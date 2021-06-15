@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sway</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - O Básico"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://avatars1.githubusercontent.com/u/32400794?s=32">
+    <link rel="stylesheet" type="text/css"href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="home">
+    </header>
+    <main id="main-area">
+        <h1>Arch Linux - Setup com Sway</h1>
+        <img class="responsiva" src="https://swaywm.org/assets/logo.png" alt="">
+        <h2>Introdução</h2>
+        <p>Sway é um compositor de Wayland e um substituto drop-in para o gerenciador de janelas i3 para X11. Ele funciona com sua configuração i3 existente e oferece suporte à maioria dos recursos do i3, além de alguns extras.<br>O Sway permite que você organize as janelas do aplicativo de forma lógica, em vez de espacialmente. As janelas são organizadas em uma grade por padrão, o que maximiza a eficiência da tela e pode ser rapidamente manipulado usando apenas o teclado. </p>
+        <h2>Instalação</h2>
+        <h3>1 - Instalar os componentes</h3>
+        <p><span style="color:white">> sudo pacman -S sway alacritty waybar wofi xorg-xwayland qt5-wayland glfw-wayland ttf-font-awesome</span></p>
+        <h3>2 - Copiar o arquivo template do Sway para a pasta de usuário</h3>
+        <p>logue no seu usuário (não root) e entre no diretório de configurações de usuário (.config)</p>
+        <p><span style="color:white">> cd ~/.config</span> (se o diretório não for encontrado, crie ele executando o comando <span style="color:white">> mkdir .config</span>)</p>
+        <p>Já dentro do diretório .config, crie o diretório do Sway com o comando <span style="color:white">> mkdir sway</span></p>
+        <p>Mova para o diretório do Sway com o comando <span style="color:white">> cd sway</span></p>
+        <p>Copie o arquivo de template do Sway (/etc/sway/config) para o diretório atual (.) com o comando <span style="color:white">> cp /etc/sway/config .</span></p>
+        <p>A configuração padrão de comandos do Sway é Configuração Padrão é:<br>
+        Recarregar Sway: Super+Shift+c (não fechará programas que estejam rodando)<br>
+        Sair do Sway: Super+Shift+e<br>
+        Abrir Terminal: Super+Return<br>
+        Abrir lançador: Super+d<br>
+        </p>
+        <h3>3 - Editando o arquivo de configuração do Sway no diretório do usuário (/home/seuusuario/.config/sway/config)</h3>
+        <p>Aqui vão algumas dicas de configurações para o seu Sway, você pode editar o arquivo de configuração com o nano</p>      
+        <p>Acrescentar gaps e remover título:<br>Edite o .config/sway/config e mude os valores para</p>
+        <p><span style="color:white">
+        # A 10-pixel border around every window. <br>
+        gaps inner 10<br>
+        # Removes the title bar of each window.<br>
+        default_border pixel 3<br>
+        </span></p>
+        <p>Utilizar a Waybar no Sway:<br> Edite o .config/sway/config e substitua o conteúdo de bar {} ao final do arquivo por</p>
+        <p><span style="color:white">
+        bar {<br>
+        swaybar_command waybar<br>
+        }<br>
+        </span></p>
+        <p>Habilitar o Wofi como drun (com ícones) no Sway:<br>Edite o .config/sway/config e substitua o conteúdo de</p>
+        <p><span style="color:white">set $menu wofi --show=drun --lines=5 --prompt=""</span></p>
+        <p>por</p>
+        <p><span style="color:white">set $menu wofi --show=drun -I</span></p>
+        <p>Mude o papel de parede:<br>Edite o .config/sway/config na linha output</p>
+        <p><span style="color:white">output * bg /diretório/nomedaimagem.png fill</span>
+        <p>Carregar teclado ABNT2:<br>Edite o .config/sway/config e insira ao final do arquivo</p>
+        <p><span style="color:white">
+        input * {<br>
+        xkb_layout "br"<br>
+        xkb_variant "abnt2"<br>
+        }<br>
+        </span></p>
+        <p>Adicionar habilitar o uso do touchpad em notebooks:<br>Edite o .config/sway/config e insira ao final do arquivo</p>
+        <p><span style="color:white">
+        input type:touchpad {<br>
+        tap enabled<br>
+        natural_scroll enabled<br>
+        }<br>
+        </span></p>
+        <p>Mudar tecla mod para Alt:<br>Edite o .config/sway/config e altere de Mod4 para Mod1</p>
+        <p><span style="color:white">
+        # Logo key. Use Mod1 for Alt.<br>
+        set $mod Mod1<br>
+        </span></p>
+        <p>Mudar comando de fechar janela para Mod+q:<br>Edite o .config/sway/config e altere o a linha abaixo de #Kill focused window para</p>
+        <p><span style="color:white">bindsym $mod+q kill</span></p>
+        <h3>4 - Copiar o arquivo de configuração padrão do Alacrity para o diretório .config do usuário</h3>
+        <p>Acesse o diretório .config com <span style="color:white">> cd .config</span></p>
+        <p>Crie o diretório do Alacritty com <span style="color:white">> mkdir alacritty</span></p>
+        <p>Acesse o diretório do Alacritty com <span style="color:white">> cd alacritty</span></p>
+        <p>Copie o arquivo de template do Alacritty (/usr/share/doc/alacritty/example/alacritty.yml) para o diretório atual (.) com o comando <span style="color:white">> cp /usr/share/doc/alacritty/example/alacritty.yml .</span></p>
+        <h3>5 - Editando o arquivo de configuração do Alacritty no diretório do usuário (/home/seuusuario/.config/alacritty/alacritty.yml)</h3>
+        <p>Aqui vão algumas dicas de configurações para o seu Alacritty, você pode editar o arquivo de configuração com o nano</p>
+        <p>Alacritty transparente:<br>Edite o .config/alacritty/alacritty.yml e delete o "#" para habilitar a linha e mude o valor de 1.0 para a sua opacidade desejada (0.5 por exemplo)<br># O valor de opacidade da janela é um número de ponto flutuante de `0.0` a` 1.0`.<br># O valor `0.0` é completamente transparente e` 1.0` é opaco. </p>
+        <p><span style="color:white">background_opacity: 0.5</span></p>
+        <p>mude a fonte do Alacritty:<br>Edite o .config/alacritty/alacritty.yml e em <span style="color:white"># Font configuration</span> delete o "#" e habilite as linhas <span style="color:white">#font:</span>, <span style="color:white">#normal:</span>, <span style="color:white">#family:</span> e <span style="color:white">#size:</span><br> na minha máquina eu utilizo <span style="color:white">family: SourceCodePro</span> (<span style="color:white"> >sudo pacman -S adobe-source-code-pro-fonts</span> para instalar) e <span style="color:white">size: 16</span></p>
+        <h3>6 - Copiar o arquivo de configuração padrão do Waybar para o diretório .config do usuário</h3>
+        <p>Acesse o diretório .config com <span style="color:white">> cd .config</span></p>
+        <p>Crie o diretório do Waybar com <span style="color:white">> mkdir waybar</span></p>
+        <p>Acesse o diretório do Waybar com <span style="color:white">> cd waybar</span></p>
+        <p>Copie o arquivo de template do Waybar (/etc/xdg/waybar/config) para o diretório atual (.) com o comando <span style="color:white">> cp /etc/xdg/waybar/config .</span></p>
+        <h3>7 - Habilitar som e compartilhamento de tela</h3>
+        <p>Para instalar o Pipewire:<br><span style="color:white">pacman -S  pipewire</span> (também instale o <span style="color:white">libpipewire02</span> caso utilize o Chromium)</p>
+        <p>Para o Firefox:<br>Em /etc/environment adicione: <span style="color:white">MOZ_ENABLE_WAYLAND=1</span><br>para verificar execute <span style="color:white">> printenv</span></p>
+        <p>Para o Chromium:<br>Em /home/meuusuario/.config/chromium-flags.conf adicione:<br><span style="color:white">--enable-features=UseOzonePlatform<br>--enable-gpu<br>--ozone-platform=wayland</span></p>
+        <p>Para setar as variáveis de ambiente para todos os usuários:<br>Em /etc/environment adicione:<br><span style="color:white">XDG_SESSION_TYPE=wayland<br>XDG_CURRENT_DESKTOP=sway</span><br>para verificar execute <span style="color:white">> printenv</span></p>
+        <p>Para compartilhamento de tela, instale xdg-desktop-portal-wlr com:<br><span style="color:white">pacman -S xdg-desktop-portal-wlr</span></p>
+        <p>Assim que for iniciar uma transmissão:<br>Do terminal, execute <span style="color:white">> /usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr</span><br>Isso executará como um trabalho em segundo plano, portanto, não feche o terminal.<br>Abra seu navegador.</p>
+        <p>Você pode testar se funciona [<a href="http://mozilla.github.io/webrtc-landing/gum_test.html">Aqui</a>]</p>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧</p>
+        <p>Retornar a página principal [<a href="index.html">Aqui</a>]</p>
+    </footer>
+</body>
+</html>
