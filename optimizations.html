@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otimizações</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Otimização para Roteador, Windows,Linux e BSD's"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="home">
+    </header>
+    <main id="main-area">
+        <h1>Otimizando o PC e a Rede</h1>
+        <h2>Introdução</h2>
+        <p>Existem algumas coisas que você pode fazer para otimizar o uso da máquina no que diz respeito a segurança e responsividade após instalar o sistema operacional. Coisas simples que não requerem muito conhecimento técnico mas produzem resultados imediatos (embora alguns deles sejam arriscados e devem ser tratados com a devida responsabilidade).</p>
+        <h3>Placa Mãe</h3>
+        <p>BIOS ou Basic Input/Output System, é um firmware, um software embarcado, que tem a finalidade de checar, configurar e manter o hardware, é o primeiro software a ser carregado assim que você liga o computador, atualizações de BIOS geralmente trazem correções de segurança, suporte a hardware e/ou correção de bugs.</p>
+        <p>Para atualizar sua BIOS hoje em dia você não precisa de nada além de um pen drive com o arquivo de atualização, entretanto, se houver alguma falha na hora do carregamento como uma queda de energia, por exemplo, e o BIOS for danificado, <span style="color:red">é possível que a placa mãe deixe de funcionar</span>.</p>
+        <h4>1 - Identifique a sua Máquina</h4>
+        <p>Ao ligar o seu computador geralmente aparece uma tela informando “<span style="color:white">Press</span> (alguma tecla) <span style="color:white">to enter Setup</span>” ou “<span style="color:white">Press</span> (alguma tecla) <span style="color:white">to UEFI BIOS setting</span>”, aperte essa tecla no processo de inicialização para ter acesso a configuração do BIOS.</p>
+        <img class="responsiva" src="assets/images/pressf2.jpg" alt=""><br>
+        <p>Geralmente nas placas mães mais novas já na tela inicial (ou na guia de “<span style="color:white">Info</span>” ou “<span style="color:white">System Info</span>”) você poderá ver o modelo da placa mãe e qual a versão do BIOS, anote o modelo da placa mãe, a versão do BIOS e a revisão/versão da placa (você também pode encontrar essa informação fisicamente gravada na sua placa mãe).</p>
+        <img class="responsiva" src="assets/images/biosversion.jpg" alt=""><br>
+        <img class="responsiva" src="assets/images/moboversion.jpg" alt=""><br>
+        <h4>2 Prepare o Pen Drive</h4>
+        <p>Para atualizar o BIOS em máquinas atuais você vai precisar de um pen drive confiável (nada de pen drive de 1tb comprado no Aliexpress ou pen drive de camelô), com uma tabela de partição em <span style="color:white">MBR</span> e com uma partição <span style="color:white">FAT32</span>. Você pode utilizar o [<a href="http://ridgecrop.co.uk/index.htm?guiformat.htm">fat32format</a>] para preparar o pen drive (embora eu recomende o <span style="color:white">GParted</span>).</p>
+        <h4>3 Baixe o Arquivo de Atualização</h4>
+        <p>Acesse o site do fabricante da sua placa mãe (ou do seu notebook), encontre a página de suporte para o seu dispositivo e verifique a última versão do BIOS disponível para ele, não há necessidade de atualizar caso sua máquina já esteja na última versão!</p>
+        <img class="responsiva" src="assets/images/biosupdate.jpg" alt="">
+        <h4><span style="color:red">ALERTA: Não siga com a instalação se há risco de pen drive corrompido ou risco de queda de energia! Tenha a certeza que todos os cabos estão muito bem conectados, que não há animais por perto pois o computador não pode ser desligado até que o processo finalize!</span></h4>
+        <h4>4 Atualizando o BIOS</h4>
+        <p>Copie o arquivo de atualização para a pasta raiz do pen drive (extraia na raiz caso ele venha zipado), lembre-se de ejetar o dispositivo com segurança. Acesse o Setup com o pen drive conectado. No setup busque a opção <span style="color:white">Update Bios</span>, se também existir uma opção <span style="color:white">Save BIOS</span> ou <span style="color:white">Backup BIOS</span>, faça o backup do BIOS para o seu pen drive e só então selecione o arquivo mais novo para fazer a atualização.</p>
+        <img class="responsiva" src="assets/images/biosupdate2.jpg" alt="">
+        <h4><span style="color:red">NÃO INTERROMPA O PROCESSO E NÃO DESLIGUE O COMPUTADOR! É NATURAL QUE DEMORE ALGUM TEMPO MESMO APÓS O FIM DA BARRA DE PROGRESSO, QUE O COMPUTADOR REINICIE ALGUMAS VEZES E MESMO QUE DEMORE INICIAR NOVAMENTE, DEIXE QUE O COMPUTADOR FAÇA TUDO SOZINHO E NÃO TOQUE EM NADA ATÉ QUE ELE INICIE NA TELA DE BOOT NOVAMENTE!</span></h4>
+        <h3>Roteador</h3>
+        <p>1 - Para acessar o roteador basta digitar o endereço IP dele na barra de endereços do seu navegador, geralmente o endereço é <span style="color:white">192.168.0.1</span> ou <span style="color:white">192.168.1.1</span> (caso nenhum desses funcione você pode tentar pelo endereço de <span style="color:white">gateway padrão</span> usando o comando <span style="color:white">ipconfig</span> no terminal do Windows ou <span style="color:white">netstat -nr</span> no terminal do Linux).</p> 
+        <p>2 - Assim que acessar o roteador salve um arquivo de backup das configurações e resete para a configuração de fábrica (lembre-se de anotar as configurações de autenticação da conexão  + MAC caso seja necessário). Por fim, atualize o firmware do roteador (basta buscar o modelo no site do fabricante, aqui se aplica o mesmo da seção de atualização do BIOS);</p>
+        <p>3 - Mude usuário e senha de acesso (lembre-se de colocar uma senha forte);</p>
+        <p>4 - Desative o <span style="color:white">Acesso Remoto</span> e o <span style="color:white">WPS</span>;</p>
+        <p>5 - Mude a criptografia do Wifi para <span style="color:white">WPA2</span> - <span style="color:white">AES</span> e o DNS para o OpenDNS (IPv4: <span style="color:white">208.67.222.222</span> e <span style="color:white">208.67.220.220</span>; IPv6: <span style="color:white">2620:119:35::35</span> e <span style="color:white">2620:119:53::53</span>);</p>
+        <p>6 - MTU ou Maximum transmission unit, determina o tamanho da maior unidade de dados de protocolo que pode ser comunicada em uma única transação da camada de rede. Em resumo, Uma MTU configurada incorretamente pode levar a transferências com falha e conectividade intermitente.<br>O valor do MTU pode ser otimizado no seu roteador, para configurar o MTU através do Windows abra o terminal e use o comando <span style="color:white">ping google.com -f -l 1500</span>, se retornar “<span style="color:white">Resposta de xxx.xxx.xxx.xxx bytes=xx (enviado xxxx) tempo=xx TTL=xx</span>” indica que o MTU já está otimizado! nesse caso sete o seu MTU para 1500 mesmo no seu roteador... Mas provavelmente vai aparecer um alerta de “<span style="color:white">O pacote precisa ser fragmentado, mas a fragmentação está ativa.</span>”, se este é o caso cancele o teste atual com <span style="color:white">Control + C</span> e insira o comando com um valores menores (como por exemplo: <span style="color:white">ping google.com -f -l 1400</span>, eu recomendo diminuir de centena em centena até retornar uma resposta e depois ir subindo dezenas e por fim unidades) até o resultado retornar “Resposta de …”. O maior valor que retornar resposta deve ser inserido nas configurações do seu roteador.</p>
+        <p>7 - Outra coisa que pode acabar com a comunicação no caso do Wifi é o congestionamento de canal, para resolver isso instale o [<a href="https://play.google.com/store/apps/details?id=com.farproc.wifi.analyzer&hl=en">Wifi Analyzer</a>] no seu smartphone, e assim que abrir o app no gráfico de canais veja qual é o canal mais livre (ou menos congestionado) e mude para este canal no seu roteador de acordo com a imagem;</p>
+        <img class="responsiva" src="assets/images/wifianalyzer.jpg" alt="">
+        <p>Nesses caso o gráfico indica que as áreas de canal <span style="color:white">4,5,6,7</span> estão livres</p>
+        <h3>Sistemas Operacionais (Windows, Linux e BSD's)</h3>
+        <p>1 - Escolha e baixe uma das versões do [<a href="https://github.com/StevenBlack/hosts">Steven Black Unified Hosts File</a>], recomendo o <span style="color:white">Unified hosts = (adware + malware)</span> por ser a menos invasiva, para baixar basta clicar em <span style="color:white">Salvar Link Como</span> no link da coluna <span style="color:white">Raw hosts</span>, e salvar com o Nome: <span style="color:white">hosts</span> (sem .txt) e o Tipo: <span style="color:white">Todos os arquivos (*.*)</span>, caso esteja no Windows acesse a pasta <span style="color:white">C:\Windows\System32\drivers\etc\</span> e caso esteja em Linux ou BSD <span style="color:white">/etc/</span> e faça backup do arquivo <span style="color:white">hosts</span> que aí está e depois o substitua para uma das versões do <span style="color:white">Unified Hosts File</span>;</p>
+        <img class="responsiva" src="assets/images.jpg" alt=""><br>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧</p>
+        <p>Retornar a página principal [<a href="index.html">Aqui</a>]</p>
+    </footer>
+</body>
+</html>
