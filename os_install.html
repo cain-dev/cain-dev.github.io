@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação de Sistemas</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - O Básico"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/osinstall"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="home">
+
+    </header>
+    <main id="main-area">
+        <h1>Instalação Básica de Sistemas Operacionais</h1>
+        <h2>Introdução</h2>
+        <p>Existia uma época que sistemas operacionais eram feitos para máquinas específicas e era necessário um conhecimento relativamente profundo de TI para garantir o sucesso da instalação... Hoje em dia até o Linux tem uma excelente compatibilidade com grande parte do hardware para usuário final e pode ser instalado em menos de 30min sem quase nenhum conhecimento de informática.</p>
+        <p>Não é mais necessário pagar um técnico 50 reais para fazer uma simples instalação de sistema padrão (erroneamente conhecido pela turma como formatação), existem razões para pagar por uma instalação sim quando há limpeza, configuração e atualização de BIOS, verificação de HD e RAM... Mas sejamos sinceros, a grande maioria dos técnicos sequer sabe o que é isso.</p>
+        <p>Nos dias de hoje é mais seguro você mesmo baixar e instalar o seu sistema (ao invés pagar 50 reais para ter um sistema modificado por algum indiano mal intencionado instalado por alguém sem formação em TI), e esse "tutorial" te ensinará o básico do processo. A única coisa a se ficar atento é previamente fazer backup dos arquivos do HD em que você quer instalar o sistema, backup do pendrive que vai ser usado e alterar o processo de instalação entre BIOS ou UEFI.</p>
+        <h2>Primeiro Passo: Baixar o Sistema</h2>
+        <p>Obviamente o primeiro passo para se instalar um sistema é baixar a mídia de instalação do sistema para então passar para um pendrive e depois começar a instalação.</p>
+        
+        <ul>
+            <li>Caso você queira instalar o Windows você pode encontrá-lo através desse link [<a href="https://www.microsoft.com/pt-br/software-download/windows10">Aqui</a>].</li>
+            <li>Caso você queira instalar o Linux Mint você pode encontrá-lo através desse link [<a href="https://linuxmint.com/download.php">Aqui</a>].</li>
+            <li>Caso você queira instalar o Manjaro Linux você pode encontrá-lo através desse link [<a href="https://manjaro.org/download/">Aqui</a>].</li>
+            <li>Caso você queira instalar o Arch Linux você pode encontrá-lo através desse link [<a href="https://archlinux.org/download/">Aqui</a>].</li>
+            <li>Caso você queira instalar o FreeBSD você pode encontrá-lo através desse link [<a href="https://www.freebsd.org/where/">Aqui</a>].</li>
+            <li>Caso você queira instalar o OpenBSD você pode encontrá-lo através desse link [<a href="https://www.openbsd.org/faq/faq4.html#Download">Aqui</a>].</li>
+            <li>Caso você queira instalar o Batocera você pode encontrá-lo através desse link [<a href="https://batocera.org/download">Aqui</a>].</li>
+            <li>Caso você queira instalar o Haiku você pode encontrá-lo através desse link [<a href="https://www.haiku-os.org/get-haiku/">Aqui</a>].</li>
+        </ul>
+           
+        <h2>BIOS ou UEFI?</h2>
+        <img class="responsiva" src="assets/images/biosuefi.jpg" alt="BIOS vs UEFI">
+        <p>BIOS e UEFI são as interfaces para os computadores iniciarem o sistema operacional. A BIOS utiliza a tabela de partição do tipo Master Boot Record (MBR) enquanto UEFI utiliza GUID Partition Table (GPT), a BIOS é um sistema mais antigo e simples enquanto o UEFI é mais novo e oferece opções mais avançadas.</p>
+        <p>Hoje em dia o UEFI já subsitui a BIOS nos computadores mais modernos, podendo ainda oferecer suporte a sistemas mais antigos que foram feitos para funcionar com BIOS por meio do Compatibility Support Module (ou CSM). Caso seu computador utilize UEFI sempre dê preferência a instalar os sistemas em UEFI sem CSM ativo.</p>
+        <p>Não há uma regra absoluta para dizer se o seu computador utiliza BIOS ou UEFI e portanto isso deve ser verificado caso a caso (computadores mais novos por via de regra trabalham com UEFI). Para verificar se o seu sistema é UEFI você pode:</p>
+        <ul>
+            <li>Verificar o suporte na página do produto no site do Fabricante da sua placa mãe.</li>
+            <li>Pelo próprio visual, a BIOS tende a ser mais simples e estática enquanto UEFI tende a ser mais gráfico.</li>
+            <li>Acessar o SETUP da sua placa mãe (geralmente pressionando F2 ou Delete durante a inicialização do sistema) e verificar se na guia BOOT existe opção de seleção de modo UEFI (se suporta a utilização de mouse você está em UEFI).</li>           
+        </ul>
+        <span style="color:red"><p>FAÇA BACKUP DO CONTEÚDO DO PENDRIVE ANTES DE PROSSEGUIR</p></span>
+        <h2>Gravação do pendrive com o balenaEtcher (para um único sistema)</h2>
+        <p>Caso você queira apenas passar o sistema para o pendrive, instalar na máquina e tocar sua vida, utilize essa ferramenta.</p>
+        <p>Baixe o balenaEtcher [<a href="https://www.balena.io/etcher/">Aqui</a>]</p>
+        <p>Selecione a versão para o seu sistema operacional e clique no botão de download:</p>
+        <img class="responsiva" src="assets/images/etcher1.jpg" alt="">
+        <p>Selecione o arquivo de imagem do sistema (seja .iso ou .img) na opção "Flash from file":</p>
+        <img class="responsiva" src="assets/images/etcher2.jpg" alt="">
+        <p>Vá para a seleção de dispositivos em "Select target":</p>
+        <img class="responsiva" src="assets/images/etcher3.jpg" alt="">
+        <p>Selecione o seu pendrive em "Select target" e depois clique em "Select":</p>
+        <img class="responsiva" src="assets/images/etcher4.jpg" alt="">
+        <h2 id="ventoy">Gravação do Pendrive com o Ventoy (para multiplas imagens de sistema)</h2>
+        <p>Caso você queira fazer um pendrive com suporte a particionamento e mais de 1 sistema por pendrive utilize essa opção.</p>
+        <p>Baixe o Ventoy [<a href="https://www.ventoy.net/en/index.html">Aqui</a>]</p>
+        <p>Selecione a guia "Downloads":</p>
+        <img class="responsiva" src="assets/images/ventoy1.jpg" alt="">
+        <p>Selecione o executável para o seu sistema:</p>
+        <img class="responsiva" src="assets/images/ventoy2.jpg" alt="">
+        <p>Selecione o dispositivo:</p>
+        <img class="responsiva" src="assets/images/ventoy3.jpg" alt="">
+        <p>Selecione o tipo de tabela de partição (MBR para BIOS e GPT para UEFI):</p>
+        <img class="responsiva" src="assets/images/ventoy4.jpg" alt="">
+        <p>Selecione a opção de instalação:</p>
+        <img class="responsiva" src="assets/images/ventoy5.jpg" alt="">
+        <p>Ao fim da gravação basta mover os arquivos de imagem de sistema para o pendrive:</p>
+        <img class="responsiva" src="assets/images/ventoy6.jpg" alt="">
+        <h2>Selecionando o Dispositivo de BOOT</h2>
+        <p>Durante a inicialização do computador aperte a tecla de acesso ao SETUP, geralmente F2 ou Delete (essa informação costuma aparecer na tela quando você liga o computador).</p>
+        <img class="responsiva" src="assets/images/pressf2.jpg" alt="">
+        <p>Na guia BOOT você encontrará alguma opção como "Select Boot Device", selecione o seu pendrive como dispositivo de inicialização, após isso vá na opção "Save and Restart" para reiniciar para a instalação.</p>
+        <img class="responsiva" src="assets/images/bootdevice.jpg" alt="">
+        <p>Se você fez tudo certinho seu computador vai reiniciar e já ir pro menu de instalação de sistema.</p>
+        <img class="responsiva" src="assets/images/bootscreen.jpg" alt="">
+        <span style="color:red"><p>FIQUE ATENTO!</p></span>
+        <p>Algumas placas-mãe possuem uma seleção de dispositivos e uma outra seleção de prioridade dentre os dispositivos de inicialização, por exemplo:</p>
+        <ul>
+            <li>First Boot Device: Hard Drive</li>
+            <ul>
+                <li>HD Western Digital</li>
+                <li>Kingston Pen Drive *</li>
+            </ul>
+            <li>Second Boot Device: CD-ROM</li>
+            <li>Third Boot Device: PXE</li>
+        </ul>
+        <p>Nesse caso você tem que especificar o tipo de dispositivo de inicialização para só então selecioná-lo como prioridade.</p>
+        <p>Não entendeu? Explico: Você disse para o sistema para iniciar pelo Hard Drive, mas você ainda precisa selecionar QUAL Hard Drive, nada demais.</p>
+        <h2>Tá... Já passei o sistema para o pendrive... Mas como instalo?</h2>
+        <ul>
+            <li>Caso você queira instalar o Windows você pode seguir esse tutorial [<a href="windows_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar algum Linux baseado nos instaladores mais comuns (Mint, Manjaro, Ubuntu, etc) você pode seguir esse tutorial [<a href="linux_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar o Arch Linux você pode seguir esse tutorial [<a href="arch_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar o FreeBSD você pode seguir esse tutorial [<a href="freebsd_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar o OpenBSD você pode seguir esse tutorial [<a href="openbsd_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar o Batocera você pode seguir esse tutorial [<a href="batocera_install.html">Aqui</a>].</li>
+            <li>Caso você queira instalar o Haiku você pode seguir esse tutorial [<a href="haiku_install.html">Aqui</a>].</li>
+        </ul>
+        <h2>E depois de instalar o sistema? O que eu instalo?</h2>
+        <p>[<a href="alternatives.html">Aqui</a>] tem uma seleção de alternativas de softwares essenciais para você ficar bem situado com o seu sistema.</p>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧</p>
+        <p>Retornar a página principal [<a href="index.html">Aqui</a>]</p>
+    </footer>
+</body>
+</html>
