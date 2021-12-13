@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap%27");
+
+@font-face { font-family: "inconsolata-regular"; 
+  src: url("assets/fonts/Inconsolata-Regular.ttf"); } 
+
+body {
+  max-width: 90%;
+  margin: auto;
+  font-family: "Share Tech Mono", monospace;
+  color: chartreuse;
+  background-color: black;
+  box-sizing: border-box;
+
+}
+
+code {
+  font-family: "inconsolata-regular";
+  display: flow-root;
+    margin: .5em 0;
+    background: #18141c;
+    border: 2px solid #2f2f2f;
+    border-left: 2px solid#ffffff;
+    padding-left: 40px;
+    max-height: 70vh;
+    overflow: auto;
+    color: #abb8c3;
+    font-size: 1.2em;
+}
+
+#main-area p{
+    text-align: justify;
+    line-height: 1.25em;
+
+  }
+
+#home {
+    
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 1.25em;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background-color: #111;
+  color: #818181;
+
+}
+
+#main-footer p{
+    
+    margin-top: 20px;
+    text-align: center;
+    line-height: 1.25em;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background-color: #111;
+    color: #818181;
+
+}
+
+.responsiva {
+    width: 100%;
+    max-width: 768px;
+    height: auto;
+  }
