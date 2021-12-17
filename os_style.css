@@ -1,40 +1,119 @@
 @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap%27");
-
-@font-face { font-family: "inconsolata-regular"; 
-  src: url("assets/fonts/Inconsolata-Regular.ttf"); } 
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
 
 body {
-  max-width: 90%;
-  margin: auto;
   font-family: "Share Tech Mono", monospace;
-  color: chartreuse;
-  background-color: black;
-  box-sizing: border-box;
+  background: #000;
+  color: #737373;
+}
 
+ul {
+  margin: 0;
+  border: 0;
+  padding: 0;
 }
 
 code {
-  font-family: "inconsolata-regular";
+  font-family: "Inconsolata", monospace;
   display: flow-root;
-    margin: .5em 0;
-    background: #18141c;
-    border: 2px solid #2f2f2f;
-    border-left: 2px solid#ffffff;
-    padding-left: 40px;
-    max-height: 70vh;
-    overflow: auto;
-    color: #abb8c3;
-    font-size: 1.2em;
+  margin: .5em 0;
+  background: #18141c;
+  border: 2px solid #2f2f2f;
+  border-left: 2px solid#ffffff;
+  padding-left: 40px;
+  max-height: 70vh;
+  overflow: auto;
+  color: #abb8c3;
+  font-size: 1.3em;
 }
 
-#main-area p{
+#main-header {
+  background-color: #171717;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 64px;
+}
+
+#main-header ul {
+  display: flex;
+  flex-direction: row;
+}
+
+#main-header li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#main-header a {
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 5px 20px;
+  opacity: 0.7;
+  color: #DA0037;
+  background-color: #EDEDED;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+}
+
+#main-header a:hover {
+  color: #EDEDED;
+  background-color: #DA0037;
+}
+
+
+#main-area {
+  width: 90%;
+  margin: 0em auto;
+}
+
+#main-area p {
     text-align: justify;
     line-height: 1.25em;
+}
 
-  }
+.responsiva {
+  width: 100%;
+  max-width: 768px;
+  height: auto;
+}
+
+.opconteiner{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.opitem {
+  width: 250px;
+  height: 100px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px;
+  border-radius: 5px;
+  color: #DA0037;
+  background-color: #EDEDED;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+}
+
+.opitem:hover {
+  color: #EDEDED;
+  background-color: #DA0037;
+}
+
+.optext{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
 
 #home {
-    
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
@@ -46,20 +125,14 @@ code {
 
 }
 
-#main-footer p{
-    
-    margin-top: 20px;
-    text-align: center;
-    line-height: 1.25em;
-    padding: 0.75rem;
-    border-radius: 10px;
-    background-color: #111;
-    color: #818181;
-
+#main-footer {
+  bottom: 0;
 }
 
-.responsiva {
-    width: 100%;
-    max-width: 768px;
-    height: auto;
-  }
+#main-footer p{
+    text-align: center;
+    padding: 0px;
+    background-color: #171717;
+    color: white;
+    font-size: 1.2em;
+}
