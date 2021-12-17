@@ -32,15 +32,15 @@
         <h1>Instalação do Arch Linux</h1>
         <img class="responsiva" src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="">
         <h2>Instalação Alvo</h2>
-        <p>Como o Arch Linux é um sistema bastante configurável, toda instalação tem um alvo de como ser finalizada. A instalação alvo dessa documentação trata-se de um sistema em <mark>UEFI</mark> com <mark>systemd-boot</mark>, com raiz em <mark>EXT4</mark> e <mark>iwd</mark>+<mark>resolved</mark> OU <mark>NetworkManager</mark>+<mark>resolved</mark>. Portanto, se você tem um computador que funciona somente com <mark>BIOS</mark> ou queira outro bootloader como o <mark>GRUB</mark> para utilizar dualboot <span style="color:red">NÃO SIGA ESTA DOCUMENTAÇÃO!</span></p>
-        <span style="color:red"><p>ALERTA! Necessário um mínimo de experiência prévia com sistemas Unixlike.</p></span>
-        <h2>//SELECIONAR TECLADO ABNT2</h2>
+        <p>Como o Arch Linux é um sistema bastante configurável, toda instalação tem um alvo de como ser finalizada. A instalação alvo dessa documentação trata-se de um sistema em <mark>UEFI</mark> com <mark>systemd-boot</mark>, com raiz em <mark>EXT4</mark> e <mark>iwd</mark>+<mark>resolved</mark> OU <mark>NetworkManager</mark>+<mark>resolved</mark>. Portanto, se você tem um computador que funciona somente com <mark>BIOS</mark> ou queira outro bootloader como o <mark>GRUB</mark> para utilizar dualboot <em>Não siga essa documentação para particionamento e instalação de bootloader</em>.</p>
+        <p><em>⚠️Alerta: Necessário um mínimo de experiência prévia com sistemas Unixlike</em></p>
+        <h2>// 1 - Configurar teclado</h2>
         <p>Antes de digitar qualquer comando é necessário que o teclado esteja configurado corretamente no padrão ABNT2, para isso utilize o comando:</p>
         <code>loadkeys br-abnt2</code>
-        <h2>//SELECIONAR FONTE TERMINUS BOLD (opcional)</h2>
+        <h2>// 1B - Mudar a fonte da padrão do terminal (opcional)</h2>
         <p>Eu frequentemente tenho que instalar o ArchLinux num laptop e a fonte fica pequena demais, para alterar para uma fonte mais agradável eu utilizo o comando:</p>
         <code>setfont ter-124b</code>
-        <h2>//CONFIGURAR REDE</h2>
+        <h2>// 2 - Configurar rede</h2>
         <h3>para cabo Ethernet</h3>
         <p>Caso você utilize um cabo de rede basta verificar aquisição de um endereço IP válido e conexão com a rede através dos comandos:</p>
         <code>ip address show</code>
@@ -64,17 +64,17 @@
         <p>E</p>
         <code>ping google.com</code>
         <p>Se a conexão com o Google não teve falhas você pode prosseguir para a edição de mirrors</p>
-        <h2>//EDITAR O ARQUIVO MIRRORLIST COM O VIM</h2>
+        <h2>// 3 - Editar o arquivo de mirrors</h2>
         <p>Existem diversam maneiras de editar o arquivo de mirrors e habilitar apenas os servidores brasileiros, mas a que geralmente uso é através do comando de substituição do <mark>vim</mark>, você pode abrir o arquivo de mirrors no vim com o seguinte comando:</p>
         <code>vim /etc/pacman.d/mirrorlist</code>
         <p>Com o vim aberto, escreva o comando abaixo para comentar e desabilitar todos os servidores:</p>
         <code>:%s/Server/#Server/g</code>
         <p>Uma vez que todos os servidores foram comentados, utilize as setas do teclado e o delete para apagar o <mark>#</mark> dos servidores brasileiros. Quando finalizar utilize o comando abaixo para salvar e sair:</p>
         <code>:wq</code>
-        <h2>//ATUALIZAR BASE DE PACOTES</h2>
+        <h2>// 4 - Atualizar pacotes</h2>
         <p>Antes de interagir qualquer outro programa do sistema é interessante atualizar os pacotes com o seguinte comando:</p>
         <code>pacman -Syy</code>
-        <h2>//PARTICIONAMENTO</h2>
+        <h2>// 5 - Particionamento</h2>
         <p>Antes de começar qualquer particionamento é importante ter certeza de qual disco vamos alterar, para listar os discos da máquina utilize o comando:</p>
         <code>fdisk -l</code>
         <p>Uma vez que você tem a certeza de qual disco vai alterar e instalar o sistema utilize o comando abaixo para iniciar o particionamento, lembre-se de substituir o <mark>x</mark> em <mark>sdx</mark> pela letra do seu disco:</p>
@@ -204,10 +204,10 @@
         <h4>Gravar e sair</h4>
         <p>Para gravar as alterações da tabela de partição e sair do programa utilize o comando:</p>
         <code>w</code>
-        <h2>//VERIFICAR PARTIÇÕES</h2>
+        <h2>// 6 - Verificar partições</h2>
         <p>Antes de prosseguir com a formatação e montagem das partições é importante ter certeza de que a tabela está correta, para listar as partições de disco utilize o comando abaixo:</p>
         <code>lsblk</code>
-        <h2>//FORMATAR PARTIÇÕES</h2>
+        <h2>// 7 - Formatar partições</h2>
         <p>Uma vez que a tabela de partição já foi terminada é importante formatarmos cada partição para o seu devido formato de arquivos, a primeira partição a ser formatada será a partição <mark>ESP</mark>, ela deve ser formatada em formato <mark>FAT32</mark>. Considerando que a sua partição <mark>ESP</mark> é a <mark>/dev/sda1</mark> utilize o comando abaixo para formatar (OU substitua <mark>/dev/sda1</mark> para o devido endereço da sua tabela de partições):</p>
         <code>mkfs.fat -F32 /dev/sda1</code>
         <p>(considerando o seu disco como /dev/sda e 1 como o número da partição efi)</p>
@@ -217,7 +217,7 @@
         <p>Por fim formataremos a partição raiz do sistema <mark>/</mark>, ela deve ser formatada em formato <mark>EXT4</mark>. Considerando que a sua partição <mark>/</mark> é a <mark>/dev/sda3</mark> utilize o comando abaixo para formatar (OU substitua <mark>/dev/sda3</mark> para o devido endereço da sua tabela de partições):</p>
         <code>mkfs.ext4 /dev/sda3</code>
         <p>(considerando o seu disco como /dev/sda e 3 como o número da partição raiz, caso você tenha feito uma partição <mark>/home</mark> ela deve ser formatada com o mesmo comando <mark>mkfs.ext4 /dev/sdax</mark> substituindo o <mark>x</mark> pela devida numeração na sua tabela de partições)</p>
-        <h2>//MONTAR PARTIÇÕES</h2>
+        <h2>// 8 - Montar partições</h2>
         <p>Uma vez que a tabela de partições está pronta e as partições já estão com os seus devidos formatos de arquivo agora falta montá-las nos seus devidos endereços para proseguirmos com a instalação. Para montar a partição raíz do sistema (<mark>/</mark>) utilize o comando:</p>
         <code>mount /dev/sdxy /mnt</code>
         <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>)</p>
@@ -234,7 +234,7 @@
         <p>E monte-o com o comando:</p>
         <code>mount /dev/sdxy /mnt/boot</code>
         <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>ESP</mark>)</p>
-        <h2>//INSTALAR SISTEMA</h2>
+        <h2>// 9 - Instalar sistema</h2>
         <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então essa vai ser o MEU comando de instalação:</p>
         <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo</code>
         <p>Porém:</p>
@@ -245,15 +245,15 @@
             <li><p>Você também pode optar por não ter elevação de privilégios através do <mark>sudo</mark> ou mesmo utilizar o <mark>doas</mark> ao invés dele;</p></li>
             
         </ul>
-        <h2>//GERAR FSTAB</h2>
+        <h2>// 10 - Gerar FSTAB</h2>
         <p>Já com o sistema instalado podemos gerar o arquivo da tabela do sistema de arquivos com o comando:</p>
         <code>genfstab -U /mnt >> /mnt/etc/fstab</code>
         <p>Para verificar o arquivo da tabela do sistema de arquivos utilize o comando:</p>
         <code>cat /mnt/etc/fstab</code>
-        <h2>//CHROOT PARA INSTALAÇÃO</h2>
+        <h2>//11 - CHROOT para a instalação</h2>
         <p>Com a tabela pronta e verificada acessaremos a instalação com o comando:</p>
         <code>arch-chroot /mnt</code>
-        <h2>//CRIAR SWAPFILE (OPCIONAL)</h2>
+        <h2>//11B - Criar swapfile (OPCIONAL)</h2>
         <p>Se e somente se você não tenha feito partição dedicada para swap mas ainda deseje utilizar swap através de arquivo swap, aloque o espaço de arquivo swap com o comando:</p>
         <code>fallocate -l 3GB /swapfile</code>
         <p>(Considerando que você queira utilizar <mark>3GiB</mark> de swap, altere o <mark>3</mark> para a quantia de swap desejada)</p>
@@ -267,19 +267,19 @@
         <code>nano /etc/fstab</code>
         <p>E ao final do arquivo adicione a linha:</p>
         <code>/swapfile    	none    	swap    	defaults    	0    	0</code>
-        <h2>//CONFIGURAR A INSTALAÇÃO PARA TECLADO ABNT2</h2>
+        <h2>//12 - Configurar o sistema instalado para teclado ABNT2</h2>
         <code>echo KEYMAP=br-abnt2 >> /etc/vconsole.conf</code>
-        <h2>//SETAR TIMEZONE E AJUSTAR O RELÓGIO DO SISTEMA</h2>
+        <h2>//13 - Setar timezone e ajustar relógio do sistema</h2>
         <code>ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime</code>
         <code>hwclock --systohc</code>
-        <h2>//SETAR LOCALE</h2>
+        <h2>//14 - Setar locale</h2>
         <p>Utilize o nano para acessar o arquivo de configuração de localização com o comando:</p>
         <code>nano /etc/locale.gen</code>
         <p>Habilite a localização <mark>pt_BR.UTF-8 UTF-8</mark> descomentando a linha deletando o <mark>#</mark> antes dele e após isso gere os arquivos de localização com o comando:</p>
         <code>locale-gen</code>
         <p>Para setar a configuração padrão de localização do sistema utilize o comando:</p>
         <code>echo "LANG=pt_BR.UTF-8" >> /etc/locale.conf</code>
-        <h2>//CONFIGURAÇÕES DE REDE</h2>
+        <h2>//15 - Configurar o arquivo de hosts da instalação</h2>
         <p>Utilize o comando abaixo para selecionar o nome do host substituindo <mark>meuhostname</mark> para o nome de host desejado:</p>
         <code>echo meuhostname >> /etc/hostname</code>
         <p>Logo em seguida edite o arquivo de hosts com o nano com o comando:</p>
@@ -288,10 +288,10 @@
         <code>127.0.0.1   localhost</code>
         <code>::1     	localhost</code>
         <code>127.0.1.1   meuhostname.localdomain 	meuhostname</code>
-        <h2>//ADICIONAR SENHA DE ADMINISTRADOR</h2>
+        <h2>//16 - Adicionar senha do administrador</h2>
         <p>Para definir a senha de administrador utilize o comando:</p>
         <code>passwd</code>
-        <h2>//INSTALAR BOOTLOADER</h2>
+        <h2>//17 - Instalar bootloader</h2>
         <p>Para instalar o bootloader utilize o comando:</p>
         <code>bootctl --path=/boot install</code>
         <p>Uma vez que o bootloader foi instalado utilize o nano para editar as configurações do bootloader com o comando:</p>
@@ -311,7 +311,7 @@
             <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
             <li><p>Em <mark>options root=/dev/sdxy rw</mark> altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>;</p></li>
         </ul>
-        <h2>//HABILITAR E CONFIGURAR SERVIÇOS DE REDE</h2>
+        <h2>//18 - Habilitar e configurar serviços de rede</h2>
         <h3>Para Wifi</h3>
         <p>Caso você tenha optado por utilizar Wifi habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
         <code>systemctl enable iwd.service</code><p></p>
@@ -335,7 +335,7 @@
         <code>systemctl enable systemd-resolved.service</code>
         <h4>NOTA:</h4>
         <p>Essa configuração foi escolhida focando por mais se encaixar no meu perfil de uso e não necessariamente em facilidade de uso. Utilizo o <mark>iwd</mark> por basicamente ser um sucessor do <mark>wpa_supplicant</mark> e já ter cliente DHCP integrado, sendo assim basta a integração com o <mark>resolved</mark>. E no caso do <mark>NetworkManager</mark> por também ter cliente DHCP integrado, altíssima compatibilidade com outros pacotes e ser o <i>go to option</i> da maioria das distribuições.</p>
-        <h2>//CRIAR USUÁRIO COMUM E HABILITANDO SUDO</h2>
+        <h2>//19 - Criar usuário e habilitar elevação de privilégios com sudo</h2>
         <p>Para adicionar um usuário que possa utilizar sudo utilize o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo nome de usuário que você deseja:</p>
         <code>useradd -mG wheel seunomedeusuário</code>
         <p>Para configurar a senha da conta desse usuário use o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo seu nome de usuário:</p>
@@ -344,7 +344,7 @@
         <code>sudo env EDITOR=nano visudo</code>
         <p>Habilite a elevação de privilégio para o grupo <mark>wheel</mark> descomentando a linha deletando o <mark>#</mark> antes dele em:</p>
         <code>%wheel ALL=(ALL) ALL</code>
-        <h2>//FINALIZANDO INSTALAÇÃO</h2>
+        <h2>//20 - Finalizando a instalação</h2>
         <p>Primeiramente precisamos sair do ambiente chroot com o comando:</p>
         <code>exit</code>
         <p>Se e somente se você ativou swap desligue-a com o comando:</p>
@@ -353,7 +353,8 @@
         <code>umount -a</code>
         <p>Para reiniciar o computador e concluir a instalação execute o comando:</p>
         <code>reboot</code>
-        <h2>//RETOQUES PÓS INSTALAÇÃO</h2>
+        <p>Lembre-se de remover a mídia de instalação assim que o computador desligar</p>
+        <h2>//Retoques pós-instalação</h2>
         <h3>Ativando o TRIM:</h3>
         <p>Caso você utilize SSD's você pode otimizá-los ativando o serviço TRIM com o comando:</p>
         <code>systemctl enable fstrim.timer</code>
@@ -369,7 +370,7 @@
         <p>Para:</p>
         <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
         <p>E em seguida salve o arquivo</p>
-        <h2>//INSTALAÇÃO BÁSICA DO CINNAMON</h2>
+        <h2>//Instalando o Cinnamon</h2>
         <p>Utilize o comando:</p>
         <code>pacman -S xorg cinnamon lightdm-gtk-greeter-settings gnome-terminal</code>
         <p>Habilite o serviço do LightDM com o comando:</p>
