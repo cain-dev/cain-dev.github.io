@@ -104,6 +104,9 @@ code {
   background-color: #DA0037;
 }
 
+i {
+  font-style: italic;
+}
 
 .link {
   display: inline-block;
@@ -130,9 +133,14 @@ code {
     line-height: 1.25em;
 }
 
-#main-area em{
+#main-area strong{
   text-transform: uppercase;
   color: red;
+}
+
+#main-area em{
+  text-transform: uppercase;
+  color: blueviolet;
 }
 
 #main-area li a {

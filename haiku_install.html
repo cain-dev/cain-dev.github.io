@@ -32,86 +32,82 @@
         <h1>Instalação do Haiku</h1>
         <img class="responsiva" src="https://www.haiku-os.org/images/haiku_logo_white.svg" alt="">
         <h2>Introdução</h2>
-        <p>Haiku é um sistema operacional gratuito e de código aberto compatível com o agora descontinuado BeOS. Seu desenvolvimento começou em 2001, e o sistema operacional tornou-se auto-hospedado em 2008. O primeiro lançamento alfa foi feito em setembro de 2009, e o último foi novembro de 2012; o primeiro beta foi lançado em setembro de 2018, seguido por beta 2 em junho de 2020 e beta 3 em julho de 2021.</p>
+        <p>Haiku é um sistema operacional gratuito e de código aberto compatível com o agora descontinuado BeOS. Seu desenvolvimento começou em 2001, e o sistema operacional tornou-se auto-hospedado em 2008. O primeiro lançamento alfa foi feito em setembro de 2009, e o último foi novembro de 2012; o primeiro beta foi lançado em setembro de 2018, seguido pelo beta 2 em junho de 2020 e o beta 3 em julho de 2021.</p>
         <p>Segundo a página do Haiku:</p>
-        <p>"O Haiku é um sistema operacional de código aberto em constante desenvolvimento. Visando especificamente a computação pessoal, o Haiku é um sistema rápido, eficiente, simples de usar, fácil de aprender e, ainda assim, muito poderoso para usuários de computador de todos os níveis. Além disso, o Haiku oferece algo em relação a outras plataformas de código aberto que é bastante único: o projeto consiste em uma única equipe escrevendo tudo, desde o kernel, drivers, serviços de área de usuário, kit de ferramentas e pilha de gráficos até os aplicativos de desktop e preflets incluídos. Embora vários projetos de código aberto sejam utilizados no Haiku, eles são integrados perfeitamente. Isso permite que o Haiku alcance um nível único de consistência que fornece muitas conveniências e é realmente agradável de usar tanto por usuários finais quanto por desenvolvedores."</p>
+        <p><i>"O Haiku é um sistema operacional de código aberto em constante desenvolvimento. Visando especificamente a computação pessoal, o Haiku é um sistema rápido, eficiente, simples de usar, fácil de aprender e, ainda assim, muito poderoso para usuários de computador de todos os níveis. Além disso, o Haiku oferece algo em relação a outras plataformas de código aberto que é bastante único: o projeto consiste em uma única equipe escrevendo tudo, desde o kernel, drivers, serviços de área de usuário, kit de ferramentas e pilha de gráficos até os aplicativos de desktop e preflets incluídos. Embora vários projetos de código aberto sejam utilizados no Haiku, eles são integrados perfeitamente. Isso permite que o Haiku alcance um nível único de consistência que fornece muitas conveniências e é realmente agradável de usar tanto por usuários finais quanto por desenvolvedores."</i></p>
         <p>Em que o Haiku se destaca?</p>
         <ul>
             <li>Foco específico na computação pessoal</li>
             <li>Kernel personalizado projetado para responsividade</li>
             <li>Design totalmente segmentado para grande eficiência com CPUs multiprocesso/núcleo</li>
             <li>API rica orientada a objetos para desenvolvimento mais rápido</li>
-            <li>Sistema de arquivos semelhante ao banco de dados (BFS) com suporte para metadados indexados</li>
+            <li>Sistema de arquivos database-like (BFS) com suporte para metadados indexados</li>
             <li>Interface unificada e coesa</li>
         </ul>
         <h2>Instalando o Haiku</h2>
-        <span style="color:red">
-            <h3>EMBORA O HAIKU POSSA SER INSTALADO EM MODO UEFI O PROCEDIMENTO É MANUAL E POUCO CONVIDATIVO, PORTANTO ESSE TUTORIAL NÃO É BASEADO EM UEFI</h3>
-        </span>
+        <p><strong>Embora o Haiku possa ser instalado em UEFI o procedimento é manual e pouco convidativo, portanto essa documentação não é baseada em UEFI</strong></p>
         <p>Essa é a tela de carregamento, apenas aguarde</p>
         <img class="responsiva" src="assets/images/haiku1.jpg" alt="">
-        <p>Na tela de <span style="color:white">Bem-vindo ao Haiku</span> selecione o idioma <span style="color:white">Português (Brasil)</span>, e <span style="color:white">teclado Brasileiro (ABNT2)</span> e em seguida clique em <span style="color:white">Instalar o Haiku</span></p>
+        <p>Na tela de <mark>Bem-vindo ao Haiku</mark> selecione o idioma <mark>Português (Brasil)</mark>, e teclado <mark>Brasileiro (ABNT2)</mark> e em seguida clique em <mark>Instalar o Haiku</mark></p>
         <img class="responsiva" src="assets/images/haiku2.jpg" alt="">
-        <p>Concorde com os termos cliando em <span style="color:white">Continuar</span></p>
+        <p>Concorde com os termos cliando em <mark>Continuar</mark></p>
         <img class="responsiva" src="assets/images/haiku3.jpg" alt="">
-        <p>Caso não haja nenhuma partição compatível com o formato <span style="color:white">Be File System</span> (o que é muito provável) você verá um aviso te indicando a criar uma partição compatível para a instalação</p>
+        <p>Caso não haja nenhuma partição compatível com o formato <mark>Be File System</mark> (o que é muito provável) você verá um aviso te indicando a criar uma partição compatível para a instalação</p>
         <img class="responsiva" src="assets/images/haiku4.jpg" alt="">
-        <p>Para criar uma partição <span style="color:white">Be File System</span> selecione <span style="color:white">Configurar partições...</span></p>
+        <p>Para criar uma partição <mark>Be File System</mark> selecione <mark>Configurar partições...</mark></p>
         <h3>Criando uma partição para o Haiku</h3>
-        <h4>A - Para um disco novo OU para uma nova tabela de partições:</h4>
-        <span style="color:red">
-            <h3>SIGA ESSA PARTE A APENAS SE VOCÊ NÃO SE IMPORTA DE PERDER DADOS NO DISCO SELECIONADO</h3>
-        </span>
+        <h4>A - Para um disco novo OU para uma nova tabela de partições</h4>
+        <p><strong>Siga essa parte apenas se você não se importa de perder os dados no disco selecionado</strong></p>
         <img class="responsiva" src="assets/images/haiku5.jpg" alt="">
-        <p>Se o seu disco estiver sem nenhuma tabela de partição OU se você quiser criar uma nova tabela de partição e "zerar" o disco para então instalar o Haiku, selecione o disco que deseja formatar e no canto superior direito da janela selecione <span style="color:white">Inicializar</span> > <span style="color:white">Intel Partition Map</span></p>
+        <p>Se o seu disco estiver sem nenhuma tabela de partição OU se você quiser criar uma nova tabela de partição e "zerar" o disco para então instalar o Haiku, selecione o disco que deseja formatar e no canto superior direito da janela selecione <mark>Inicializar</mark> > <mark>Intel Partition Map</mark></p>
         <img class="responsiva" src="assets/images/haiku6.jpg" alt="">
-        <p>Você será avisado que ao fazer isso TODOS OS DADOS DO DISCO SERÃO PERDIDOS, clique em <span style="color:white">Continuar</span> caso deseje instalar num disco novo ou zerar os dados do disco atual</p>
+        <p>Você será avisado que ao fazer isso <strong>todos os dados do disco serão perdidos</strong>, clique em <mark>Continuar</mark> caso deseje instalar num disco novo ou zerar os dados do disco atual</p>
         <img class="responsiva" src="assets/images/haiku7.jpg" alt="">
-        <p>O sistema irá te perguntar se você quer aplicar as alterações no disco, caso tenha certeza clique em <span style="color:white">Aplicar alterações</span></p>
+        <p>O sistema irá te perguntar se você quer aplicar as alterações no disco, caso tenha certeza clique em <mark>Aplicar alterações</mark></p>
         <img class="responsiva" src="assets/images/haiku8.jpg" alt="">
-        <p>E caso tudo tenha dado certo, você será informado que o inicializador foi instalado com sucesso, para prosseguir clique em <span style="color:white">OK</span></p>
+        <p>E caso tudo tenha dado certo, você será informado que o inicializador foi instalado com sucesso, para prosseguir clique em <mark>OK</mark></p>
         <img class="responsiva" src="assets/images/haiku9.jpg" alt="">
         <h4>B - Apenas criando a partição para o Haiku sem alterar a tabela de partições atual OU após criar a nova tabela de partiçoes</h4>
-        <p>Selecione o <span style="color:white">Espaço vazio</span> no disco que você quer utilizar para instalar o Haiku, clique com o botão direito e selecione <span style="color:white">Criar...</span></p>
+        <p>Selecione o <mark>Espaço vazio</mark> no disco que você quer utilizar para instalar o Haiku, clique com o botão direito e selecione <mark>Criar...</mark></p>
         <img class="responsiva" src="assets/images/haiku10.jpg" alt="">
-        <p>Selecione o tamanho da partição, o Tipo de partição <span style="color:white">Be File System</span>, marque a opção <span style="color:white">Partição Ativa</span> e por fim clique em <span style="color:white">Criar</span></p>
+        <p>Selecione o tamanho da partição, o Tipo de partição <mark>Be File System</mark>, marque a opção <mark>Partição Ativa</mark> e por fim clique em <mark>Criar</mark></p>
         <img class="responsiva" src="assets/images/haiku11.jpg" alt="">
-        <p>Selecione <span style="color:white">Aplicar alterações</span></p>
+        <p>Selecione <mark>Aplicar alterações</mark></p>
         <img class="responsiva" src="assets/images/haiku12.jpg" alt="">
-        <p>Depois clique com o botão direito na partição que acabou de criar, selecione <span style="color:white">Formatar</span> > <span style="color:white">Be File System</span></p>
+        <p>Depois clique com o botão direito na partição que acabou de criar, selecione <mark>Formatar</mark> > <mark>Be File System</mark></p>
         <img class="responsiva" src="assets/images/haiku13.jpg" alt="">
-        <p>Selecione <span style="color:white">Continuar</span></p>
+        <p>Selecione <mark>Continuar</mark></p>
         <img class="responsiva" src="assets/images/haiku14.jpg" alt="">
-        <p>E depois <span style="color:white">Formatar</span></p>
+        <p>E depois <mark>Formatar</mark></p>
         <img class="responsiva" src="assets/images/haiku15.jpg" alt="">
-        <p>Selecione <span style="color:white">Aplicar alterações</span></p>
+        <p>Selecione <mark>Aplicar alterações</mark></p>
         <img class="responsiva" src="assets/images/haiku16.jpg" alt="">
-        <p>E caso tudo tenha dado certo dê <span style="color:white">OK</span></p>
+        <p>E caso tudo tenha dado certo dê <mark>OK</mark></p>
         <img class="responsiva" src="assets/images/haiku17.jpg" alt="">
-        <p>Feche o <span style="color:white">Gestor de Discos</span></p>
+        <p>Feche o <mark>Gestor de Discos</mark></p>
         <img class="responsiva" src="assets/images/haiku18.jpg" alt="">
-        <p>E na tela do <span style="color:white">Instalador</span> selecione a partição que acabou de criar em <span style="color:white">Para:</span></p>
+        <p>E na tela do <mark>Instalador</mark> selecione a partição que acabou de criar em <mark>Para:</mark></p>
         <img class="responsiva" src="assets/images/haiku19.jpg" alt="">
-        <p>E depois clique em <span style="color:white">Iniciar</span></p>
+        <p>E depois clique em <mark>Iniciar</mark></p>
         <img class="responsiva" src="assets/images/haiku20.jpg" alt="">
         <p>Aguarde o fim da instalação</p>
         <img class="responsiva" src="assets/images/haiku21.jpg" alt="">
-        <p>Após o fim da instalação clique em <span style="color:white">Reiniciar</span></p>
+        <p>Após o fim da instalação clique em <mark>Reiniciar</mark></p>
         <img class="responsiva" src="assets/images/haiku22.jpg" alt="">
         <p>Se tudo deu certo ao reiniciar você verá a área de trabalho do Haiku</p>
         <img class="responsiva" src="assets/images/haiku23.jpg" alt="">
         <h2>Pós Instalação</h2>
-        <p>A minha primeira recomendação de pós instalação pra você é atualizar o sistema, para isso clique no ícone da pena no canto da tela, selecione <span style="color:white">Applications</span> > <span style="color:white">Atualização de Software</span></p>
+        <p>A minha primeira recomendação de pós instalação pra você é atualizar o sistema, para isso clique no ícone da pena no canto da tela, selecione <mark>Applications</mark> > <mark>Atualização de Software</mark></p>
         <img class="responsiva" src="assets/images/haiku24.jpg" alt="">
         <p>Espere que o programa verifique as atualizações disponíveis</p>
         <img class="responsiva" src="assets/images/haiku25.jpg" alt="">
-        <p>Clique em <span style="color:white">Atualizar</span> agora para iniciar a atualização do sistema</p>
+        <p>Clique em <mark>Atualizar</mark> agora para iniciar a atualização do sistema</p>
         <img class="responsiva" src="assets/images/haiku26.jpg" alt="">
         <p>Aguarde a o fim da atualização</p>
         <img class="responsiva" src="assets/images/haiku27.jpg" alt="">
-        <p>E clique em <span style="color:white">Reiniciar</span></p>
+        <p>E clique em <mark>Reiniciar</mark></p>
         <img class="responsiva" src="assets/images/haiku28.jpg" alt="">
-        <p>Podemos instalar aplicações por meio do terminal com o comando <span style="color:white">pkgman install nomedopacote</span>, ou pelo gerenciador gráfico <span style="color:white">HaikuDepot</span>. Existem diversas aplicações disponíveis como o LibreOffice, VLC Player, Audacious, qBittorrent, qView, Notepadqq, Retroarch (com núcleos como snes9x, genesis plus gx, melonds, mgba, final burn neo, entre outros). Basta selecionar a aplicação e clicar em <span style="color:white">Instalar</span></p>
+        <p>Podemos instalar aplicações por meio do terminal com o comando <code>pkgman install <mark>nomedopacote</mark></code> ou pelo gerenciador gráfico <mark>HaikuDepot</mark>. Existem diversas aplicações disponíveis como o LibreOffice, VLC Player, Audacious, qBittorrent, qView, Notepadqq, Retroarch (com núcleos como snes9x, genesis plus gx, melonds, mgba, final burn neo, entre outros). Basta selecionar a aplicação e clicar em <mark>Instalar</mark></p>
         <img class="responsiva" src="assets/images/haiku29.jpg" alt="">
     </main>
     <footer id="main-footer">
