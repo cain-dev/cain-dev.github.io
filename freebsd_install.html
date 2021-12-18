@@ -118,19 +118,19 @@
         <p>Selecione <mark>Reboot</mark> para concluir a instalação e reiniciar a máquina para o sistema instalado.</p>
         <img class="responsiva" src="assets/images/bsd34.jpg" alt="">
         <h2>Pós Instalação</h2>
-        <p>Assim que o sistema iniciar logue na conta de administrador (login: <mark>root</mark> - senha: <mark>senha que você digitou para acesso administrativo</mark>)</p>
+        <p>Assim que o sistema iniciar logue na conta de administrador: (login: <mark>root</mark> - senha: <mark>senha que você digitou para acesso administrativo</mark>)</p>
         <img class="responsiva" src="assets/images/bsd35.jpg" alt="">
         <p>Assim que logado na conta de root vamos começar a preparar o sistema...</p>
         <img class="responsiva" src="assets/images/bsd36.jpg" alt="">
-        <p>Para atualizar o núcleo do sistema use o comando</p>
+        <p>Para atualizar o núcleo do sistema use o comando:</p>
         <code>freebsd-update fetch install</code>
-        <p>Para atualizar os pacotes insira o comando</p>
+        <p>Para atualizar os pacotes insira o comando:</p>
         <code>pkg update && upgrade</code>
         <code>Do you want to fetch and install it now?: <mark>y</mark></code> 
         <p>Se aparecer:</p>
         <code>Your packages are up to date</code>
-        <p>significa que seu sistema já está devidamente atualizado.</p>
-        <p>Caso tenha escolhido usar o <mark>ports</mark> use o comando abaixo  para fetch, extract e update do ports</p>
+        <p>Significa que seu sistema já está devidamente atualizado.</p>
+        <p>Caso tenha escolhido usar o <mark>ports</mark> use o comando abaixo  para fetch, extract e update do ports:</p>
         <code>portsnap auto</code>
         <p>Pronto! Seu sistema está devidamente instalado e atualizado... Mas ainda da pra melhorar.</p>
         <h3>Configuração para Usuário Final</h3>
@@ -142,51 +142,51 @@
         <code>pkg install xorg</code>
         <code>Proceed with this action? <mark>y</mark></code> 
         <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
-        <p>Para instalação do Gnome</p>
+        <p>Para instalação do Gnome:</p>
         <code>pkg install gdm gnome3</code>
-        <p>Para instalação do KDE</p>
+        <p>Para instalação do KDE:</p>
         <code>pkg install kde5</code>
-        <p>Para Instalação do XFCE</p>
+        <p>Para Instalação do XFCE:</p>
         <code>pkg install xfce slim</code>
-        <p>Para Instalação do Mate</p>
+        <p>Para Instalação do Mate:</p>
         <code>pkg install mate slim</code>
-        <p>Para instalação do LxQT</p>
+        <p>Para instalação do LxQT:</p>
         <code>pkg install lxqt slim</code>
-        <p>Para instalação do Cinnamon</p>
+        <p>Para instalação do Cinnamon:</p>
         <code>pkg install cinnamon slim</code>
         <h3>Edição do FSTAB</h3>
         <p>Esses ambientes (por via de regra) dependem do <mark>process file system</mark> montados, para isso vamos editar o <mark>/etc/fstab</mark>. Caso nunca tenha utilizado um editor de texto por terminal antes eu recomendo instalar o <mark>nano</mark> para editar o arquivo, instale-o com o comando:</p>
         <code>pkg install nano</code>
         <p>Edite o arquivo com o comando:</p>
         <code>nano /etc/fstab</code>
-        <p>adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
+        <p>Adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
         <code>proc&emsp;/proc&emsp;procfs&emsp;rw&emsp;0&emsp;0</code>
         <p>Para sair do nano o comando é <mark>Ctrl</mark> + <mark>x</mark>, quando utilizar esse comando caso não tenha salvado o arquivo ele vai perguntar se você deseja salvar antes de sair, obviamente escolha que <mark>sim</mark> e <mark>tecle Enter</mark> para confirmar o <mark>nome do arquivo</mark> (<strong>não edite o nome do arquivo!</strong>).</p>
         <h3>Edição do RCCONF</h3>        
-        <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark></p>
+        <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark>.</p>
         <p>para editar o arquivo com o nano execute o comando:</p>
         <code>nano /etc/rc.conf</code>
         <p>acrescente essas linhas ao final do arquivo:</p>
         <code>dbus_enable="YES"</code>
         <code>hald_enable="YES"</code>
         <p>(não mais necessário)</p>
-        <p>Os ambientes precisam da adição de linhas específicas</p>
-        <h4> Caso escolha o KDE ative o SDDM</h4>
+        <p>Os ambientes gráficos precisam da adição de linhas específicas.</p>
+        <h4> Caso escolha o KDE ative o SDDM:</h4>
         <code>sddm_enable="YES"</code>
         <p>(apenas para chamar o gerenciador de exibição para o KDE)</p>
-        <h4>Caso escolha o Gnome ative o GDM</h4>
+        <h4>Caso escolha o Gnome ative o GDM e os serviços do Gnome:</h4>
         <code>gdm_enable="YES"</code>
         <p>(apenas para chamar o gerenciador de exibição Gnome)</p>
         <code>gnome_enable="YES"</code>
         <p>(para iniciar os serviços do gnome)</p>
-        <h4>Caso escolha os demais Ambientes ative o Slim</h4>
+        <h4>Caso escolha os demais Ambientes ative o Slim:</h4>
         <code>slim_enable="YES"</code>
         <p>(apenas para chamar o gerenciador de exibição SLiM para os demais desktop environments)</p>
-        <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark></p>
+        <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
         <h3>Edição do arquivo XINITRC</h3>
-        <p>Caso ainda esteja logado como root, deslogue utilizando o comando</p>
+        <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
         <code>exit</code>
-        <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> como comando</p>
+        <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
         <code>nano ~/.xinitrc</code>
         <p>Acrescente as linhas:</p>
         <code>export LC_ALL=pt_BR.UTF-8</code>
@@ -227,17 +227,17 @@
         <code>kern.vty="vt"</code>
         <p>Para reduzir o tempo do prompt de autoboot para 5 segundos:</p>
         <code>autoboot_delay="5"</code>
-        <h4>Mudar o ntpd para o openntpd</h4>
+        <h4>Mudar o ntpd para o openntpd:</h4>
         <code>pkg install openntpd</code>
-        <p>edite o <mark>ntpd.conf</mark></p>
+        <p>edite o <mark>ntpd.conf</mark>:</p>
         <code>nano /usr/local/etc/ntpd.conf</code>
         <p>edite para o seguinte conteúdo:</p>
         <code>servers pool.ntp.br</code>
-        <p>No <mark>rc.conf</mark>, edite a linha</p>
+        <p>No <mark>rc.conf</mark>, edite a linha:</p>
         <code>ntpd_enable="YES"</code>
-        <p>para</p>
+        <p>para:</p>
         <code>ntpd_enable="NO"</code>
-        <p>e logo abaixo insira a linha</p>
+        <p>e logo abaixo insira a linha:</p>
         <code>openntpd_enable="YES"</code>
         <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
         <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
@@ -256,7 +256,7 @@
         <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
         <code>LANG=pt_BR.UTF-8;   export LANG</code>
         <code>CHARSET=UTF-8;  export CHARSET</code>
-        <p>Para verificar a localização execute no seu próximo login o comando</p>
+        <p>Para verificar a localização execute no seu próximo login o comando:</p>
         <code>locale</code>
         <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
         <p>isso retira a necessidade das linhas...</p>
