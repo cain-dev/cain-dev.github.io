@@ -122,7 +122,6 @@ i {
   margin-top: 1px;
 }
 
-
 #main-area {
   width: 90%;
   margin: 0em auto;
@@ -133,12 +132,12 @@ i {
     line-height: 1.25em;
 }
 
-#main-area strong{
+#main-area strong {
   text-transform: uppercase;
   color: red;
 }
 
-#main-area em{
+#main-area em {
   text-transform: uppercase;
   color: blueviolet;
 }
