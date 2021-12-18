@@ -192,8 +192,13 @@ i {
 }
 
 #main-area em {
+  color: white;
+  background-color: transparent;
+  font-family: 'Inconsolata', monospace;
+  font-weight: 900;
+  padding: 0 .2em;
   text-transform: uppercase;
-  color: blueviolet;
+  
 }
 
 #main-area li a {
