@@ -156,6 +156,11 @@ i {
   margin-top: 1px;
 }
 
+#main-area a:hover {
+  color: #EDEDED;
+  background-color: #DA0037;
+}
+
 .responsiva {
   width: 100%;
   max-width: 768px;
