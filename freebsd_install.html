@@ -133,146 +133,146 @@
         <p>Caso tenha escolhido usar o <mark>ports</mark> use o comando abaixo  para fetch, extract e update do ports:</p>
         <code>portsnap auto</code>
         <p>Pronto! Seu sistema está devidamente instalado e atualizado... Mas ainda da pra melhorar.</p>
-        <h3>Configuração para Usuário Final</h3>
-        <h3>Instalação de Desktop Environment</h3>
-        <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
-        <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
-        <h3>Instalação do Xorg</h3>
-        <p>A primeira coisa que precisamos para instalar um ambiente gráfico é o Xorg, para instala-lo utilize o comando:</p>
-        <code>pkg install xorg</code>
-        <code>Proceed with this action? <mark>y</mark></code> 
-        <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
-        <p>Para instalação do Gnome:</p>
-        <code>pkg install gdm gnome3</code>
-        <p>Para instalação do KDE:</p>
-        <code>pkg install kde5</code>
-        <p>Para Instalação do XFCE:</p>
-        <code>pkg install xfce slim</code>
-        <p>Para Instalação do Mate:</p>
-        <code>pkg install mate slim</code>
-        <p>Para instalação do LxQT:</p>
-        <code>pkg install lxqt slim</code>
-        <p>Para instalação do Cinnamon:</p>
-        <code>pkg install cinnamon slim</code>
-        <h3>Edição do FSTAB</h3>
-        <p>Esses ambientes (por via de regra) dependem do <mark>process file system</mark> montados, para isso vamos editar o <mark>/etc/fstab</mark>. Caso nunca tenha utilizado um editor de texto por terminal antes eu recomendo instalar o <mark>nano</mark> para editar o arquivo, instale-o com o comando:</p>
-        <code>pkg install nano</code>
-        <p>Edite o arquivo com o comando:</p>
-        <code>nano /etc/fstab</code>
-        <p>Adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
-        <code>proc&emsp;/proc&emsp;procfs&emsp;rw&emsp;0&emsp;0</code>
-        <p>Para sair do nano o comando é <mark>Ctrl</mark> + <mark>x</mark>, quando utilizar esse comando caso não tenha salvado o arquivo ele vai perguntar se você deseja salvar antes de sair, obviamente escolha que <mark>sim</mark> e <mark>tecle Enter</mark> para confirmar o <mark>nome do arquivo</mark> (<strong>não edite o nome do arquivo!</strong>).</p>
-        <h3>Edição do RCCONF</h3>        
-        <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark>.</p>
-        <p>para editar o arquivo com o nano execute o comando:</p>
-        <code>nano /etc/rc.conf</code>
-        <p>acrescente essas linhas ao final do arquivo:</p>
-        <code>dbus_enable="YES"</code>
-        <code>hald_enable="YES"</code>
-        <p>(não mais necessário)</p>
-        <p>Os ambientes gráficos precisam da adição de linhas específicas.</p>
-        <h4> Caso escolha o KDE ative o SDDM:</h4>
-        <code>sddm_enable="YES"</code>
-        <p>(apenas para chamar o gerenciador de exibição para o KDE)</p>
-        <h4>Caso escolha o Gnome ative o GDM e os serviços do Gnome:</h4>
-        <code>gdm_enable="YES"</code>
-        <p>(apenas para chamar o gerenciador de exibição Gnome)</p>
-        <code>gnome_enable="YES"</code>
-        <p>(para iniciar os serviços do gnome)</p>
-        <h4>Caso escolha os demais Ambientes ative o Slim:</h4>
-        <code>slim_enable="YES"</code>
-        <p>(apenas para chamar o gerenciador de exibição SLiM para os demais desktop environments)</p>
-        <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
-        <h3>Edição do arquivo XINITRC</h3>
-        <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
-        <code>exit</code>
-        <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
-        <code>nano ~/.xinitrc</code>
-        <p>Acrescente as linhas:</p>
-        <code>export LC_ALL=pt_BR.UTF-8</code>
-        <code>export LANGUAGE=pt_BR.UTF-8</code>
-        <code>export LANG=pt_BR.UTF-8</code>
-        <code>setxkbmap -model abnt2 -layout br</code>
-        <p>Caso tenha selecionado algum ambiente que precisa ser iniciado pelo SLiM adicione a linha correspondente:</p>
-        <code>exec startxfce4</code>
-        <p>para iniciar o XFCE pelo SLiM</p>
-        <code>exec mate-session</code>
-        <p>para iniciar o Mate pelo SLiM</p>
-        <code>exec startlxqt</code>
-        <p>para iniciar o LxQT pelo SLiM</p>
-        <code>exec cinnamon-session</code>
-        <p>para iniciar o Cinnamon pelo SLiM</p>
-        <p>Feche o arquivo com <mark>Ctrl</mark> + <mark>x</mark>, confirme salvar.</p>
-        <h3>Ambiente gráfico devidamente instalado!</h3>
-        <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
-        <code>shutdown -r now</code>
-        <img class="responsiva" src="assets/images/mate.jpg" alt="">
-        <h3>Mas ainda é só o começo...</h3>
-        <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
-        <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
-        <h3>Caso queira continuar...</h3>
-        <p>Aqui vão algumas alterações recomendadas:</p>
-        <h4>/etc/rc.conf</h4>
-        <p>Para desabilitar completamente o Sendmail:</p>
-        <code>sendmail_enable="NO"</code> 
-        <p>(ao invés do depreciado <mark>sendmail_enable="NONE"</mark>)</p>
-        <code>sendmail_submit_enable="NO"</code>
-        <code>sendmail_outbound_enable="NO"</code>
-        <code>sendmail_msp_queue_enable="NO"</code>
-        <p>Para habilitar a sincronização de horário no boot:</p>
-        <code>ntpd_sync_on_start="YES"</code>
-        <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
-        <h4>/boot/loader.conf</h4>
-        <p>Para habilitar o novo virtual console:</p>
-        <code>kern.vty="vt"</code>
-        <p>Para reduzir o tempo do prompt de autoboot para 5 segundos:</p>
-        <code>autoboot_delay="5"</code>
-        <h4>Mudar o ntpd para o openntpd:</h4>
-        <code>pkg install openntpd</code>
-        <p>edite o <mark>ntpd.conf</mark>:</p>
-        <code>nano /usr/local/etc/ntpd.conf</code>
-        <p>edite para o seguinte conteúdo:</p>
-        <code>servers pool.ntp.br</code>
-        <p>No <mark>rc.conf</mark>, edite a linha:</p>
-        <code>ntpd_enable="YES"</code>
-        <p>para:</p>
-        <code>ntpd_enable="NO"</code>
-        <p>e logo abaixo insira a linha:</p>
-        <code>openntpd_enable="YES"</code>
-        <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
-        <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
-        <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
-        <p>Ao alterar o locale usando a codificação de caracteres UTF-8, o sistema pode entender e exibir cada um dos 1112064 caracteres no conjunto de caracteres Unicode, ao invés de apenas US ASCII como é o padrão com LANG=C.</p>
-        <p>Edite o banco de dados da classe de login em <mark>/etc/login.conf</mark> para adicionar um conjunto de caracteres e localidade padrão. Os shells de login herdarão as variáveis ​​de ambiente definidas aqui na classe padrão ou em uma classe mais restrita, se corresponder a uma.</p>
-        <p>altere de:</p>
-        <code>:charset=UTF-8:\</code>
-        <code>:lang=en_US.UTF-8:</code>
-        <p>para:</p>
-        <code>:charset=UTF-8:\</code>
-        <code>:lang=pt_BR.UTF-8:</code>
-        <p>Após fazer as alterações reconstrua o banco de dados de login com</p>
-        <code>cap_mkdb /etc/login.conf</code>
-        <p>Você pode ter que especificar a nova localidade em outro lugar (como <mark>/etc/profile</mark>) para usos de shell sem login, como GDM e outros gerenciadores de login.</p>
-        <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
-        <code>LANG=pt_BR.UTF-8;   export LANG</code>
-        <code>CHARSET=UTF-8;  export CHARSET</code>
-        <p>Para verificar a localização execute no seu próximo login o comando:</p>
-        <code>locale</code>
-        <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
-        <p>isso retira a necessidade das linhas...</p>
-        <code>export LC_ALL=pt_BR.UTF-8</code>
-        <code>export LANGUAGE=pt_BR.UTF-8</code>
-        <code>export LANG=pt_BR.UTF-8</code>
-        <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
-        <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
-        <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
-        <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
-        <code>fsck -y</code>
-        <code>mount -u /</code>
-        <code>mount -a -t ufs</code>
-        <code>swapon -a</code> 
-        <p>(caso utilize swap)</p>
-        <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
+        <h2>Configuração para Usuário Final</h2>
+            <h3>Instalação de Desktop Environment</h3>
+                <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
+                <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
+            <h3>Instalação do Xorg</h3>
+                <p>A primeira coisa que precisamos para instalar um ambiente gráfico é o Xorg, para instala-lo utilize o comando:</p>
+                <code>pkg install xorg</code>
+                <code>Proceed with this action? <mark>y</mark></code> 
+            <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
+                <p>Para instalação do Gnome:</p>
+                <code>pkg install gdm gnome3</code>
+                <p>Para instalação do KDE:</p>
+                <code>pkg install kde5</code>
+                <p>Para Instalação do XFCE:</p>
+                <code>pkg install xfce slim</code>
+                <p>Para Instalação do Mate:</p>
+                <code>pkg install mate slim</code>
+                <p>Para instalação do LxQT:</p>
+                <code>pkg install lxqt slim</code>
+                <p>Para instalação do Cinnamon:</p>
+                <code>pkg install cinnamon slim</code>
+            <h3>Edição do FSTAB</h3>
+                <p>Esses ambientes (por via de regra) dependem do <mark>process file system</mark> montados, para isso vamos editar o <mark>/etc/fstab</mark>. Caso nunca tenha utilizado um editor de texto por terminal antes eu recomendo instalar o <mark>nano</mark> para editar o arquivo, instale-o com o comando:</p>
+                <code>pkg install nano</code>
+                <p>Edite o arquivo com o comando:</p>
+                <code>nano /etc/fstab</code>
+                <p>Adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
+                <code>proc&emsp;/proc&emsp;procfs&emsp;rw&emsp;0&emsp;0</code>
+                <p>Para sair do nano o comando é <mark>Ctrl</mark> + <mark>x</mark>, quando utilizar esse comando caso não tenha salvado o arquivo ele vai perguntar se você deseja salvar antes de sair, obviamente escolha que <mark>sim</mark> e <mark>tecle Enter</mark> para confirmar o <mark>nome do arquivo</mark> (<strong>não edite o nome do arquivo!</strong>).</p>
+            <h3>Edição do RCCONF</h3>        
+                <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark>.</p>
+                <p>para editar o arquivo com o nano execute o comando:</p>
+                <code>nano /etc/rc.conf</code>
+                <p>acrescente essas linhas ao final do arquivo:</p>
+                <code>dbus_enable="YES"</code>
+                <code>hald_enable="YES"</code>
+                <p>(não mais necessário)</p>
+                <p>Os ambientes gráficos precisam da adição de linhas específicas.</p>
+                <p> Caso escolha o KDE ative o SDDM:</p>
+                <code>sddm_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição para o KDE)</p>
+                <p>Caso escolha o Gnome ative o GDM e os serviços do Gnome:</p>
+                <code>gdm_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição Gnome)</p>
+                <code>gnome_enable="YES"</code>
+                <p>(para iniciar os serviços do gnome)</p>
+                <p>Caso escolha os demais Ambientes ative o Slim:</p>
+                <code>slim_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição SLiM para os demais desktop environments)</p>
+                <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
+            <h3>Edição do arquivo XINITRC</h3>
+                <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
+                <code>exit</code>
+                <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
+                <code>nano ~/.xinitrc</code>
+                <p>Acrescente as linhas:</p>
+                <code>export LC_ALL=pt_BR.UTF-8</code>
+                <code>export LANGUAGE=pt_BR.UTF-8</code>
+                <code>export LANG=pt_BR.UTF-8</code>
+                <code>setxkbmap -model abnt2 -layout br</code>
+                <p>Caso tenha selecionado algum ambiente que precisa ser iniciado pelo SLiM adicione a linha correspondente:</p>
+                <code>exec startxfce4</code>
+                <p>para iniciar o XFCE pelo SLiM</p>
+                <code>exec mate-session</code>
+                <p>para iniciar o Mate pelo SLiM</p>
+                <code>exec startlxqt</code>
+                <p>para iniciar o LxQT pelo SLiM</p>
+                <code>exec cinnamon-session</code>
+                <p>para iniciar o Cinnamon pelo SLiM</p>
+                <p>Feche o arquivo com <mark>Ctrl</mark> + <mark>x</mark>, confirme salvar.</p>
+            <h3>Ambiente gráfico devidamente instalado!</h3>
+                <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
+                <code>shutdown -r now</code>
+                <img class="responsiva" src="assets/images/mate.jpg" alt="">
+            <h3>Mas ainda é só o começo...</h3>
+                <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
+                <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
+            <h3>Caso queira continuar...</h3>
+                <p>Aqui vão algumas alterações recomendadas:</p>
+            <h3>/etc/rc.conf</h3>
+                <h4>Para desabilitar completamente o Sendmail:</h4>
+                    <code>sendmail_enable="NO"</code> 
+                    <p>(ao invés do depreciado <mark>sendmail_enable="NONE"</mark>)</p>
+                    <code>sendmail_submit_enable="NO"</code>
+                    <code>sendmail_outbound_enable="NO"</code>
+                    <code>sendmail_msp_queue_enable="NO"</code>
+                <h4>Para habilitar a sincronização de horário no boot:</h4>
+                <code>ntpd_sync_on_start="YES"</code>
+                <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
+            <h3>/boot/loader.conf</h3>
+                <h4>Para habilitar o novo virtual console:</h4>
+                    <code>kern.vty="vt"</code>
+                <h4>Para reduzir o tempo do prompt de autoboot para 5 segundos:</h4>
+                    <code>autoboot_delay="5"</code>
+                <h4>Mudar o ntpd para o openntpd:</h4>
+                    <code>pkg install openntpd</code>
+                    <p>edite o <mark>ntpd.conf</mark>:</p>
+                    <code>nano /usr/local/etc/ntpd.conf</code>
+                    <p>edite para o seguinte conteúdo:</p>
+                    <code>servers pool.ntp.br</code>
+                    <p>No <mark>rc.conf</mark>, edite a linha:</p>
+                    <code>ntpd_enable="YES"</code>
+                    <p>para:</p>
+                    <code>ntpd_enable="NO"</code>
+                    <p>e logo abaixo insira a linha:</p>
+                    <code>openntpd_enable="YES"</code>
+            <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
+                <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
+                <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
+                <p>Ao alterar o locale usando a codificação de caracteres UTF-8, o sistema pode entender e exibir cada um dos 1112064 caracteres no conjunto de caracteres Unicode, ao invés de apenas US ASCII como é o padrão com LANG=C.</p>
+                <p>Edite o banco de dados da classe de login em <mark>/etc/login.conf</mark> para adicionar um conjunto de caracteres e localidade padrão. Os shells de login herdarão as variáveis ​​de ambiente definidas aqui na classe padrão ou em uma classe mais restrita, se corresponder a uma.</p>
+                <p>altere de:</p>
+                <code>:charset=UTF-8:\</code>
+                <code>:lang=en_US.UTF-8:</code>
+                <p>para:</p>
+                <code>:charset=UTF-8:\</code>
+                <code>:lang=pt_BR.UTF-8:</code>
+                <p>Após fazer as alterações reconstrua o banco de dados de login com</p>
+                <code>cap_mkdb /etc/login.conf</code>
+                <p>Você pode ter que especificar a nova localidade em outro lugar (como <mark>/etc/profile</mark>) para usos de shell sem login, como GDM e outros gerenciadores de login.</p>
+                <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
+                <code>LANG=pt_BR.UTF-8;   export LANG</code>
+                <code>CHARSET=UTF-8;  export CHARSET</code>
+                <p>Para verificar a localização execute no seu próximo login o comando:</p>
+                <code>locale</code>
+                <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
+                <p>isso retira a necessidade das linhas...</p>
+                <code>export LC_ALL=pt_BR.UTF-8</code>
+                <code>export LANGUAGE=pt_BR.UTF-8</code>
+                <code>export LANG=pt_BR.UTF-8</code>
+                <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
+                <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
+            <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
+                <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
+                <code>fsck -y</code>
+                <code>mount -u /</code>
+                <code>mount -a -t ufs</code>
+                <code>swapon -a</code> 
+                <p>(caso utilize swap)</p>
+                <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 17/12/2021)</p>
