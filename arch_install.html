@@ -235,7 +235,7 @@
         <code>mount /dev/sdxy /mnt/boot</code>
         <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>ESP</mark>)</p>
         <h2>// 9 - Instalar sistema</h2>
-        <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então essa vai ser o MEU comando de instalação:</p>
+        <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então esse vai ser o MEU comando de instalação:</p>
         <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo</code>
         <p>Porém:</p>
         <ul>
