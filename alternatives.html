@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternativas de Software</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - O Básico"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://opensource.org/files/osi_favicon.png">
+    <link rel="stylesheet" type="text/css"href="reset.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <img src="assets/images/slogo.png" alt="">
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="">SOBRE</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Alternativas de Software</h1>
+        <h2>Introdução</h2>
+        <p>Existem diversos programas proprietários inchados (no sentido que pesam bastante para o computador) de uso gratuito que as pessoas insistem em usar ainda que transforme o pc numa tartaruga, isso quando não estamos falando de programas proprietários que não só são inchados como também são pagos que as pessoas fazem questão de  ainda por cima crackear. E aí não só comprometem desempenho e privacidade mas também a segurança da máquina, e pra piorar geralmente essas pessoas utilizam somente 1 ou 2 funções desses programas...</p>
+        <p>Quem está há muito tempo na área de t.i. já cansou de ver gente com laptop dualcore com 2gb de ram usando Windows 7 com Microsoft Office pra editar a porcaria de um texto pra faculdade e ainda reclamando que tá travando, sendo que essa mesma máquina com um Linux Mint XFCE com Google Docs rodaria liso e faria a mesma coisa só que melhor e mais rápido!</p>
+        <p>Se você é daqueles que ainda perde tempo tendo que clicar na janelinha da licença de uso do WinRAR ou esperando 30 minutos pro seu computador abrir a porcaria de um <mark>.pdf</mark> essa página é pra você!</p>
+        <p>Eu não tenho o objetivo de converter ninguém para o lado Full Open-Source da força, mas depender de um programa que instala 5gb de dados e que executa ocupando 2gb de ram pra editar a porcaria de um tcc é falta de vergonha na cara com as opções que temos hoje em 2021 😂.<br>Então, caso você queira deixar de perder tempo, aqui tem um compilado de alternativas de software pra você não depender de coisa proprietária pra executar funções simples como ler emails, descompactar arquivos, editar textos e por aí vai...</p>
+        <p>Se você quiser continuar passando raiva com seu computador com programas que controlam ele mais do que você (abraços pra você que nesse momento utiliza Windows 10 só navegando no Chrome, usando o WinRAR só pra extrair arquivos e o µTorrent só pra baixar) a escolha é sua, mas caso você queira parar de depender dessas porcarias fique a vontade para instalar qualquer uma dessas alternativas pois sem nenhuma dúvida elas são mais leves e seguras que suas contrapartes.</p>
+        <ul class="opconteiner">
+            <li>
+                <a class="opitem" href="https://www.linuxmint.com/download.php">
+                    <div class="optext">
+                        <span>Para substituir o Windows:<br>Linux Mint</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.mozilla.org/pt-BR/firefox/new/">
+                    <div class="optext">
+                        <span>Para substituir o Chrome:<br>Firefox</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://jdownloader.org/download/index">
+                    <div class="optext">
+                        <span>Para substituir o Internet Download Manager:<br>JDownloader2</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.thunderbird.net/pt-BR/">
+                    <div class="optext">
+                        <span>Para substituir o MSOutlook:<br>Thunderbird</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://pt-br.libreoffice.org/">
+                    <div class="optext">
+                        <span>Para substituir o MSOffice:<br>LibreOffice</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://github.com/clsid2/mpc-hc/releases">
+                    <div class="optext">
+                        <span>Para substituir o Filmes e TV:<br>MPC-HC</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="http://www.digimezzo.com/software/dopamine/">
+                    <div class="optext">
+                        <span>Para substituir o Groove Music:<br>Dopamine</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://imageglass.org/">
+                    <div class="optext">
+                        <span>Para substituir o Microsoft Photos:<br>ImageGlass</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.qbittorrent.org/download.php">
+                    <div class="optext">
+                        <span>Para substituir o µTorrent:<br>qBittorrent</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.7-zip.org/download.html">
+                    <div class="optext">
+                        <span>Para substituir o WinRAR:<br>7-Zip</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.sumatrapdfreader.org/download-free-pdf-viewer">
+                    <div class="optext">
+                        <span>Para substituir o Adobe Acrobat:<br>SumatraPDF</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://wincdemu.sysprogs.org/download/">
+                    <div class="optext">
+                        <span>Para substituir o DaemonTools:<br>WinCDEmu</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://meet.jit.si/">
+                    <div class="optext">
+                        <span>Para substituir o Zoom:<br>Jitsi</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://element.io/get-started">
+                    <div class="optext">
+                        <span>Para substituir o Discord:<br>Element</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://flameshot.org/#download">
+                    <div class="optext">
+                        <span>Para substituir o Lightshot:<br>Flameshot</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.gimp.org/downloads/">
+                    <div class="optext">
+                        <span>Para substituir o Adobe Photoshop:<br>GIMP</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://inkscape.org/">
+                    <div class="optext">
+                        <span>Para substituir o CorelDRAW:<br>Inkscape</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.dwservice.net/pt_BR/download.html">
+                    <div class="optext">
+                        <span>Para substituir o TeamViewer/Anydesk:<br>DW Service</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://signal.org/pt_BR/download/">
+                    <div class="optext">
+                        <span>Para substituir o Whatsapp:<br>Signal</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://rocksdanister.github.io/lively/#three">
+                    <div class="optext">
+                        <span>Para substituir o Wallpaper Engine:<br>Lively Wallpaper</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.bcuninstaller.com/">
+                    <div class="optext">
+                        <span>Para substituir o Revo Uninstaller:<br>Bulk Crap Uninstaller</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://chrisandriessen.nl/taskbarx">
+                    <div class="optext">
+                        <span>Para substituir o TranslucentTB:<br>TaskbarX</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://joplinapp.org/">
+                    <div class="optext">
+                        <span>Para substituir o Evernote:<br>Joplin</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://vscodium.com/#install">
+                    <div class="optext">
+                        <span>Para substituir o Visual Studio Code:<br>VSCodium</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <h2>Softwares Universais</h2>
+        <p>Sabe quando seu colega te manda um arquivo que ele salvou no Office 2019 do Windows 10 dele e quando você vai abrir no seu Office do Windows 7 fica tudo bugado? Ou quando você tem que instalar 1001 aplicativos pra fazer a mesma porcaria só pelo fato de ter mudado o sistema? Cansado desse tipo de situação eu resolvi o problema cortando o mal pela raíz: Utilizando softwares que rodam da mesma forma em basicamente todos os sistemas que uso (ou pelo menos em mais de 1 versão do Windows e do Linux). Sendo assim quando eu posso utilizar sistemas diferentes na mesma configuração, o que poupa tempo e especialmente dor cabeça.</p>
+        <ul class="opconteiner">
+            <li>
+                <a class="opitem" href="https://www.mozilla.org/pt-BR/firefox/new/">
+                    <div class="optext">
+                        <span>Navegador:<br>Firefox</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://pt-br.libreoffice.org/">
+                    <div class="optext">
+                        <span>Suíte Office:<br>LibreOffice</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://audacious-media-player.org/download">
+                    <div class="optext">
+                        <span>Player de Música:<br>Audacious</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://deadbeef.sourceforge.io/download.html">
+                    <div class="optext">
+                        <span>Player de Música 2:<br>DEADBEEF</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://interversehq.com/qview/download/">
+                    <div class="optext">
+                        <span>Visualizador de Imagem:<br>qView</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.videolan.org/vlc/index.html">
+                    <div class="optext">
+                        <span>Player de Vídeo:<br>VLC Player</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://mpv.io/installation/">
+                    <div class="optext">
+                        <span>Player de Vídeo 2:<br>MPV</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://github.com/jely2002/youtube-dl-gui/releases/latest">
+                    <div class="optext">
+                        <span>Youtube Vídeo Downloader:<br>Open Video Downloader</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://addons.mozilla.org/pt-BR/firefox/addon/youtube_downloader_webx/">
+                    <div class="optext">
+                        <span>Youtube Vídeo Downloader 2:<br>YouTube Video and Audio Downloader</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://obsproject.com/">
+                    <div class="optext">
+                        <span>Gravação e Streaming de Vídeo:<br>OBS</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.stremio.com/downloads/">
+                    <div class="optext">
+                        <span>Assistir Filmes Online:<br>Stremio</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://kdenlive.org/en/download/">
+                    <div class="optext">
+                        <span>Edição de Vídeo:<br>Kdenlive</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.audacityteam.org/download/">
+                    <div class="optext">
+                        <span>Edição/Gravação de Áudio:<br>Audacity</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.shutterencoder.com/en/#downloads">
+                    <div class="optext">
+                        <span>Conversão de Áudio/Vídeo:<br>Shutter Encoder</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://krita.org/en/download/krita-desktop/">
+                    <div class="optext">
+                        <span>Pintura Digital:<br>Krita</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://kodi.tv/">
+                    <div class="optext">
+                        <span>Central de Mídia:<br>Kodi</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.retroarch.com/?page=platforms">
+                    <div class="optext">
+                        <span>Emulação:<br>Retroarch</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://youtu.be/dQw4w9WgXcQ">
+                    <div class="optext">
+                        <span>Leitor de PDF:<br>Seu navegador já faz isso duh</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://youtu.be/dQw4w9WgXcQ">
+                    <div class="optext">
+                        <span>Montagem de ISO:<br>Todo sistema atual já tem nativamente de montagem de iso...</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <h2>Alternativas para Android</h2>
+        <h3>F-Droid</h3>
+        <p>F-Droid é um loja de software para Android, tem uma função similar à da Google Play. O repositório principal, hospedado pelo projeto, contém apenas aplicativos <em>gratuitos e de código aberto</em>. Os aplicativos podem ser navegados, baixados e instalados a partir do site ou do F-Droid sem a necessidade de registro.</p>
+        <a class="link" href="https://f-droid.org/pt_BR/">Baixe Aqui</a>
+        <h3>Simple Mobile Tools</h3>
+        <p>Segundo o próprio Tibor Kaputa: <i>"Um grupo de aplicativos Android simples e de código aberto sem anúncios e permissões desnecessárias, com widgets personalizáveis."</i></p>
+        <p>Se você é usuário do Android, deve ter notado a quantidade de apps pré-instalados no seu aparelho. Alguns deles são ok, alguns definitivamente não são. Mas, como eles foram pré-instalados, você os obteve de graça. Como você não os instalou manualmente, talvez não tenha notado a quantidade de permissões que eles têm. Basta encontrar um aplicativo nas configurações do seu dispositivo e verificar as permissões concedidas. Dependendo do dispositivo e do fabricante, você pode encontrar um Calendário sem nenhum outro serviço integrado, mas ainda exigindo acesso à Internet. Pode haver alguns aplicativos que têm, por exemplo, acesso aos seus contatos ou arquivos por motivos inexplicáveis. O acesso à Internet é tão comum que você nem precisa concedê-lo explicitamente, ao contrário de alguns outros. Acabei de verificar meu dispositivo e o cliente de e-mail personalizado pré-instalado de baixa qualidade requer quase o dobro das permissões do que o Gmail exige.</p>
+        <p>Meu segundo problema com aplicativos pré-instalados, ou aplicativos em geral, são os anúncios. Sim, criar esses aplicativos custa muito dinheiro às grandes empresas, é por isso que eles são ineficientes. Mas como diabos eles podem confiar em anúncios para obter lucro? Eles incomodam todo mundo, e quase ninguém clica neles intencionalmente, pelo menos não eu. Algumas empresas estão claramente tentando fazer com que os usuários cliquem neles por engano, mas um gerenciador de arquivos com anúncios entre pastas é simplesmente inaceitável e não ficará no meu dispositivo por muito tempo.</p>
+        <p>O terceiro problema é a experiência do usuário. Embora sejam aplicativos nativos e as empresas saibam que serão usados ​​apenas no Android, muitas vezes ainda não seguem as diretrizes de design. Não estou interessado nas animações e ícones personalizados de suas empresas (aumentando ainda mais os custos de produção), quando não tenho ideia do que o botão fará quando pressionado. O Google fornece uma lista enorme de ícones de materiais que é mais do que suficiente para a maioria dos aplicativos.</p>
+        <p>Widgets também fazem parte da experiência do usuário e eu adoro usá-los, então eles devem ser mencionados. Alguns aplicativos fornecem widgets quando faz sentido, como relógios com a previsão do tempo, o que é bom. No entanto, muito poucos permitem a personalização de widgets, mesmo que os usuários possam ter papéis de parede claros ou escuros. Os widgets podem não apenas economizar muito tempo, mas também podem tornar a tela inicial incrível quando configuradas corretamente. Configurar corretamente é a parte principal aqui, pois apenas alguns widgets são realmente personalizáveis. Se a cor do aplicativo não corresponder à cor do papel de parede dos usuários, ou se o plano de fundo do widget for muito claro ou muito escuro, bem, isso é muito ruim. Além disso, não há necessidade de criar aplicativos com mil recursos que apenas 1% dos usuários usará. Eu só quero aplicativos simples que funcionem, não me faça pressionar 2-3 botões até que eu tire fotos em uma câmera.</p>
+        <p>Por último, quero aplicativos que sejam úteis. Não estou interessado em criar filmes em um smartphone ou desenhar borboletas sobre fotos. Se eu quisesse, eu mesmo baixaria um aplicativo para isso. Eu sei que alguns aplicativos do Google precisam ser pré-instalados, mas isso é um tópico diferente. Se os fabricantes de dispositivos parassem de produzir esse lixo e, em vez disso, concentrassem sua mão de obra e dinheiro na aplicação de patches mais rapidamente, atualizando sistemas operacionais mais rapidamente e suportando dispositivos por mais tempo, eu estaria disposto a pagar ainda mais por eles. Isso lhes daria ainda mais dinheiro do que esperar que eu clique nesse anúncio. Deixe o mercado cuidar dos aplicativos.</p>
+        <p>Agora, você provavelmente está se perguntando, o que realmente são as Simple Mobile Tools? Bem, é um grupo de aplicativos Android simples e de código aberto com widgets personalizáveis, sem anúncios e permissões desnecessárias. E muitos outros benefícios. Eu queria criar aplicativos que não tivessem todas as coisas que eu odiava em aplicativos de telefone - permissões desnecessárias, anúncios, experiência ruim do usuário e widgets não personalizáveis. Sinto que não sou o único que odeia essas coisas; portanto, verificar meu conjunto de aplicativos pode ser útil para você. Você pode obtê-los no Google Play ou em seu site. O Simple Gallery Pro é realmente tão popular que recebeu uma página independente.</p>
+        <ul class="opconteiner">
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.applauncher">
+                    <div class="optext">
+                        <span>Launcher:<br>Simple App Launcher</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.calculator">
+                    <div class="optext">
+                        <span>Calculadora:<br>Simple Calculator</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.draw">
+                    <div class="optext">
+                        <span>Rascunho:<br>Simple Draw</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.musicplayer">
+                    <div class="optext">
+                        <span>Player de Música:<br>Simple Music Player</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.dialer">
+                    <div class="optext">
+                        <span>Discador:<br>Simple Dialer</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.smsmessenger">
+                    <div class="optext">
+                        <span>SMS:<br>Simple SMS Messenger</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.voicerecorder">
+                    <div class="optext">
+                        <span>Gravador:<br>Simple Voice Recorder</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.flashlight">
+                    <div class="optext">
+                        <span>Lanterna:<br>Simple Flashlight</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.gallery">
+                    <div class="optext">
+                        <span>Galeria:<br>Simple Gallery</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.calendar">
+                    <div class="optext">
+                        <span>Calendário:<br>Simple Calendar</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.contacts">
+                    <div class="optext">
+                        <span>Contatos:<br>Simple Contacts</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.filemanager">
+                    <div class="optext">
+                        <span>Gerenciador de Arquivos:<br>Simple File Manager</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.simplemobiletools.notes">
+                    <div class="optext">
+                        <span>Notas:<br>Simple Notes</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://f-droid.org/pt_BR/packages/com.simplemobiletools.camera/">
+                    <div class="optext">
+                        <span>Câmera:<br>Simple Camera</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://f-droid.org/pt_BR/packages/com.simplemobiletools.clock/">
+                    <div class="optext">
+                        <span>Relógio:<br>Simple Clock</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <h3>Outras Alternativas</h3>
+        <ul class="opconteiner">
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=ch.deletescape.lawnchair.plah">
+                    <div class="optext">
+                        <span>Launcher:<br>Lawnchair 2</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=fr.neamar.kiss">
+                    <div class="optext">
+                        <span>Launcher:<br>KISS Launcher</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://f-droid.org/pt_BR/packages/rkr.simplekeyboard.inputmethod/">
+                    <div class="optext">
+                        <span>Teclado:<br>Simple Keyboard</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.menny.android.anysoftkeyboard">
+                    <div class="optext">
+                        <span>Teclado:<br>AnySoftKeyboard</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=net.sourceforge.opencamera">
+                    <div class="optext">
+                        <span>Câmera:<br>OpenCamera</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://www.bromite.org/">
+                    <div class="optext">
+                        <span>Navegador:<br>Bromite</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.amaze.filemanager&hl=pt_BR&gl=US">
+                    <div class="optext">
+                        <span>Gerenciador de Arquivos:<br>Amaze File Manager</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://newpipe.net/#download">
+                    <div class="optext">
+                        <span>Cliente de Youtube:<br>NewPipe</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://f-droid.org/en/packages/com.pitchedapps.frost/">
+                    <div class="optext">
+                        <span>Cliente de Facebook:<br>Frost for Facebook</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=org.telegram.messenger">
+                    <div class="optext">
+                        <span>Mensageiro:<br>Telegram</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms">
+                    <div class="optext">
+                        <span>Mensageiro:<br>Signal</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.retroarch">
+                    <div class="optext">
+                        <span>Emulação:<br>Retroarch</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=com.poupa.vinylmusicplayer">
+                    <div class="optext">
+                        <span>Player de Música:<br>Vynil Music Player</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=org.videolan.vlc">
+                    <div class="optext">
+                        <span>Player de Vídeo:<br>VLC Player</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="opitem" href="https://play.google.com/store/apps/details?id=is.xyz.mpv">
+                    <div class="optext">
+                        <span>Player de Vídeo:<br>MPV</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <h2>E se eu quiser alternativas pra outro aplicativo?</h2>
+        <p>Recomendo utilizar o <a class="link" href="https://alternativeto.net/">AlternativeTo</a> para isso.</p>
+        <p>Basta digitar o <mark>nome do aplicativo</mark> para qual você quer alternativas na barra de pesquisa e depois clicar nele:</p>
+        <img class="responsiva" src="assets/images/alternative1.jpg" alt="">
+        <p>Desça um pouco mais a página e selecione <mark>All filters</mark> para poder filtrar por sistema ou licença, em <mark>License:</mark> marque <mark>Open Source</mark>:</p>
+        <img class="responsiva" src="assets/images/alternative2.jpg" alt="">
+        <p>E você verá uma lista de aplicativos similares com licença Open-Source:</p>
+        <img class="responsiva" src="assets/images/alternative3.jpg" alt="">
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 13/01/2022)</p>
+        <a href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>
