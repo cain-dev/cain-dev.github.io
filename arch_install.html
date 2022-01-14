@@ -407,6 +407,59 @@
         <h3>Habilitar extração/compressão no menu de contexto do Nemo:</h3>
         <p>Basta executar o seguinte comando:</p>
         <code>sudo pacman -S nemo-fileroller</code>
+        <h2>//Melhorar renderização de fontes</h2>
+        <h3>1 - Editar o <mark>/etc/fonts/local.conf</mark></h3>
+        <code>sudo nano /etc/fonts/local.conf</code>
+        <p>Adicione as linhas:</p>
+        <pre>
+            <code>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+&lt;fontconfig&gt;
+    &lt;match target="font"&gt;
+        &lt;edit name="antialias" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit name="hinting" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit mode="assign" name="rgba"&gt;
+            &lt;const&gt;rgb&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="hintstyle"&gt;
+            &lt;const&gt;hintslight&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="lcdfilter"&gt;
+            &lt;const&gt;lcddefault&lt;/const&gt;
+        &lt;/edit&gt;
+    &lt;/match&gt;
+&lt;/fontconfig&gt;
+            </code>
+        </pre>
+        <h3>2 - Editar o <mark>~/.Xresources</mark></h3>
+        <p><strong>IMPORTANTE:</strong>Este arquivo deve ser alterado na conta do seu usuário e não como <mark>root</mark>, lembre-se de trocar para a sua conta caso necessário.<br>Uma vez logado na sua conta de usuário edite o arquivo com o comando:</p>
+        <code>nano ~/.Xresources</code>
+        <p>Se as seguintes linhas ainda não estão presentes, adicione ao final do arquivo os seguintes valores:</p>
+        <code>
+            Xft.antialias: 1<br>
+            Xft.hinting: 1<br>
+            Xft.rgba: rgb<br>
+            Xft.hintstyle: hintslight<br>
+            Xft.lcdfilter: lcddefault
+        </code>
+        <h3>3 - Crie links simbólicos com algumas das predefinições disponíveis</h3>
+        <p>Utilize os comandos abaixo:</p>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/</code>
+        <h3>4 - Habilite FreeType2</h3>
+        <p>Edite o arquivo <mark>freetype2.sh</mark> com o comando:</p>
+        <code>nano /etc/profile.d/freetype2.sh</code>
+        <p>Descomente a linha:</p>
+        <code>export FREETYPE_PROPERTIES="truetype:interpreter-version=NN"</code>
+        <p>Reconstrua o cache do fontconfig com o comando:</p>
+        <code>sudo fc-cache -fv</code>
+        <h2>//Instalar Firefox com suporte a localização pt-br</h2>
+        <code>pacman -S firefox firefox-i18n-pt-br</code>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 14/01/2022)</p>
