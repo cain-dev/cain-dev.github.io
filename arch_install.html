@@ -32,7 +32,7 @@
         <h1>Instalação do Arch Linux</h1>
         <img class="responsiva" src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="">
         <h2>Instalação Alvo</h2>
-        <p>Como o Arch Linux é um sistema bastante configurável, toda instalação tem um alvo de como ser finalizada. A instalação alvo dessa documentação trata-se de um sistema em <mark>UEFI</mark> com <mark>systemd-boot</mark>, com raiz em <mark>EXT4</mark> e <mark>iwd</mark>+<mark>resolved</mark> OU <mark>NetworkManager</mark>+<mark>resolved</mark>. Portanto, se você tem um computador que funciona somente com <mark>BIOS</mark> ou queira outro bootloader como o <mark>GRUB</mark> para utilizar dualboot <strong>Não siga essa documentação para particionamento e instalação de bootloader</strong>.</p>
+        <p>Como o Arch Linux é uma distribuição bastante configurável, toda instalação tem um alvo de como ser finalizada. A instalação alvo dessa documentação trata-se de um sistema em <mark>UEFI</mark> com <mark>systemd-boot</mark>, com raiz em <mark>EXT4</mark> e <mark>iwd</mark>+<mark>resolved</mark> OU <mark>NetworkManager</mark>+<mark>resolved</mark> para interface de rede e utilizando o <mark>PipeWire</mark> para servidor de áudio. Portanto, se você tem um computador que funciona somente com <mark>BIOS</mark> ou queira outro bootloader como o <mark>GRUB</mark> para utilizar dualboot <strong>Não siga essa documentação para particionamento e instalação de bootloader</strong>.</p>
         <p><strong>⚠️Alerta: Necessário um mínimo de experiência prévia com sistemas Unixlike</strong></p>
         <h2>// 1 - Configurar teclado</h2>
         <p>Antes de digitar qualquer comando é necessário que o teclado esteja configurado corretamente no padrão ABNT2, para isso utilize o comando:</p>
@@ -236,14 +236,14 @@
         <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>ESP</mark>)</p>
         <h2>// 9 - Instalar sistema</h2>
         <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então esse vai ser o MEU comando de instalação:</p>
-        <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo</code>
+        <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo pipewire</code>
         <p>Porém:</p>
         <ul>
             <li><p>Caso você queira utilizar um kernel lts você pode substituir o pacote <mark>linux</mark> por <mark>linux-lts</mark>;</p></li>
             <li>Caso você utilize cabo de rede ao invés de wifi você deve substituir o pacote <mark>iwd</mark> por <mark>networkmanager</mark>;</p></li>
             <li>Caso você utilize processadores Intel ao invés de AMD você deve substituir o pacote <mark>amd-ucode</mark> por <mark>intel-ucode</mark>;</p></li>
             <li><p>Você também pode optar por não ter elevação de privilégios através do <mark>sudo</mark> ou mesmo utilizar o <mark>doas</mark> ao invés dele;</p></li>
-            
+            <li><p>Caso o instalador te peça para escolher entre <mark>pipewire-media-session</mark> e <mark>WirePlumber</mark>, selecione o <mark>WirePlumber</mark>.</p></li>
         </ul>
         <h2>// 10 - Gerar FSTAB</h2>
         <p>Já com o sistema instalado podemos gerar o arquivo da tabela do sistema de arquivos com o comando:</p>
@@ -308,15 +308,21 @@
         <code>options root=/dev/sdxy rw</code>
         <p>Observações:</p>
         <ul>
+            <li><p>Caso você utilize kernal lts lembre-se de modificar a linha <mark>/vmlinuz-linux</mark> para <mark>/vmlinuz-linux-lts</mark> e <mark>initramfs-linux.img</mark> para <mark>initramfs-linux-lts.img</mark></p></li>
             <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
             <li><p>Em <mark>options root=/dev/sdxy rw</mark> altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>;</p></li>
         </ul>
         <h2>//18 - Habilitar e configurar serviços de rede</h2>
+        <h3>Configurar resolv.conf</h3>
+        <code>nano /etc/resolv.conf</code>
+        <p>Adicione as linhas:</p>
+        <code>nameserver 208.67.222.222<br>nameserver 208.67.220.220</code>
         <h3>Para Wifi</h3>
         <p>Caso você tenha optado por utilizar Wifi habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
         <code>systemctl enable iwd.service</code><p></p>
         <code>systemctl enable systemd-resolved.service</code>
-        <p>Agora devemos editar o arquivo de configuração do iwd, para acessar o arquivo pelo nano utilize o comando:</p>
+        <p>Agora devemos criar a pasta e o arquivo de configuração do iwd, para acessar o arquivo pelo nano utilize o comando:</p>
+        <code>mkdir /etc/iwd</code>
         <code>nano /etc/iwd/main.conf</code>
         <p>Desde a versão 0.19, o iwd pode atribuir endereços IP e configurar rotas usando um cliente DHCP integrado, para habilitar essa configuração adicione as linhas:</p></p>
         <code>
@@ -370,7 +376,12 @@
         <p>Para:</p>
         <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
         <p>E em seguida salve o arquivo</p>
-        <h2>//Instalando o Cinnamon</h2>
+        <h2>//Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
+        <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
+        <code>sudo pacman -S nvidia</code>
+        <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
+        <code>sudo pacman -S nvidia-lts</code>
+        <h2>//Instalando o Cinnamon+LightDM</h2>
         <p>Utilize o comando:</p>
         <code>pacman -S xorg cinnamon lightdm-gtk-greeter-settings gnome-terminal</code>
         <p>Habilite o serviço do LightDM com o comando:</p>
@@ -393,7 +404,7 @@
         <code>sudo pacman -S nemo-fileroller</code>
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 19/12/2021)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 14/01/2022)</p>
         <a href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
