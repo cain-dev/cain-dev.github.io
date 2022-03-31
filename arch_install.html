@@ -236,14 +236,13 @@
         <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>ESP</mark>)</p>
         <h2>// 9 - Instalar sistema</h2>
         <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então esse vai ser o MEU comando de instalação:</p>
-        <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo pipewire</code>
+        <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo pipewire-pulse</code>
         <p>Porém:</p>
         <ul>
             <li><p>Caso você queira utilizar um kernel lts você pode substituir o pacote <mark>linux</mark> por <mark>linux-lts</mark>;</p></li>
             <li>Caso você utilize cabo de rede ao invés de wifi você deve substituir o pacote <mark>iwd</mark> por <mark>networkmanager</mark>;</p></li>
             <li>Caso você utilize processadores Intel ao invés de AMD você deve substituir o pacote <mark>amd-ucode</mark> por <mark>intel-ucode</mark>;</p></li>
             <li><p>Você também pode optar por não ter elevação de privilégios através do <mark>sudo</mark> ou mesmo utilizar o <mark>doas</mark> ao invés dele;</p></li>
-            <li><p>Caso o instalador te peça para escolher entre <mark>pipewire-media-session</mark> e <mark>WirePlumber</mark>, selecione o <mark>WirePlumber</mark>.</p></li>
         </ul>
         <h2>// 10 - Gerar FSTAB</h2>
         <p>Já com o sistema instalado podemos gerar o arquivo da tabela do sistema de arquivos com o comando:</p>
@@ -312,11 +311,7 @@
             <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
             <li><p>Em <mark>options root=/dev/sdxy rw</mark> altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>;</p></li>
         </ul>
-        <h2>//18 - Habilitar e configurar serviços de rede</h2>
-        <h3>Configurar resolv.conf</h3>
-        <code>nano /etc/resolv.conf</code>
-        <p>Adicione as linhas:</p>
-        <code>nameserver 208.67.222.222<br>nameserver 208.67.220.220</code>
+        <h2>//18 - Habilitar e configurar serviços de rede</h2>        
         <h3>Para Wifi</h3>
         <p>Caso você tenha optado por utilizar Wifi habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
         <code>systemctl enable iwd.service</code><p></p>
@@ -339,6 +334,23 @@
         <p>Caso você tenha optado por utilizar cabo Ethernet habilite os serviços <mark>NetworkManager</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
         <code>systemctl enable NetworkManager.service</code>
         <code>systemctl enable systemd-resolved.service</code>
+        <h3>Configurar o DNS manualmente</h3>
+        <p>Por padrão o <mark>/etc/resolv.conf</mark> aponta para <mark>/run/systemd/resolve/resolv.conf</mark> que basicamente mescla todas as entradas de DNS de todos os links e configurações em um arquivo independente de hierarquia, cache, routing ou outras configurações, para começar a configurar manualmente verifique se o arquivo existe com o comando:</p>
+        <code>cat /etc/resolv.conf</code>
+        <p>Caso o arquivo exista, apague-o com o comando:</p>
+        <code>rm /etc/resolv.conf</code>
+        <p>E depois crie o link simbólico com o comando:</p>
+        <code>ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</code>
+        <p>Crie o diretório <mark>/etc/systemd/resolved.conf.d/</mark> para os arquivos de configuração com o comando:</p>
+        <code>mkdir /etc/systemd/resolved.conf.d</code>
+        <p>Em <mark>/etc/systemd/resolved.conf.d/dns_servers.conf</mark> adicione os seguintes endereços para o <mark>OpenDNS</mark> (ou substitua para os endereços que você preferir):</p>
+        <code>[Resolve]<br>DNS= 208.67.222.222 208.67.220.220 2620:119:35::35 2620:119:53::53</code>
+        <p>Em <mark>/etc/systemd/resolved.conf.d/fallback_dns.conf</mark> adicione:</p>
+        <code>[Resolve]<br>FallbackDNS=</code>
+        <p>Reinicie o serviço <mark>resolved</mark> com os comando:</p>
+        <code>systemctl restart systemd-resolved.service</code>
+        <p>Verifique o status do DNS com os comandos:</p>
+        <code>resolvectl status<br>systemd-resolve --status</code>
         <h4>NOTA:</h4>
         <p>Essa configuração foi escolhida focando por mais se encaixar no meu perfil de uso e não necessariamente em facilidade de uso. Utilizo o <mark>iwd</mark> por basicamente ser um sucessor do <mark>wpa_supplicant</mark> e já ter cliente DHCP integrado, sendo assim basta a integração com o <mark>resolved</mark>. E no caso do <mark>NetworkManager</mark> por também ter cliente DHCP integrado, altíssima compatibilidade com outros pacotes e ser o <i>go to option</i> da maioria das distribuições.</p>
         <h2>//19 - Criar usuário e habilitar elevação de privilégios com sudo</h2>
@@ -381,6 +393,8 @@
         <code>sudo pacman -S adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts</code>
         <p>Para símbolos:</p>
         <code>sudo pacman -S noto-fonts</code>
+        <h3>Habilitar NTP</h3>
+        <code>sudo timedatectl set-ntp true</code>        
         <h2>//Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
         <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
         <code>sudo pacman -S nvidia</code>
@@ -462,7 +476,7 @@
         <code>pacman -S firefox firefox-i18n-pt-br</code>
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 14/01/2022)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 31/03/2022)</p>
         <a href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
