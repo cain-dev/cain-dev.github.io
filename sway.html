@@ -126,7 +126,7 @@
             xkb_variant "abnt2"<br>
             }
         </code>
-        <h4>//Habilitar touchpad tap</h4>
+        <h4>//Habilitar toque e rolagem natural no touchpad</h4>
         <p>Após:</p>
         <code>
             input * {<br>
@@ -154,6 +154,14 @@
         <code>gaps inner 10</code>
         <p>Insira:</p>
         <code>default_border pixel 3</code>
+        <h4>//Alterar o temo do cursor através do xcursor-configuration</h4>
+        <p>Adicione as linhas abaixo:</p>
+        <code>seat seat0 xcursor_theme <mark>nomedotema</mark> <mark>48</mark></code>
+        <p>Substitua o valor <mark>48</mark> pelo tamanho desejado do cursor</p>
+        <h4>//Configurar GTK no Sway</h4>
+        <p>Adicione as seguintes configurações:</p>
+        <code>set $gnome-schema org.gnome.desktop.interface<br>exec_always {<br>gsettings set $gnome-schema gtk-theme "<mark>nome do tema GTK</mark>"<br>gsettings set $gnome-schema icon-theme "<mark>nome do tema de ícone</mark>"<br>gsettings set $gnome-schema cursor-theme "<mark>nome do tema de cursor</mark>"<br>gsettings set $gnome-schema font-name "<mark>Fonte</mark> <mark>10</mark>"<br>}</code>
+        <p>Substitua o <mark>10</mark> pelo tamanho desejado de fonte desejado</p>        
         <h3>4 - Copiar o arquivo template do foot para a pasta de usuário</h3>
         <p>Ainda no seu usuário (não root) acesse o diretório de configurações de usuário com o comando:</p>
         <code>cd ~/.config</code>
