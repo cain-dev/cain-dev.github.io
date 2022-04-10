@@ -242,9 +242,17 @@
         <p>Caso você queira habilitar acerelação por hardware você pode também adicionar a linha:</p>
         <code> --enable-gpu</code>
         <p>Salve o arquivo e reinicie o Chromium para que as mudanças tenham efeito.</p>
+        <h3>10 - Adicionando suporte básico para notificações</h3>
+        <p>Para possiblitar a exibição de notificações simples utilizaremos o <mark>Mako</mark>, utilize o comando abaixo para a instalação:</p>
+        <code>pacman -S mako</code>
+        <p>E agora precisamos adicionar a execução do <mark>Mako</mark> junto ao arquivo de configuração do Sway, em <mark>.config/sway/config</mark> adicione:</p>
+        <code>exec mako</code>
+        <p>Para testar as notificações você pode utilizar o <a class="link" href="https://www.bennish.net/web-notifications.html">HTML5 Web Notifications Test</a>.</p>
+        
+        
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 31/03/2022)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 10/04/2022)</p>
         <a href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
