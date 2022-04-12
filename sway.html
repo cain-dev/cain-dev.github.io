@@ -186,6 +186,13 @@
         <code># alpha=1.0</code>
         <p>Para:</p>
         <code>alpha=0.8</code>
+	<h4>Instalação do fish (opcional)</h4>
+	<p>Para uma experiência mais intuitiva ao interagir com o terminal você pode instalar o <mark>fish shell</mark>, para isso utilize o comando:</p>
+	<code>pacman -S fish</code>
+	<p>E para deixar o fish como padrão no foot no lugar do bash basta abrir o arquivo de configuração do foot em <mark>/home/seuusuario/.config/foot/foot.ini</mark> e na linha:</p>
+	<code># shell=$SHELL (if set, otherwise user's default shell from /etc/passwd</code>
+	<p>Descomente a linha e substitua para:</p>
+	<code>shell=/bin/fish</code>
         <h3>6 - Copiar os arquivos template do Waybar para a pasta de usuário</h3>
         <p>Ainda no seu usuário (não root) acesse o diretório de configurações de usuário com o comando:</p>
         <code>cd ~/.config</code>
