@@ -79,7 +79,8 @@
         <code>fdisk -l</code>
         <p>Uma vez que você tem a certeza de qual disco vai alterar e instalar o sistema utilize o comando abaixo para iniciar o particionamento, lembre-se de substituir o <mark>x</mark> em <mark>sdx</mark> pela letra do seu disco:</p>
         <code>gdisk /dev/sdx</code>
-        <p>Já com o <mark>gdisk</mark> aberto no disco selecionado criaremos uma nova tabela de partição em <mark>GPT</mark> com o comando:</p>
+	<p><strong>*Obs:</strong> Caso você queira realizar o particionamento de maneira mais gráfica você pode utilizar o comando <mark>cgdisk /dev/sdx</mark>.</p>
+	<p>Já com o <mark>gdisk</mark> aberto no disco selecionado criaremos uma nova tabela de partição em <mark>GPT</mark> com o comando:</p>
         <code>o</code>
         <h4>Partição EFI</h4>
         <p>Antes de mais nada é importante criarmos a partição <mark>EFI</mark>, o comando para criar uma nova partição é:</p>
