@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminocentric</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Links Úteis"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="reset.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <img src="assets/images/slogo.png" alt="">
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="contact.html">CONTATO</a></li>
+        </ul> 
+    </header>
+	<main id="main-area">
+        	<h1>Terminocêntrico</h1>
+        	<h2>Introdução</h2>
+        	<p>Seja pelo fato de ter uma máquina antiga e de baixo poder de processamento, seja pela busca de entender o Linux ou simplesmente pela vontade de ser um "I use Arch, btw" user, se você instalou um Arch com Sway e invejou os rices do Unixporn é bem provavel que você notou o fascínio da comunidade por aplicativos de terminal, que além de serem muito mais rápidos também PODEM ser muito agradáveis estéticamente...</p>
+		<p>Mas você não está satisfeito em apenas ter uma interface funcionando e usar os mesmos aplicativos de sempre, você quer um setup terminocêntrico! Mas... Não sabe como conseguir ferramentas que substituam perfeitamente o caso de uso atual? Então esse tutorial é pra vocẽ!</p>
+		<p>Mas antes disso um aviso: <strong>Desse ponto em diante basicamente não tem mais colher de chá ou videozinho no youtube pra resolver em 2 comandos, daqui pra frente o que há é leitura de documentação de software e testes, muita leitura, e muitos testes! Não existe atalhos!</strong> Se você está tudo bem com isso então vamos começar:</p>
+		<h2><mark>Usecase Target</mark></h2>
+		<p>O alvo dessa documentação é fazer um setup terminocêntrico tão capaz quanto o básico de uso de um computador hoje em dia: <mark>Navegação</mark> (isso você já tinha antes), <mark>Gerenciamento de arquivos</mark> (abrir, copiar, colar, visualizar, editar, comprimir, extrair), <mark>Gerenciamento de Mídias Removíveis</mark> (automontagem, interface para montar, desmontar, remover), <mark>Edição de Código</mark> (com visualização de árvore de diretórios)</p>
+
+		<h2>Instalação do Terminal, Kitty</h2>
+		<code>sudo pacman -S kitty</code>
+		<p>Diretório de configuração: <mark>~/.config/kitty/kitty.conf</mark></p>
+		<p>Você pode ver a documentação de configuração do Kitty <a class="link" href="https://sw.kovidgoyal.net/kitty/overview/#configuring-kitty">aqui</a></p>
+		<p>Você pode ver a minha configuração do Kitty <a class="link" href="https://github.com/cain-dev/dotfiles/blob/main/kitty/kitty.conf">aqui</a></p>
+		<h2>Instalação do Gerenciador de arquivos, Ranger</h2>
+		<code>sudo pacman -S ranger atool unzip unrar python-pillow</code>
+		<p>Você pode ver a documentação de guia de usuário do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki/Official-user-guide">aqui</a></p>
+		<p>Você pode ver a documentação de Wiki do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
+		<p>Você pode ver a minha documentação do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
+		<p><mark>rc.conf</mark> é usado para definir várias opções e vincular teclas a funções.<br>
+		<mark>rifle.conf</mark> decide qual programa usar para abrir um arquivo.<br>
+		<mark>scope.sh</mark> é um script de shell usado para gerar visualizações para vários tipos de arquivo.<br>
+		<mark>commands.py</mark> contém a implementação de várias funções, escritas em Python, usadas para modificar o comportamento do ranger e implementar seus próprios comandos personalizados.</p>
+		<p>Use <code>ranger --copy-config=rc</code> ou substitua <mark>rc</mark> por <mark>commands</mark>, <mark>rifle</mark>, ou <mark>scope</mark>, para copiar os arquivos de configuração padrão para o diretório <mark>~/.config/ranger</mark> e modificá-los lá, apenas copie os arquivos que você deseja editar.</p>
+
+
+
+		<p></p>
+        	<a class="link" href="https://"></a>
+        </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 28/04/2022)</p>
+        <a href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>
