@@ -29,14 +29,17 @@
         </ul> 
     </header>
 	<main id="main-area">
-        	<h1>Terminocêntrico</h1>
+        	<h1>Ambiente Terminocêntrico</h1>
         	<h2>Introdução</h2>
         	<p>Seja pelo fato de ter uma máquina antiga e de baixo poder de processamento, seja pela busca de entender o Linux ou simplesmente pela vontade de ser um "I use Arch, btw" user, se você instalou um Arch com Sway e invejou os rices do Unixporn é bem provavel que você notou o fascínio da comunidade por aplicativos de terminal, que além de serem muito mais rápidos também PODEM ser muito agradáveis estéticamente...</p>
 		<p>Mas você não está satisfeito em apenas ter uma interface funcionando e usar os mesmos aplicativos de sempre, você quer um setup terminocêntrico! Mas... Não sabe como conseguir ferramentas que substituam perfeitamente o caso de uso atual? Então esse tutorial é pra vocẽ!</p>
 		<p>Mas antes disso um aviso: <strong>Desse ponto em diante basicamente não tem mais colher de chá ou videozinho no youtube pra resolver em 2 comandos, daqui pra frente o que há é leitura de documentação de software e testes, muita leitura, e muitos testes! Não existe atalhos!</strong> Se você está tudo bem com isso então vamos começar:</p>
 		<h2><mark>Usecase Target</mark></h2>
-		<p>O alvo dessa documentação é fazer um setup terminocêntrico tão capaz quanto o básico de uso de um computador hoje em dia: <mark>Navegação</mark> (isso você já tinha antes), <mark>Gerenciamento de arquivos</mark> (abrir, copiar, colar, visualizar, editar, comprimir, extrair), <mark>Gerenciamento de Mídias Removíveis</mark> (automontagem, interface para montar, desmontar, remover), <mark>Edição de Código</mark> (com visualização de árvore de diretórios)</p>
-
+		<p>O alvo dessa documentação é fazer um setup terminocêntrico tão capaz quanto o básico de uso de um computador hoje em dia: <mark>Navegação</mark> (isso você já tinha antes), <mark>Gerenciamento de arquivos</mark> (abrir, copiar, colar, excluir, visualizar, editar, comprimir, extrair), <mark>Gerenciamento de Mídias Removíveis</mark> (automontagem, interface para montar, desmontar, remover), <mark>Edição de Código</mark> (com visualização de árvore de diretórios)</p>
+		<h2>Instalação de NerdFonts</h2>
+		<p>Escolha e baixe alguma das fontes desse link <a class="link" href="https://www.nerdfonts.com/font-downloads">Aqui</a>, mova as fontes para <mark>/usr/local/share/fonts/otf</mark> ou <mark>/usr/local/share/fonts/ttf</mark>. Os arquivos de fonte precisam ter permissões de leitura suficientes para todos os usuários, ou seja, pelo menos <mark>chmod 444</mark> para arquivos e <mark>555</mark> para diretórios.</p>
+		<p>Por último execute o comando abaixo para atualizar o cache de fontconfig</p>
+		<code>fc-cache</code>
 		<h2>Instalação do Terminal, Kitty</h2>
 		<code>sudo pacman -S kitty</code>
 		<p>Diretório de configuração: <mark>~/.config/kitty/kitty.conf</mark></p>
@@ -46,16 +49,123 @@
 		<code>sudo pacman -S ranger atool unzip unrar python-pillow</code>
 		<p>Você pode ver a documentação de guia de usuário do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki/Official-user-guide">aqui</a></p>
 		<p>Você pode ver a documentação de Wiki do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
-		<p>Você pode ver a minha documentação do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
+		<p>Você pode ver a minha configuração do Ranger <a class="link" href="https://github.com/cain-dev/dotfiles/tree/main/ranger">aqui</a></p>
 		<p><mark>rc.conf</mark> é usado para definir várias opções e vincular teclas a funções.<br>
 		<mark>rifle.conf</mark> decide qual programa usar para abrir um arquivo.<br>
 		<mark>scope.sh</mark> é um script de shell usado para gerar visualizações para vários tipos de arquivo.<br>
 		<mark>commands.py</mark> contém a implementação de várias funções, escritas em Python, usadas para modificar o comportamento do ranger e implementar seus próprios comandos personalizados.</p>
 		<p>Use <code>ranger --copy-config=rc</code> ou substitua <mark>rc</mark> por <mark>commands</mark>, <mark>rifle</mark>, ou <mark>scope</mark>, para copiar os arquivos de configuração padrão para o diretório <mark>~/.config/ranger</mark> e modificá-los lá, apenas copie os arquivos que você deseja editar.</p>
+		<h3>Habilitar Ícones no Ranger</h3>
+		<p>Para possibilitar a visualização de ícones no ranger você pode utilizar o plugin <mark>ranger_devicons</mark>, basta copiar o arquivo <mark>devicons.py</mark> para a pasta de plugins do ranger e adicionar a linha <mark>default_linemode devicons</mark> no <mark>rc.conf</mark> ou utilizar os códigos abaixo:</p>
+		<code>git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons</code>
+		<code>echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf</code>
+		<h3>Habilitar Lixeira e Esvaziamento de Lixeira</h3>
+		<p>Primeiramente crie o diretório da lixeira <mark>~/.local/share/Trash/files/</mark> e mapeie o comando abaixo no <mark>rc.conf</mark></p>
+		<code>map DD shell mv %s /home/${USER}/.local/share/Trash/files/</code>
+		<p>Em <mark>commands.py</mark> adicione as seguintes lihas:</p>
+		<pre><code>
+class empty(Command):
+	""":empty
 
+	Empties the trash directory ~/.Trash
+	"""
 
+	def execute(self):
+		self.fm.run("rm -rf /home/myname/.Trash/")
+		</code></pre>
+		<p>Para limpar a lixeira digite use o comando <code>:empty</code> e tecle <mark>Enter</mark></p>
+		<h3>Habilitar Extração de Arquivos</h3>
+		<p>Em <mark>commands.py</mark> adicione as seguintes lihas:</p>
+		<pre><code>
+import os
+from ranger.core.loader import CommandLoader
 
-		<p></p>
+class extract_here(Command):
+    def execute(self):
+        """ extract selected files to current directory."""
+        cwd = self.fm.thisdir
+        marked_files = tuple(cwd.get_selection())
+
+        def refresh(_):
+            cwd = self.fm.get_directory(original_path)
+            cwd.load_content()
+
+        one_file = marked_files[0]
+        cwd = self.fm.thisdir
+        original_path = cwd.path
+        au_flags = ['-x', cwd.path]
+        au_flags += self.line.split()[1:]
+        au_flags += ['-e']
+
+        self.fm.copy_buffer.clear()
+        self.fm.cut_buffer = False
+        if len(marked_files) == 1:
+            descr = "extracting: " + os.path.basename(one_file.path)
+        else:
+            descr = "extracting files from: " + os.path.basename(
+                one_file.dirname)
+        obj = CommandLoader(args=['aunpack'] + au_flags
+                            + [f.path for f in marked_files], descr=descr,
+                            read=True)
+
+        obj.signal_bind('after', refresh)
+        self.fm.loader.add(obj)
+		</code></pre>
+		<h3>Habilitar Compressão de Arquivos</h3>
+		<p>Em <mark>commands.py</mark> adicione as seguintes lihas:</p>
+		<pre><code>
+import os
+from ranger.core.loader import CommandLoader
+
+class compress(Command):
+    def execute(self):
+        """ Compress marked files to current directory """
+        cwd = self.fm.thisdir
+        marked_files = cwd.get_selection()
+
+        if not marked_files:
+            return
+
+        def refresh(_):
+            cwd = self.fm.get_directory(original_path)
+            cwd.load_content()
+
+        original_path = cwd.path
+        parts = self.line.split()
+        au_flags = parts[1:]
+
+        descr = "compressing files in: " + os.path.basename(parts[1])
+        obj = CommandLoader(args=['apack'] + au_flags + \
+                [os.path.relpath(f.path, cwd.path) for f in marked_files], descr=descr, read=True)
+
+        obj.signal_bind('after', refresh)
+        self.fm.loader.add(obj)
+
+    def tab(self, tabnum):
+        """ Complete with current folder name """
+
+        extension = ['.zip', '.tar.gz', '.rar', '.7z']
+        return ['compress ' + os.path.basename(self.fm.thisdir.path) + ext for ext in extension]
+
+		</code></pre>
+		<h3>Habilitar Visualização de Imagens e PDF</h3>
+		<p>Para habilitar a visualização de imagens no Ranger através do Kitty adicione essas linhas no <mark>rc.conf</mark></p>
+		<code>set preview_images true<br>set preview_images_method kitty</code>
+		<p>Para habilitar a visualização de demais arquivos adicione essas linhas no <mark>rc.conf</mark></p>
+		<code>set use_preview_script true</code>
+		<p>Por padrão o ranger permite a visualização de PDF como documento de texto, caso você queira a visualização de PDF de maneira gráfica descomente e habilite as seguintes linhas no <mark>scope.sh</mark>:</p>
+		<pre><code>
+## PDF
+         application/pdf)
+             pdftoppm -f 1 -l 1 \
+                      -scale-to-x "${DEFAULT_SIZE%x*}" \
+                      -scale-to-y -1 \
+                      -singlefile \
+                      -jpeg -tiffcompression jpeg \
+                      -- "${FILE_PATH}" "${IMAGE_CACHE_PATH%.*}" \
+                 && exit 6 || exit 1;;
+		</code></pre>
+
         	<a class="link" href="https://"></a>
         </main>
     <footer id="main-footer">
