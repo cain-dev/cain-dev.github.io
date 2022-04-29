@@ -255,11 +255,37 @@
         <p>E agora precisamos adicionar a execução do <mark>Mako</mark> junto ao arquivo de configuração do Sway, em <mark>.config/sway/config</mark> adicione:</p>
         <code>exec mako</code>
         <p>Para testar as notificações você pode utilizar o <a class="link" href="https://www.bennish.net/web-notifications.html">HTML5 Web Notifications Test</a>.</p>
-        
+
+	# suporte disco
+
+	# suporte flameshot
+	<h3>11 - Captura de tela com o Flameshot</h3>
+	<p><mark>Flameshot</mark> é um daqueles programas que melhora muito sua produtividade quando você precisa fazer alguma captura de tela, infelizmente apenas instalar o pacote com o pacman não é o suficiente, porém assim que devidamente configurado ele funciona perfeitamente. Para utilizar o Flameshot primeiro temos que instalar os pacotes abaixo:</p>
+	<code>
+		sudo pacman -S flameshot xdg-desktop-portal xdg-desktop-portal-wlr grim
+	</code>
+	<p>Uma vez que os pacotes estão instalados é necessário declarar algumas variáveis de ambiente, é interessante que sejam declaradas antes da inicialização do Sway (embora não seja a melhor opção você pode adicionar ao <mark>/etc/environment</mark> para isso). Declare as variáveis de ambiente abaixo:</p>
+	<code>
+		export SDL_VIDEODRIVER=wayland<br>
+		export _JAVA_AWT_WM_NONREPARENTING=1<br>
+		export QT_QPA_PLATFORM=wayland<br>
+		export XDG_CURRENT_DESKTOP=sway<br>
+		export XDG_SESSION_DESKTOP=sway<br>
+	</code>
+	<p>Uma vez que as variáveis estejam declaradas basta adicionar as linhas abaixo no arquivo de configuração do <mark>Sway</mark>:</p>
+	<pre><code>
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+	dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+	</code></pre>
+	<p>Pronto! Uma vez que o Sway seja <mark>reiniciado</mark> o comando <mark>flameshot gui</mark> vai iniciar uma captura de tela... Mas nós podemos adicionar um atalho Sway para que a tecla print já inicie o Flameshot, para isso adicione a linha abaixo no arquivo de configuração do Sway:</p>
+	<code>
+	bindsym Print exec flameshot gui
+	</code>
         
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 10/04/2022)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 29/04/2022)</p>
         <a href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
