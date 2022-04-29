@@ -255,10 +255,6 @@
         <p>E agora precisamos adicionar a execução do <mark>Mako</mark> junto ao arquivo de configuração do Sway, em <mark>.config/sway/config</mark> adicione:</p>
         <code>exec mako</code>
         <p>Para testar as notificações você pode utilizar o <a class="link" href="https://www.bennish.net/web-notifications.html">HTML5 Web Notifications Test</a>.</p>
-
-	# suporte disco
-
-	# suporte flameshot
 	<h3>11 - Captura de tela com o Flameshot</h3>
 	<p><mark>Flameshot</mark> é um daqueles programas que melhora muito sua produtividade quando você precisa fazer alguma captura de tela, infelizmente apenas instalar o pacote com o pacman não é o suficiente, porém assim que devidamente configurado ele funciona perfeitamente. Para utilizar o Flameshot primeiro temos que instalar os pacotes abaixo:</p>
 	<code>
@@ -282,7 +278,57 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 	<code>
 	bindsym Print exec flameshot gui
 	</code>
-        
+	<h3>12 - Gerenciamento de mídias removíveis com o Udiskie</h3> 
+	<img class="responsiva" src="https://raw.githubusercontent.com/coldfix/udiskie/master/screenshot.png" alt="">
+	<p>O udiskie é uma excelente ferramenta para gerenciar mídias removíveis de forma gráfica e simples, casa muito bem com a a bandeija da Waybar. Para instalar o udiskie utilize o comando:</p>
+	<code>sudo pacman -S udiskie</code>
+	<p>Uma vez que o udiskie foi instalado você deve adicionar as seguintes linhas no arquivo de configuração do Sway para mostrar o ícone na bandeija:</p>
+<pre><code>
+exec_always {
+	udiskie --appindicator -t
+	}
+</code></pre>
+	<p><strong>Importante:</strong> Não esqueça de declarar a configuração e adicionar o módulo de tray na sua Waybar! Não tem como exibir um ícone de bandeija sem bandeija declarada (obviamente).</p>
+	<p>Exemplo:
+	<pre><code>
+"modules-right": ["tray", "network"...
+
+"tray": {
+    "icon-size": 21,
+    "spacing": 10
+}
+	</code></pre>
+	<a class="link" href="https://www.bennish.net/web-notifications.html">Documentação do módulo de tray</a>
+	<p><mark>Resolução de problemas:</mark></p>
+	<p>O udiskie requer permissão para algumas ações do polkit que geralmente são concedidas ao usar um ambiente de desktop. Se sua sessão de login não estiver ativada corretamente, talvez seja necessário personalizar suas configurações de polkit. Crie o arquivo <mark>/etc/polkit-1/rules.d/50-udiskie.rules</mark> com permissões <mark>644</mark> e com o seguinte conteúdo:</p>
+<pre><code>
+polkit.addRule(function(action, subject) {
+  var YES = polkit.Result.YES;
+  var permission = {
+    // required for udisks1:
+    "org.freedesktop.udisks.filesystem-mount": YES,
+    "org.freedesktop.udisks.luks-unlock": YES,
+    "org.freedesktop.udisks.drive-eject": YES,
+    "org.freedesktop.udisks.drive-detach": YES,
+    // required for udisks2:
+    "org.freedesktop.udisks2.filesystem-mount": YES,
+    "org.freedesktop.udisks2.encrypted-unlock": YES,
+    "org.freedesktop.udisks2.eject-media": YES,
+    "org.freedesktop.udisks2.power-off-drive": YES,
+    // required for udisks2 if using udiskie from another seat (e.g. systemd):
+    "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
+    "org.freedesktop.udisks2.filesystem-unmount-others": YES,
+    "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
+    "org.freedesktop.udisks2.eject-media-other-seat": YES,
+    "org.freedesktop.udisks2.power-off-drive-other-seat": YES
+  };
+  if (subject.isInGroup("storage")) {
+    return permission[action.id];
+  }
+});
+</code></pre>
+	<p>Essa configuração permite que todos os membros do grupo de <mark>storage</mark> executem o udiskie.<br>Para adicionar o seu usuário no grupo storage basta utilizar o comando:</p>
+	<code>usermod -a -G storage <mark>seuusername</mark></code>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 29/04/2022)</p>
