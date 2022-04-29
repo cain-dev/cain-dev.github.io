@@ -165,8 +165,28 @@ class compress(Command):
                       -- "${FILE_PATH}" "${IMAGE_CACHE_PATH%.*}" \
                  && exit 6 || exit 1;;
 		</code></pre>
+		<h2>Istalação do Editor de Código, Neovim</h2>
+		<p>Antes de mais nada instalaremos o Neovim com</p>
+		<code>sudo pacman -S neovim</code>
+		<p>Para acesso rápido no gerenciador de arquivos é interessante definir o Neovim como editor padrão nas variáveis de ambiente, para isso declare a seguinte variável</mark></p>
+		<code>EDITOR=nvim</code>
+		<p>Com isso basta mapear um atalho para edição de arquivo (no meu caso eu uso a tecla e: <mark>map e edit</mark>)</p>
+		<h3>Habilitar plugins com o vim-plug</h3>
+		<p>O Neovim (ou o Vim original ou mesma alguma outra versão) é quase que uma religião, é uma ferramenta poderosíssima e absurdamente extensível e leve, existem diversas maneiras de incrementar o Neovim mas uma das (se não a) mais populares é através do gerenciador de plugins <mark>vim-plug</mark>. Para instalar o vim-plug basta adicionar o arquivo <mark>plug.vim</mark> na pasta <mark>~/.config/nvim/autoload</mark></p>
+		<p>Agora é interessante preparar o arquivo de configuração do Neovim que fica em <mark>~/.config/nvim/init.vim</mark>. Para instalar plugins basta adicionar o link do plugin nesse arquivo como no exemplo abaixo e usar o comando <mark>:PlugInstall</mark> no Neovim.</p>
+		<pre><code>
+" início da função 
+call plug#begin()
+" adicione aqui os links dos plugins que você deseja
+Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/ryanoasis/vim-devicons'
+Plug 'https://github.com/sainnhe/sonokai'
+Plug 'https://github.com/preservim/nerdtree'
+call plug#end()
+		</code></pre>
+		<p>Inclusive esses são os plugins que eu recomendo, caso você queira ver o meu arquivo de configuração basta acessar esse link <a class="link" href="https://github.com/cain-dev/dotfiles/blob/main/nvim/init.vim">aqui</a><p>
 
-        	<a class="link" href="https://"></a>
+        	<a class="link" href=""></a>
         </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 28/04/2022)</p>
