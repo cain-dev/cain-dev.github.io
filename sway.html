@@ -263,11 +263,11 @@
 	</code>
 	<p>Uma vez que os pacotes estão instalados é necessário declarar algumas variáveis de ambiente, é interessante que sejam declaradas antes da inicialização do Sway (embora não seja a melhor opção você pode adicionar ao <mark>/etc/environment</mark> para isso). Declare as variáveis de ambiente abaixo:</p>
 	<code>
-		export SDL_VIDEODRIVER=wayland<br>
-		export _JAVA_AWT_WM_NONREPARENTING=1<br>
-		export QT_QPA_PLATFORM=wayland<br>
-		export XDG_CURRENT_DESKTOP=sway<br>
-		export XDG_SESSION_DESKTOP=sway<br>
+		SDL_VIDEODRIVER=wayland<br>
+		_JAVA_AWT_WM_NONREPARENTING=1<br>
+		QT_QPA_PLATFORM=wayland<br>
+		XDG_CURRENT_DESKTOP=sway<br>
+		XDG_SESSION_DESKTOP=sway<br>
 	</code>
 	<p>Uma vez que as variáveis estejam declaradas basta adicionar as linhas abaixo no arquivo de configuração do <mark>Sway</mark>:</p>
 	<pre><code>
