@@ -47,7 +47,7 @@
 		<p>Você pode ver a minha configuração do Kitty <a class="link" href="https://github.com/cain-dev/dotfiles/blob/main/kitty/kitty.conf">aqui</a></p>
 		<p>Caso você queira instalar um tema recomendo esse repositório <a class="link" href="https://github.com/dexpota/kitty-themes">aqui</a></p>
 		<h2>Instalação do Gerenciador de arquivos, Ranger</h2>
-		<code>sudo pacman -S ranger atool unzip unrar python-pillow</code>
+		<code>sudo pacman -S ranger atool unzip unrar python-pillow poppler ffmpegthumbnailer</code>
 		<p>Você pode ver a documentação de guia de usuário do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki/Official-user-guide">aqui</a></p>
 		<p>Você pode ver a documentação de Wiki do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
 		<p>Você pode ver a minha configuração do Ranger <a class="link" href="https://github.com/cain-dev/dotfiles/tree/main/ranger">aqui</a></p>
@@ -72,7 +72,7 @@ class empty(Command):
 	"""
 
 	def execute(self):
-		self.fm.run("rm -rf /home/myname/.Trash/")
+		self.fm.run("rm -rf /home/${USER}/.local/share/Trash/files/")
 		</code></pre>
 		<p>Para limpar a lixeira digite use o comando <code>:empty</code> e tecle <mark>Enter</mark></p>
 		<h3>Habilitar Extração de Arquivos</h3>
@@ -166,6 +166,14 @@ class compress(Command):
                       -- "${FILE_PATH}" "${IMAGE_CACHE_PATH%.*}" \
                  && exit 6 || exit 1;;
 		</code></pre>
+		<p>Para habilitar exibição de thumbnail de vídeos habilite as seguintes linhas no <mark>scope.sh</mark>:</p>
+<pre><code>
+	## Video
+	video/*)
+		# Thumbnail
+		ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+		exit 1;;
+</code></pre>
 		<h2>Istalação do Editor de Código, Neovim</h2>
 		<p>Antes de mais nada instalaremos o Neovim com</p>
 		<code>sudo pacman -S neovim</code>
