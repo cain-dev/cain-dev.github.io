@@ -154,6 +154,14 @@ class compress(Command):
 		<code>set preview_images true<br>set preview_images_method kitty</code>
 		<p>Para habilitar a visualização de demais arquivos adicione essas linhas no <mark>rc.conf</mark></p>
 		<code>set use_preview_script true</code>
+		<p>Para habilitar exibição de thumbnail de vídeos habilite as seguintes linhas no <mark>scope.sh</mark>:</p>
+		<pre><code>
+## Video
+video/*)
+	# Thumbnail
+	ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+	exit 1;;
+		</code></pre>
 		<p>Por padrão o ranger permite a visualização de PDF como documento de texto, caso você queira a visualização de PDF de maneira gráfica descomente e habilite as seguintes linhas no <mark>scope.sh</mark>:</p>
 		<pre><code>
 ## PDF
@@ -166,14 +174,6 @@ class compress(Command):
                       -- "${FILE_PATH}" "${IMAGE_CACHE_PATH%.*}" \
                  && exit 6 || exit 1;;
 		</code></pre>
-		<p>Para habilitar exibição de thumbnail de vídeos habilite as seguintes linhas no <mark>scope.sh</mark>:</p>
-<pre><code>
-	## Video
-	video/*)
-		# Thumbnail
-		ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
-		exit 1;;
-</code></pre>
 		<h2>Instalação do Editor de Código, Neovim</h2>
 		<p>Antes de mais nada instalaremos o Neovim com</p>
 		<code>sudo pacman -S neovim</code>
@@ -203,7 +203,7 @@ call plug#end()
 		-->
         </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 30/04/2022)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 01/05/2022)</p>
         <a href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
