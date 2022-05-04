@@ -58,8 +58,8 @@
 		<p>Use <code>ranger --copy-config=rc</code> ou substitua <mark>rc</mark> por <mark>commands</mark>, <mark>rifle</mark>, ou <mark>scope</mark>, para copiar os arquivos de configuração padrão para o diretório <mark>~/.config/ranger</mark> e modificá-los lá, apenas copie os arquivos que você deseja editar.</p>
 		<h3>Habilitar Ícones no Ranger</h3>
 		<p>Para possibilitar a visualização de ícones no ranger você pode utilizar o plugin <mark>ranger_devicons</mark>, basta copiar o arquivo <mark>devicons.py</mark> para a pasta de plugins do ranger e adicionar a linha <mark>default_linemode devicons</mark> no <mark>rc.conf</mark> ou utilizar os códigos abaixo:</p>
-		<code>git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons</code>
-		<code>echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf</code>
+		<code>git clone https://github.com/cdump/ranger-devicons2 ~/.config/ranger/plugins/devicons2</code>
+		<code>echo "default_linemode devicons2" >> $HOME/.config/ranger/rc.conf</code>
 		<h3>Habilitar Lixeira e Esvaziamento de Lixeira</h3>
 		<p>Primeiramente crie o diretório da lixeira <mark>~/.local/share/Trash/files/</mark> e mapeie o comando abaixo no <mark>rc.conf</mark></p>
 		<code>map DD shell mv %s /home/${USER}/.local/share/Trash/files/</code>
