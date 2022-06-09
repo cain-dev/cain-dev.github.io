@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introdução ao Linux</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Segurança Básica de Sistemas"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais, desde as diferenças dos processos entre BIOS e UEFI até mesmo a seleção do dispositivo e começo da instalação."/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets\images\security.png">
+    <link rel="stylesheet" type="text/css"href="reset.css">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <img src="assets/images/slogo.png" alt="">
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="contact.html">CONTATO</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Introdução</h1>
+        <p>Ao longo do tempo muitas pessoas (geralmente acadêmicos)  me pediram auxílio para instalar sistemas, encontrar alternativas de software, entender as alternativas de interface, manutenção básica… E essas pessoas tendem a ter um conhecimento base para usar as minhas documentações.</p>
+        <p>Mas vez ou outra encontrei pessoas que queriam mesmo é entender o que é Linux, qual é a diferença dele pro Windows ou Mac e eu sempre expliquei isoladamente, porém recentemente duas amigas me pediram auxílio não só para migrar mas também para entender a base do que é Linux, e ao notar que não tinha nenhuma documentação aqui a respeito disso resolvi fazer essa página.</p>
+        <p>Essa documentação parte do princípio que você não é nenhum acadêmico da área e também não vai iniciar de imediato a migração, mas sim quer entender a base de como as coisas são quando o assunto é Linux.</p>
+        <p>Tenha uma coisa em mente: Aqui eu vou te ensinar a computação necessária para verdadeiramente entender o que o Linux é, muito disso não é algo especificamente DO Linux, então se você usa Windows ou Mac e acha tudo o que está aqui muito complexo provavelmente é devido a nunca ter aprendido computação na sua vida. E não tem nada de errado com isso.</p>
+        <p>Existe uma diferença entre saber clicar em 2 ou 3 ícones ou escrever uma mensagem no Facebook e verdadeiramente entender o sistema que você está utilizando, é (em ordens de grandeza) muito mais fácil aprender o básico de se usar um sistema do que aprender o básico para entender o sistema (tanto quanto é mais fácil aprender a dirigir do que aprender mecânica de carros). Se algo aqui lhe parece alien provavelmente é porque você nem mesmo entende essas condições no próprio Windows ou Mac, você só usa o básico.</p>
+        <p>O ponto aqui não é humilhar você, não me entenda mal por favor, é que você precisa entender diferença entre aprender Linux e aprender computação. Cansei de ouvir pessoas falando "nossa, como Linux é difícil" quando eu estava explicando sobre coisas que são comuns da computação para todos os sistemas! Se a explicação é sobre compiladores, isso não é algo específico do Linux, sistemas usam compiladores! Se eu te explicar sobre sistemas de arquivo saiba que isso não é específico do Linux! Sistermas tem sistemas de arquivo! Então se você começa com a mentalidade de "tudo isso é só do Linux" já era, mas se você se focar em aprender computação pra entender Linux os seus resultados serão completamente diferentes.</p>
+        <h2>Primeiramente, o que é Linux?</h2>
+        <p>Creio que a definição mais clara do que é Linux é que Linux é uma tecnologia (ah vá, é mesmo?), livre e de código aberto (FLOSS), e também modular. Linux pode ser uma parte do sistema do seu smartphone (caso você use Android) assim como pode ser um sistema completo para o servidor da sua empresa (caso utilizem Ubuntu).</p>
+        <p>Algumas pessoas tratam o Linux como UM sistema operacional, algumas pessoas tratam o Linux como UM kernel. E se alguém te disse isso antes, saiba que essa pessoa está errada!</p>
+        <p>Para entender o erro dessa afirmação precisamos entender o que é um sistema operacional e o que é o kernel. E acredite: é bem mais fácil entender isso do que parece.</p>
+        <h2>O que é um sistema operacional?</h2>
+        <p>Podemos entender sistemas como o conjunto de elementos que interagem entre si de maneira lógica para atingir um objetivo, parece complicado? Imagine como funciona um relógio: Você tem diversas peças, todas elas interligadas com o fim de te mostrar as horas (eu disse que era mais fácil do que parece).</p>
+        <p>Na computação, assim como dividimos o que é software (a parte lógica / os programas, documentações e licenças) e o que é hardware (a parte física / as peças), e dividimos cada componente de hardware (placa mãe, hdd, placa de vídeo, fonte…) também dividimos cada componente de software.</p>
+        <p>Ainda que você seja um completo leigo em computação você já deve saber que computadores funcionam através de código binário, mas você certamente não utiliza seu computador com um interruptor alterando cada pulso elétrico, você usa teclado e mouse e lê no seu monitor.</p>
+        <p>Na computação não tem magia, se VOCÊ usuário não precisa modular cada pulso e comunicar cada fase de um processo de inicialização e cada alteração no disco pro seu computador subir um sistema é porque alguém faz isso por você, e o cara responsável por fazer isso por você se chama Sistema Operacional.</p>
+        <p>Se sistema é o conjunto de elementos que interagem entre si de maneira lógica para atingir determinado objetivo, Sistema Operacional é o software que tem por objetivo ser a ponte entre o que o usuário faz e o que a máquina entende. Assim como o harware também é composto de outras peças (placa de vídeo tem seu próprio chip de memória, seu próprio processador) o sistema operacional também tem as suas peças, mas já que você não veio aqui pra fazer um artigo de doutorado você só precisa entender superficialmente 2 componentes: Espaço de usuário e Kernel.</p>
+        <p>Espaço de usuário é a área do sistema operacional voltada para atender o usuário (duh), como por exemplo o gerenciamento de janelas e os elementos gráficos.</p>
+        <p>Kernel é a área do sistema operacional voltada para atender o próprio computador, como gerenciamento de memória, sistema de rede, interfaces virtuais para comunicação com dispositivos.</p>
+        <p>E aqui vai o primeiro alerta dessa documentação: Mais de 80% do sistema operacional é invisível aos olhos do usuário final, então muito do que você julga ser o sistema operacional provavelmente não é ou tende a não ser uma parte relevante/intrínseca do sistema.</p>
+        <p>E qual a razão dessa confusão toda? A razão é que quando você fala “Linux” você designa uma tecnologia de kernel completa, monolítica, modular, multitarefa, multiusuário, multi arquitetura , e baseado em Unix (já explico o que é Unix), que é usada em diversos dispositivos e sistemas.</p>
+        <p>Então sempre que alguém por aí quer fazer algum dispositivo que precise de um kernel, a tendência é simplesmente utilizar o Linux mesmo, funciona em basicamente tudo.</p>
+        <p>Seu Android não é “O LINUX”, mas ele é Linux também, seu roteador não é “O LINUX”, mas ele provavelmente tem partes de Linux também.</p>
+        <p>Então, diferente do Mac ou Windows que você tem que instalar por inteiro e você só instala em arquiteturas de pc (x86/x64) ou de smartphone (ARM), o Linux você pode usar modularmente onde quiser.</p>
+        <p>O Linux também tem outros componentes que vão além do kernel, como init system, bootloader, bibliotecas… Porém, pela própria natureza da tecnologia ela não é UM sistema operacional completo, fechado.</p>
+        <p>E isso não é um problema (como muitos usuários de BSD tentam insistir) FAZ PARTE DO DESIGN DO LINUX ser assim! Pegue como precisa, implemente como quiser e onde quiser.</p>
+        <p>Então daí a confusão, tem quem não sabe que existem mais componentes e por isso acha que Linux é apenas um kernel, e tem quem usa alguma implementação de sistema baseado em Linux e acha que Linux é um sistema. Porém ele não é nem um nem outro, lembre-se:</p>
+        <p>Linux é uma tecnologia modular e livre. Não é um único sistema completo, e nem somente um kernel.</p>
+        <h2>Livre? Código aberto?</h2>
+        <p>Quando você utiliza o Windows (legalmente), ou é porque você comprou um computador que já veio com o Windows instalado ou porque montou o seu computador e depois comprou uma licença de uso do Windows por 1500 pila e baixou o sistema do site da Microsoft e instalou por conta própria no seu computador.</p>
+        <p>Quando você utiliza o MacOS (legalmente) é porque você comprou um computador da Apple que já veio com o sistema. Esses sistemas tem dono! Você não pode modificar o que quiser e muito menos redistribuir ou revender!</p>
+        <p>Isso se dá por uma parte importantíssima dos programas de computador que a maioria das pessoas sequer sabe que existe: a licença de uso.</p>
+        <p>Todo programa que você usa no seu computador, seja sistema ou seja aplicativo tem uma licença de uso que determina o que você pode e o que não pode fazer, e mais importante ainda determina o que o programa pode ou não fazer com você e o seu computador, sabe aqueles termos de uso que você ignora? Então…</p>
+        <p>Cada programa tem sua licença e caso você queira se formar em computação você provavelmente vai ter algumas aulas completamente focada em licenças de software. Mas como você veio aqui para aprender o básico, então vamos nos focar no que você precisa aprender sobre licenças:</p>
+        <p>Uma licença pode ser…</p>
+        <p>Proprietária, o programa tem dono e não pode ser alterado e/ou redistribuído.</p>
+        <p>OU</p>
+        <p>Livre, em resumo o software é considerado “software livre” se ele tem 4 liberdades básicas, que são</p>
+        <ul>
+            <li>A liberdade de usar o programa como desejar;</li>
+            <li>A liberdade de estudar e alterar o programa (para isso o código fonte do programa deve ser aberto);</li>
+            <li>A liberdade de redistribuir o programa;</li>
+            <li>A liberdade de distribuir publicamente as alterações e modificações criadas por você.</li>
+        </ul>
+        <p>Existe toda uma discussão entre softwares proprietários e softwares livres, e as liberdades do software livre vão bem além disso, mas grosso modo essa é a diferença.</p>
+        <p>Com relação ao código, você sabe que o computador executa código binário, então para se tornar uma aplicação funcional o código escrito por um humano em alguma linguagem de programação precisa passar por uma ferramenta chamada compilador para transformar esse código “humano” em código de máquina. Entenda o código do programa como a “receita” para se fazer o programa.</p>
+        <p>Basicamente faz isso:</p>
+        <p>função (calcular) {<br>
+            valor a = 5;<br>
+            valor b = 2;<br>
+            valor c =  a + b;<br>
+            retornar c;<br>
+            }<br>
+        Virar isso: 01100110 01110101 01101110 11000011 10100111 11000011 10100011 01101111 00100000 00101000 01100011 01100001 01101100 01100011 01110101…</p>
+        <p>(sim, é pseudocódigo com conversão de texto pra decimal e foi só pra dar exemplo…)</p>
+        <p>Sendo assim o software pode ter…</p>
+        <p>O código fechado, e assim o programa é distribuído apenas em formato de executável, sem receita de bolo, de maneira que você não pode ver o que o programa faz no seu computador você pode apenas executá-lo.</p>
+        <p>OU</p>
+        <p>O código aberto, você ver toda a “receita” do programa e entender tudo que o programa é capaz de fazer e como ele interage com o seu computador.</p>
+        <p>Então entenda, o Windows é um produto, assim como o Macbook, você compra e consome. O Linux é como um livro de domínio público, você pode ter acesso àquele conteúdo e interagir com ele como quiser.</p>
+        <p>Essa é a razão que faz com que chamar o Linux de sistema GRATUITO esteja completamente errado! Windows e Macbook são produtos, são compráveis, talvez alguém te dê um gratuitamente mas eles não deixam de ser propriedade das empresas que os fizeram.</p>
+        <p>O Linux em si não é um produto, ele não é vendido, ele é livre!</p>
+        <p>No mundo da computação, gratuito é uma designação do software proprietário de custo 0! Essa não é a condição do Linux!</p>
+        <p>Lembre-se: Linux não é um sistema “de grátis”, ele simplesmente não é um produto, ponto.</p>
+        <p>Comparar os incentivos do Windows como software pago com o Linux como software livre é como comparar os incentivos no pagamento de uma refeição em um restaurante famoso com os incentivos para comer a comida da sua avó. Você não come a comida da sua avó “por ser de grátis”, você não come a comida da sua avó por uma questão financeira, você come por outros valores.</p>
+        <h2>O que são distribuições?</h2>
+        <p>Como eu disse anteriormente, o Linux em si não é um sistema operacional completo, mas não quer dizer que não existam sistemas Linux completos para uso. Caso você queira utilizar Linux como seu sistema operacional, você não precisa baixar código, compilar e “completar” o sistema (a menos que você deseje), você pode simplesmente baixar uma mídia de instalação de alguém que redistribui o Linux como sistema, e essas distribuições nós chamamos de distros (bem intuitivo né?).</p>
+        <p>Existem diversas empresas e comunidades que usam o Linux, o modificam e redistribuem as suas instalações para diversos propósitos, seja para criar um servidor de mídia (como o LibreELEC) ou fazer do seu computador uma central de jogos (como o Batocera).</p>
+        <p>Atualmente essas são as distribuições Linux conhecidas:</p>
+        <img class="responsiva" src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg" alt="">
+        <p>Parece muito? Você acha que nunca vai decorar todas? Ainda bem! Pois quem disse que você precisa entender 1% disso está mentindo. Inclusive essa é mais uma mentira usada pelas comunidades de Windows, Mac e BSD, como se todo o usuário Linux tivesse que entender e decorar cada uma dessas…</p>
+        <p>Só pra você ter uma média, EU, que sou entusiasta de Linux, que trabalho com Linux, verdadeiramente conheço umas 50 dessas (se chegar a isso). Ainda parece muito?</p>
+        <p>Repare uma coisa, a esmagadora maioria dessas distribuições é baseada numa outra distribuição principal, e qual a relevância disso? Você pode ter Android, Android-X86, CyanogenMod, CyanogenOS, LineageOS… Mas no fim do dia é tudo um sabor diferente de Android mesmo. Se você sabe usar Android você sabe usar Lineage OS!</p>
+        <p>Então quantas você usuário final precisa conhecer? Uma. A que você usa. É sério.</p>
+        <p>É interessante você saber da existência e importância do Slackware, Debian, Red Hat, Gentoo e Arch Linux? Sim! Essas são basicamente as 5 distribuições Linux mais influentes, que determinam os padrões de uso para todas as outras, então se você conhece o funcionamento dessas você meio que conhece quase todas as maneiras possíveis de se usar Linux (a nível de usuário final, claro).</p>
+        <p>Mas para usuários iniciantes a única que eu me sinto confortável em recomendar é o Linux Mint. É baseada em Ubuntu e oferece instaladores com Cinnamon, Mate e XFCE.</p>
+        <h2>Se eu quiser iniciar a entender todas essas? O que eu preciso saber inicialmente?</h2>
+        <p>Que o Slackware é considerada a mais Unix das distribuições. Tudo aqui você faz na mão, excelente pra estudos mas não recomendaria para iniciantes.</p>
+        <p>Que o Debian é focado em estabilidade e é muito usado em servidores, não recomendo para usuários finais mas é “pai” do Ubuntu que eu até interessante para usuários finais.</p>
+        <p>Que o Red Hat é uma distribuição paga (SIM, PAGA!) basicamente a distribuição com maior produção e adoção de novas tecnologias, não recomendo para usuários finais mas é pai do Fedora que é até interessante para usuários finais.</p>
+        <p>Que o Arch Linux é uma distribuição rolling release, ou seja, as atualizações são implementadas assim que são disponibilizadas. Não recomendo para usuários iniciantes embora seja excelente para usuários avançados, pai do conhecido Manjaro que é uma excelente opção para usuários médios.</p>
+        <p>Que o Gentoo é uma distribuição focada em compilação local dos aplicativos (ou seja, você baixa o código e compila os programas para depois usar), não recomendo nem para usuários médios mas para usuários muito avançados já que permite uma customização sem igual.</p>
+        <p>Sendo assim as distribuições podem ser:</p>
+        <ul>
+            <li>Voltadas para usuário final (Fedora) OU uso específico (Red Hat);</li>
+            <li>Versionadas (Debian) OU rolling release (Arch);</li>
+            <li>Baseadas em binários (Debian) OU em compilação (Gentoo);</li>
+            <li>Focadas em estabilidade (Debian) OU em ser ponta de lança (Arch);</li>
+            <li>Automatizadas (Debian) OU “customize e faça você mesmo” (Slackware).</li>
+        </ul>
+        <p>Se você considera qualquer distribuição nesses termos e sabe em que ela foi baseada você entende muito em como se virar nela, da mesma forma que se você entende de Android você entende de Lineage, se você entende de Debian você entende de Ubuntu.</p>
+        <h2>Cinnamon? Mate? XFCE?</h2>
+        <p>Recomendo você ver a minha página dedicada a apresentação desses ambientes aqui:</p>
+        <a class="link" href="interfaces.html">Interfaces, Ambientes Gráficos e Gerenciadores de Janelas e Display</a>
+        <p>Mas em resumo, diferente do Windows e MacOS, o Linux não se limita a uma única interface, existem opções de interface para sua tela de login, opções de ambientes gráficos completos ou mesmo opção para quem quer apenas um gerenciador de janelas.</p>
+        <p>Um ambiente de área de trabalho (desktop environment ou DE) propicia uma experiência completa que reúne ícones, barras de ferramentas, papéis de parede e widgets de área de trabalho. Além disso, a maioria dos ambientes inclui um conjunto de aplicativos e utilitários integrados como gerenciadores de arquivos e aplicativos de “painel de controle”.</p>
+        <p>Cada ambiente é baseado numa tecnologia, baseado num tipo de uso, alguns funcionam da mesma maneira que o Windows outros da mesma maneira que o Mac (por exemplo), alguns são mais leves e outros mais pesados, alguns permitem pouca personalização enquanto outros são absurdamente personalizáveis.</p>
+        <p>A nível de iniciante eu recomendaria o uso do ambiente Cinnamon para usuários de Windows (já que ele pode ficar idêntico ao Windows):</p>
+        <img class="responsiva" src="assets/images/cinnamon3.jpg" alt="">
+        <p>E o ambiente Pantheon para usuários do Mac:</p>
+        <img class="responsiva" src="https://1.bp.blogspot.com/-nt-Vqhi65iU/XiWxN57L3BI/AAAAAAAAZ0w/dYNAKmJFLVkU5svK5WgbelnsYXYtu26AgCLcBGAsYHQ/s1600/Screenshot%2Bfrom%2B2020-01-20%2B13-54-37.png" alt="">
+        <h2>Da pra instalar o Word e o uTorrent e o WinRAr e o…?</h2>
+        <p>O primeiro erro que usuário leigos cometem é tentar usar o Linux como um “quebra-galho” do Windows, simplesmente tentando instalar os mesmos aplicativos do Windows e da mesma maneira Windows.</p>
+        <p>Se você tentar fazer isso a sua experiência com Linux vai ser um inferno!</p>
+        <p>Ninguém em sã consciência migra para o Mac e espera usar nele os mesmos aplicativos do Windows e da mesma maneira do Windows, não faça isso com o Linux!</p>
+        <p>Pare de depender de aplicativos específicos e passe a tratar aplicativos como funções no seu computador, por exemplo:</p>
+        <p>Você não PRECISA do Word para editar um texto, você precisa de um editor de texto e PODE usar o LibreOffice Writer para isso.</p>
+        <p>Você não PRECISA do uTorrent para baixar torrents, você precisa de um cliente de torrent e você PODE usar o qBittorrent para isso.</p>
+        <p>Você não PRECISA do WinRAR para compactar/descompactar seus arquivos, você precisa de um compactador/descompactador de arquivos e PODE usar o file-roller para isso.</p>
+        <p>Se você quer usar o Linux, busque usar o Linux com os programas de Linux nos termos do Linux!</p>
+        <p>Caso você queira entender mais sobre alternativas de software você pode ler essa minha página aqui:</p>
+        <a class="link" href="alternatives.html">Alternativas de Software</a>
+        <h2>Eu já sei o que posso instalar, mas como eu instalo?</h2>
+        <p>Diferente do Windows que é baseado em você ir na página do desenvolvedor, baixar um .exe, dar 2 cliques, permitir acesso administrativo, clicar em next next next e rezar pra não ter vírus, no Linux a grande maioria dos sistemas para usuário final já tem uma lojinha de aplicativos para você baixar o que precisa.</p>
+        <p>Diferente da lojinha do Windows ou do Mac que tem 1001 opções um tanto duvidosas, na lojinha do sistema você encontra os pacotes disponíveis para a sua distribuição.</p>
+        <p>Então caso queira instalar alguma coisa pra fazer algo no seu computador, para de sair fazendo pesquisa aleatória no Google ou Youtube, visite o alternativeto, veja as opções de software e busque esse mesmo software na lojinha de aplicativos do seu sistema.</p>
+        <h2>E se não tiver na lojinha? O que são pacotes universais?</h2>
+        <p>Algumas vezes a sua distribuição pode não empacotar o software que você precisa devido a falta de um mantenedor ou coisa do tipo, nesse caso você ainda tem a opção de tentar instalar o software através de um Appimage, Flatpak ou Snap.</p>
+        <p>Esses pacotes são como os arquivos .dmg no Mac, porém no caso do Linux eles funcionam independente da distribuição Linux que você usa, ou seja, se a distribuição que você utiliza não empacota a última versão do Retroarch basta você instalar a versão Flatpak com o comando flatpak install flathub org.libretro.RetroArch que vai rodar.</p>
+        <h2>É tudo no terminal então? Tem que ficar usando DOS? Que atrasado…</h2>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 09/05/2022)</p>
+        <a href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>
