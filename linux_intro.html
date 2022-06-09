@@ -149,6 +149,75 @@
         <p>Algumas vezes a sua distribuição pode não empacotar o software que você precisa devido a falta de um mantenedor ou coisa do tipo, nesse caso você ainda tem a opção de tentar instalar o software através de um Appimage, Flatpak ou Snap.</p>
         <p>Esses pacotes são como os arquivos .dmg no Mac, porém no caso do Linux eles funcionam independente da distribuição Linux que você usa, ou seja, se a distribuição que você utiliza não empacota a última versão do Retroarch basta você instalar a versão Flatpak com o comando flatpak install flathub org.libretro.RetroArch que vai rodar.</p>
         <h2>É tudo no terminal então? Tem que ficar usando DOS? Que atrasado…</h2>
+        <p>Amigo(a)... Deixe-me educar você…</p>
+        <p>DOS significa Disk Operating System, DOS é um sistema operacional da Microsoft. O DOS é baseado em linha de comando, mas a linha de comando não é DOS. Chamar  terminal de DOS porque usa linha de comando é como chamar uma carroça de caminhão cegonha porque também usa pneu!</p>
+        <p>Linha de comando não é “atraso”, linha de comando é uma ferramenta que você usa para se comunicar diretamente com o sistema, sem ter que ficar clicando em 1001 menus. Quer um exemplo disso? Se você quiser mudar o endereço IP do seu computador você precisa:</p>
+        <ul>
+            <li>Clicar com o botão direito no ícone de internet;</li>
+            <li>Abrir configurações de rede e internet;</li>
+            <li>Selecionar as propriedades do dispositivo;</li>
+            <li>Ir em atribuição de ip;</li>
+            <li>Mudar para manual;</li>
+            <li>Inserir os valores;</li>
+            <li>Confirmar.</li>
+        </ul>
+    <p>Imagina o inferno para te explicar onde e como clicar numa ligação ou sem ver a sua tela. Se utilizarmos o terminal? Basta executar:</p>
+    <code>netsh interface ipv4 set address name="Wi-Fi" static 192.168.3.8 255.255.255.0 192.168.3.1</code>
+    <p>Como no terminal eu não preciso ficar falando onde você tem que clicar, basta eu te passar um comando e você executar, não tem interferência de outros aplicativos, customização de interface, nada disso.</p>
+    <p>O terminal é um meio de comunicação direto e objetivo, todo bom uso de sistema operacional passa cedo ou tarde pela utilização do terminal, da mesma forma que utilizar uma chave Philips é a principal ferramenta para alterar o estado do hardware do seu computador (montar/desmontar), o terminal é como a principal ferramenta para alterar o estado do software do seu computador (configurações e afins).</p>
+    <p>Você pode navegar em 1001 menus para desabilitar a hibernação do sistema ou simplesmente executar powercfg.exe /hibernate off.</p>
+    <p>Inclusive, eu dei o exemplo de instalar através do Flatpak por comando pois se a distribuição não oferece suporte você fica sem usar o Retroarch e deu, mas caso você utilize uma ÚNICA linha de comando no terminal você passa a poder utilizar o Retroarch, entendeu a importância dessa ferramenta?</p>
+    <p>Terminal não é de forma alguma atrasado, pelo contrário, é a maneira mais rápida e eficiente de se alterar algo num sistema, sem contar que a utilização de um terminal hoje em dia é muito mais interativa. Vai querer me convencer que você sabe de cabeça todos os lugares que você tem que clicar e o nome de todas as janelas que você tem que abrir pra desabilitar o ajuste de volume em chamada do Windows? Aham… Mas se eu quiser atualizar completamente meu Arch Linux? <code>sudo pacman -Syyu</code>😆</p>
+    <p>Você não é obrigado a usar o terminal em distribuições como o Linux Mint (se alguém te falou isso mentiu), mas minha dica pra você é: Use! O terminal num sistema operacional é como o painel de ECU na tunagem de um carro, você precisa aprender a usar, mas é ordens de grandeza mais fácil de configurar do que fazer tudo na mão.</p>
+    <h2>Você citou Unix, o que é isso?</h2>
+    <p>É difícil explicar a importância do Unix em menos de 10 páginas, mas em resumo o Unix é uma família de sistemas operacionais, multiuso e multitarefa criado no Bell Labs por pessoas como Ken Thompson, e Dennis Ritchie.</p>
+    <p>Diferente do Windows que foi desenvolvido já focado no usuário final em âmbito comercial, o desenvolvimento do Unix se confunde muito até mesmo com o desenvolvimento da Linguagem C (linguagem de referência para programação de sistemas ATÉ HOJE), o Unix possibilita uma portabilidade e modularidade muito alta e teve diversas variantes tanto no âmbito comercial como no âmbito acadêmico (sem contar a quantidade maior ainda de sistemas que utilizaram o Unix como base).</p>
+    <p>Os sistemas Unix são caracterizados por um design brutalmente simples e modular. E ao invés de simplesmente dar lucro, o Unix tem toda uma filosofia de uso e desenvolvimento por trás. Existem diversos livros sobre essa filosofia, mas eu vou tentar explicar da seguinte forma, em termos de desenvolvimento:</p>
+    <ul>
+        <li>Desenvolva programas que façam uma coisa só e que façam muito bem, faça um novo programa para uma nova função ao invés de complicar velhos programas com funções novas.</li>
+        <li>Desenvolva os programas de modo que o resultado da execução de um programa se transforme na entrada de dados para outro programa.</li>
+        <li>Faça programas que lidem com fluxo de textos, pois essa é a interface universal.</li>
+    </ul>
+    <p>Em termos de utilização, ao invés de ter um sistema massivo e monolítico o Unix se focava num modelo mais baseado em Kernel, Shell e Aplicação.</p>
+    <p>O Kernel se comunicava com os dispositivos, o Shell era a interface de comunicação com o Kernel e as Aplicações se comunicam com o Shell. Qual a vantagem disso?</p>
+    <p>Imagine que você tem uma lista de convidados para conferir, você precisa de todos os nomes dessa lista sejam únicos, que estejam em letras maiúsculas, em ordem alfabética, que sejam numerados e que por fim sejam comparados com uma primeira lista. Seria extremamente complexo de se fazer um programa pra fazer tudo isso, porém…</p>
+    <ul>
+        <li>É fácil criar um programa de comparação de linhas;</li>
+        <li>É fácil criar um programa pra deixar tudo maiusculo;</li>
+        <li>É fácil criar um programa pra deixar uma lista em ordem alfabética;</li>
+        <li>É fácil criar um programa para numerar linhas;</li>
+        <li>E também é fácil criar um programa que mostre a diferença  entre 2 arquivos…</li>
+    </ul>
+    <p>Se você tem uma arquitetura próxima desse módulo dito acima (kernel, shell, aplicação) basta mandar esse comando no seu terminal:</p>
+    <code>compara_linhas Lista1.txt > maiúsculo > ordem_alfabética > numerar > diferente_de Lista2.txt</code>
+    <p>E Voilà! (sim, é um pseudocódigo também...)</p>
+    <p>E antes antes disso? Você precisava de um editor de texto  específico para abrir o texto de um formato específico, esse editor teria que ter as próprias funções de comparação, ordenação e enumeração, essas funções só seriam funcionais nesse programa, elas teriam que ser chamadas com as próprias instruções de manipulação do sistema de arquivos, se você queria o resultado desse texto como saída para algum dispositivo (como por exemplo uma impressora) você teria que estender esse programa para possibilitar que ele se comunique com o dispositivo… Agora imagina ter um sistema TODO com esse retrabalho…</p>
+    <p>Entende como a arquitetura do Unix é muito mais elegante? Você não estende o seu programa para fazer tudo, você faz com que seu programa use o Shell para enviar informações para outro programa que se vire com o dispositivo em questão. É muito mais eficiente.</p>
+    <p>Essa “filosofia”, essa maneira de programar e usar o computador influenciou fortemente tanto o Linux quanto os BSDs (especialmente os BSDs).</p>
+    <p>Você não gostou da interface gráfica do seu Windows? Que pena, o sistema é “casado” com a interface.<br>Você não gostou da interface gráfica do seu Linux? Troca ela, o sistema não depende dela.</p>
+    <p>Você não gostou do sistema de arquivos do seu Windows? Que pena, o sistema é “casado” com o sistema de arquivos.<br>Você não gostou do sistema de arquivos do seu Linux? Troca ele, o sistema não depende dele.</p>
+    <p>Você não gostou do applet de rede do seu Windows? Que pena, o sistema é “casado” com o applet de rede.<br>Você não gostou do applet de rede do seu Linux? Troca ele, o sistema não depende dele.</p>
+    <p>Acho que deu pra entender…</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 09/05/2022)</p>
