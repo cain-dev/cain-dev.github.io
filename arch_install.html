@@ -146,12 +146,121 @@
         <code>fdisk /dev/<mark>storageA</mark></code>
         <p>Com o <mark>fdisk</mark> aberto na unidade desejada criaremos uma nova tabela de partição em <mark>MBR</mark> com o comando:</p>
         <code>o</code>
+        <!-- Easy Mode CFDISK -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <details class="spoiler" >
-            <summary>Modo Easy</summary>
-            <p>Uma vez que você criou uma nova tabela em <em>MBR</em> você pode imediatamente usar o comando abaixo para escrever as alterações:</p>
+            <summary>Modo Easy (Clique para ver)</summary>
+            <p>Uma vez que você criou uma nova tabela em <em>MBR (DOS)</em> você pode imediatamente usar o comando abaixo para escrever as alterações:</p>
             <code>w</code>
-            <p>E fazer as partições de uma forma mais gráfica através do <em>cfdisk</em> com o comando:</p>
+            <p>E fazer as partições de uma forma mais gráfica e fácil através do <em>cfdisk</em> com o comando:</p>
             <code>cfdisk /dev/<mark>storageA</mark></code>
+            <h4>Como usar:</h4>
+            <ul>
+                <li><p>Com as setas ↑↓ (cima e baixo) você seleciona as partiçoes e com as setas ←→ (esquerda e direita) você seleciona as ações, tecle <em>Enter</em> para confirmar.</p></li>
+                <li><p>Coloque o cursor sobre as partições que deseja excluir e depois selecione <em>[ Delete ]</em> para remover as partições.</p></li>
+                <li><p>Coloque o cursor sobre <em>Free Space</em> depois selecione <em>[ New ]</em> para criar uma partição, digite o tamanho desejado ou apenas tecle <em>Enter</em> para usar todo o espaço.</p></li>
+                <li><p>Para alterar o tipo da partição, coloque o cursor sobre a partição e selecione a opção <em>[ Type ]</em>.</p></li>
+                <li><p>Para fazer com que uma partição seja inicializável coloque o cursor sobre a partição e depois selecione <em>[ Bootable ]</em>.</p></li>
+                <li><p>Por fim selecione a opção <em>[ Write ]</em> e confirme digitando <em>yes</em> e teclando <em>Enter</em>.</p></li>
+            </ul>
+            <h4>Partição SWAP (opcional mas altamente recomendado)</h4>
+            <p>A memória Swap é um espaço que é utilizado quando o sistema operacional fica sobrecarregado, evita a queda de desempenho, travamentos e desligamentos automáticos. A quantidade de memória swap necessária varia conforme a quantidade de memória ram que seu sistema possui e se você vai ou não utilizar hibernação, também pode variar conforme o tipo de dispositivo de armazenamento e não sendo recomendado o uso na sua configuração padrão em SSD's e NVME's. Fique tranquilo, você pode (e em grande parte dos casos deve) ter algum espaço voltado para swap ainda que seja no seu SSD ou NVME, apenas lembre de verificar a otimização de swap ao fim desse guia.</p>
+            <p>Em vez de uma partição swap você também pode utilizar um arquivo de memória swap, assim você não precisa dedicar uma partição no disco especificamente para a swap, essa opção tende a ser preferida pelos usuários de SSD e NVME apesar da partição swap poder resultar numa melhor performance. Independente do caso utilize a partição swap <strong>ou</strong> o arquivo de swap, <strong>não use ambos e também não fique sem nenhum dos dois</strong> (ainda que seja em um outro dispositivo), vai te evitar muita dor de cabeça.</p>
+            <p id="tabela-swap">Para saber quanto de swap pode ser necessário para o seu caso verifique na tabela abaixo:</p>
+            <figure>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>RAM</th>
+                            <th>Swap (sem hibernação)</th>
+                            <th>&nbsp;Swap (com hibernação)</th>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;256MB</td>
+                            <td>&nbsp;256MB</td>
+                            <td>&nbsp;512MB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;512MB</td>
+                            <td>&nbsp;512MB</td>
+                            <td>&nbsp;1GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;2GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;3GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;5GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;4GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;6GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;6GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;8GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;8GB</td>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;11GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;12GB</td>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;15GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;16GB</td>
+                            <td>&nbsp;4GB</td>
+                            <td>&nbsp;20GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;24GB</td>
+                            <td>&nbsp;5GB</td>
+                            <td>&nbsp;29GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;32GB</td>
+                            <td>&nbsp;6GB</td>
+                            <td>&nbsp;38GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;64GB</td>
+                            <td>&nbsp;8GB</td>
+                            <td>&nbsp;72GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;128GB</td>
+                            <td>&nbsp;11GB</td>
+                            <td>&nbsp;139GB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </figure>
+            
+            <p>A partição swap deve ser uma partição <mark>extended</mark> do tipo <mark>82 Linux swap</mark>.</p>
+            <h4>Partição raiz do sistema (root ou /)</h4>
+            <p>A partição mais importante do sistema, é a partição em que todos os arquivos de sistema ficam e que tudo é montado. Via de regra, essa é a partição que ocupada todo o resto do armazenamento. No entanto, algumas pessoas preferem delimitar o espaço dessa partição para o tamanho necessário apenas para o funcionamento do sistema e ocupar o resto do armazenamento com uma partição dedicada para a pasta de usuários (/home). Dessa forma, se algum problema ocorrer com a partição do sistema não haverá perdas para os dados de usuário.</p>
+            <p>É importante ressaltar que pastas de usuário <strong>não são compatíveis entre distribuições distintas</strong> e ainda numa mesma distribuição podem gerar problemas de incompatibilidade ou com configurações de aplicativos, variáveis e afins. Recomendo delimitar o tamanho da partição de sistema apenas e somente se você pretende fazer mudanças na partição de raiz do sistema sem ter que reinstalar o sistema.</p>
+            <p>Se você é um usuário iniciante ou não pretende fazer tais mudanças, faça backup dos seus arquivos num outro dispositivo e <strong>e não delimite o tamanho da partição raiz e também não faça uma partição separada para a /home!</strong></p>
+            <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi, a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
+            <p>A partição / deve ser uma partição <mark>primary</mark> do tipo <mark>83 Linux</mark> <strong>e marcada como</strong> <mark>bootable</mark>.</p>         
+            <h4>Partição para /home separada (opcional e não recomendado)</h4>
+            <p>Se decidiu fazer uma partição separada para a /home recomendo que ocupe todo o resto do armazenamento (embora você também pode delimitar o tamanho dessa partição da mesma maneira que a raiz).</p></p>
+            <p>A partição /home deve ser uma partição <mark>extended</mark> do tipo <mark>83 Linux</mark>.</p>
+            <h4>Terminado!</h4>
+            <p>Pule para o <em>Passo 5 - Formatar as partições</em></p>
         </details>
         <!-- Partição SWAP em BIOS -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -314,6 +423,7 @@
         <h4>Gravar as alterações</h4>
         <p>Para gravar as alterações da tabela de partição e sair do programa utilize o comando abaixo:</p>
         <code>w</code>
+        <p>Uma vez que as alterações foram gravadas você pode seguir para o <em>Passo 5 - Formatar as partições</em>.</p>
         <!-- Passo 4 Opção B - armazenamento em sistemas baseados em UEFI -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h3>Opção B - Preparação para armazenamento em sistemas baseados em <mark>UEFI</mark></h3>
@@ -321,6 +431,122 @@
         <code>gdisk /dev/<mark>storageA</mark></code>
         <p>Com o <mark>gdisk</mark> aberto na unidade desejada criaremos uma nova tabela de partição em <mark>GPT</mark> com o comando:</p>
         <code>o</code>
+        <!-- Modo Easy CGDISK -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <details class="spoiler" >
+            <summary>Modo Fácil (Clique para ver)</summary>
+            <p>Uma vez que você criou uma nova tabela em <em>GPT</em> você pode imediatamente usar o comando abaixo para escrever as alterações:</p>
+            <code>w</code>
+            <p>E fazer as partições de uma forma mais gráfica e fácil através do <em>cgdisk</em> com o comando:</p>
+            <code>cgdisk /dev/<mark>storageA</mark></code>
+            <h4>Como usar:</h4>
+            <ul>
+                <li><p>Com as setas ↑↓ (cima e baixo) você seleciona as partiçoes e com as setas ←→ (esquerda e direita) você seleciona as ações, tecle <em>Enter</em> para confirmar.</p></li>
+                <li><p>Coloque o cursor sobre as partições que deseja excluir e depois selecione <em>[ Delete ]</em> para remover as partições.</p></li>
+                <li><p>Coloque o cursor sobre <em>Free Space</em> depois selecione <em>[ New ]</em> para criar uma partição, digite o tamanho desejado ou apenas tecle <em>Enter</em> para usar todo o espaço.</p></li>
+                <li><p>Para alterar o tipo da partição, coloque o cursor sobre a partição e selecione a opção <em>[ Type ]</em>.</p></li>
+                <li><p>Por fim selecione a opção <em>[ Write ]</em> e confirme digitando <em>yes</em> e teclando <em>Enter</em>.</p></li>
+            </ul>
+            <h4>Partição ESP (EFI system partition)</h4>
+            <p>Para uma instalação de sistema em modo UEFI precisamos criar uma partição <em>ESP</em>, que é uma partição específica para ser acessada pela placa mãe para iniciar os sistemas. Por questões de compatibilidade o recomendado é <mark>550M</mark> do tipo <mark>ef00</mark> .</p>
+            <h4>Partição SWAP (opcional mas altamente recomendado)</h4>
+            <p>A memória Swap é um espaço que é utilizado quando o sistema operacional fica sobrecarregado, evita a queda de desempenho, travamentos e desligamentos automáticos. A quantidade de memória swap necessária varia conforme a quantidade de memória ram que seu sistema possui e se você vai ou não utilizar hibernação, também pode variar conforme o tipo de dispositivo de armazenamento e não sendo recomendado o uso na sua configuração padrão em SSD's e NVME's. Fique tranquilo, você pode (e em grande parte dos casos deve) ter algum espaço voltado para swap ainda que seja no seu SSD ou NVME, apenas lembre de verificar a otimização de swap ao fim desse guia.</p>
+            <p>Em vez de uma partição swap você também pode utilizar um arquivo de memória swap, assim você não precisa dedicar uma partição no disco especificamente para a swap, essa opção tende a ser preferida pelos usuários de SSD e NVME apesar da partição swap poder resultar numa melhor performance. Independente do caso utilize a partição swap <strong>ou</strong> o arquivo de swap, <strong>não use ambos e também não fique sem nenhum dos dois</strong> (ainda que seja em um outro dispositivo), vai te evitar muita dor de cabeça.</p>
+            <p id="tabela-swap">Para saber quanto de swap pode ser necessário para o seu caso verifique na tabela abaixo:</p>
+            <figure>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>RAM</th>
+                            <th>Swap (sem hibernação)</th>
+                            <th>&nbsp;Swap (com hibernação)</th>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;256MB</td>
+                            <td>&nbsp;256MB</td>
+                            <td>&nbsp;512MB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;512MB</td>
+                            <td>&nbsp;512MB</td>
+                            <td>&nbsp;1GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;2GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;1GB</td>
+                            <td>&nbsp;3GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;5GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;4GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;6GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;6GB</td>
+                            <td>&nbsp;2GB</td>
+                            <td>&nbsp;8GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;8GB</td>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;11GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;12GB</td>
+                            <td>&nbsp;3GB</td>
+                            <td>&nbsp;15GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;16GB</td>
+                            <td>&nbsp;4GB</td>
+                            <td>&nbsp;20GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;24GB</td>
+                            <td>&nbsp;5GB</td>
+                            <td>&nbsp;29GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;32GB</td>
+                            <td>&nbsp;6GB</td>
+                            <td>&nbsp;38GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;64GB</td>
+                            <td>&nbsp;8GB</td>
+                            <td>&nbsp;72GB</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;128GB</td>
+                            <td>&nbsp;11GB</td>
+                            <td>&nbsp;139GB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </figure>
+            <p>A partição swap deve ser to tipo <mark>8200</mark>.</p>
+            <h4>Partição raiz do sistema (root ou /)</h4>
+            <p>A partição mais importante do sistema, é a partição em que todos os arquivos de sistema ficam e que tudo é montado. Via de regra, essa é a partição que ocupada todo o resto do armazenamento. No entanto, algumas pessoas preferem delimitar o espaço dessa partição para o tamanho necessário apenas para o funcionamento do sistema e ocupar o resto do armazenamento com uma partição dedicada para a pasta de usuários (/home). Dessa forma, se algum problema ocorrer com a partição do sistema não haverá perdas para os dados de usuário.</p>
+            <p>É importante ressaltar que pastas de usuário <strong>não são compatíveis entre distribuições distintas</strong> e ainda numa mesma distribuição podem gerar problemas de incompatibilidade ou com configurações de aplicativos, variáveis e afins. Recomendo delimitar o tamanho da partição de sistema apenas e somente se você pretende fazer mudanças na partição de raiz do sistema sem ter que reinstalar o sistema.</p>
+            <p>Se você é um usuário iniciante ou não pretende fazer tais mudanças, faça backup dos seus arquivos num outro dispositivo e <strong>e não delimite o tamanho da partição raiz e também não faça uma partição separada para a /home!</strong></p>
+            <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi, a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
+            <p>A partição / deve ser to tipo <mark>8304</mark>.</p>           
+            <h4>Partição para /home separada (opcional e não recomendado)</h4>
+            <p>Se decidiu fazer uma partição separada para a /home recomendo que ocupe todo o resto do armazenamento (embora você também pode delimitar o tamanho dessa partição da mesma maneira que a raiz).</p></p>
+            <p>A partição /home deve ser to tipo <mark>8302</mark>.</p>
+            <h4>Terminado!</h4>
+            <p>Pule para o <em>Passo 5 - Formatar as partições</em></p>
+        </details>
         <h4>Partição ESP (EFI system partition)</h4>
         <p>Para uma instalação de sistema em modo UEFI precisamos criar uma partição <em>ESP</em>, que é uma partição específica para ser acessada pela placa mãe para iniciar os sistemas. Para criar a partição <em>ESP</em> use o comando:</p>
         <code>n</code>
@@ -450,7 +676,7 @@
         <p>Apenas tecle <mark>Enter</mark>.</p>
         <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, caso você queira que a partição de sistema ocupe todo o resto do armazenamento apenas tecle <em>Enter</em> (recomendado), caso você queira uma partição de sistema com espaço delimitado insira o comando abaixo trocando o valor de 20G pelo valor desejado (não recomendado): </p>
         <code>last sector: +<mark>20G</mark></code>
-        <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
+        <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi, a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
         <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>root ou /</mark> devemos digitar o tipo <mark>8304</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
         <code>Hex code or GUID (L to show codes, Enter = 8300): 8304</code>
         <p>Com isso temos uma nova partição de 20G e do tipo Linux x86-64 root (/).</p>
@@ -465,7 +691,7 @@
         <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
         <code>first sector: default</code>
         <p>Apenas tecle <mark>Enter</mark>.</p>
-        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, recomendo que apenas tecle <em>Enter</em> para ocupar o resto do armazenamento (embora você também pode delimitar o tanho dessa partição digitando da mesma maneira que a raiz).</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, recomendo que apenas tecle <em>Enter</em> para ocupar o resto do armazenamento (embora você também pode delimitar o tamanho dessa partição digitando da mesma maneira que a raiz).</p>
         <code>last sector: default</code>
         <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>/home</mark> devemos utilizar o comando <mark>8302</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
         <code>Hex code or GUID (L to show codes, Enter = 8300): 8302</code>
@@ -528,6 +754,7 @@
             <li><p>Caso você não deseje um gerenciamento de rede mínimo para wifi e quer mais compatibilidade e integração com a interface gráfica deve substituir o pacote <mark>iwd</mark> por <mark>networkmanager</mark>;</p></li>
             <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o pacote <mark>amd-ucode</mark> por <mark>intel-ucode</mark>;</p></li>
             <li><p><strong>Se e somente se</strong> você está instalando em modo BIOS adicione <mark>grub</mark> na lista de pacotes para serem instalados.</p></li>
+            <li><p><strong>Se e somente se</strong> você está instalando numa máquina virtual, instale também o pacote <mark>virtualbox-guest-utils</mark> para utilitários do VirtualBox com suporte ao X ou <mark>virtualbox-guest-utils-nox</mark> para utilitários do VirtualBox sem suporte ao X.</p></li>
         </ul>
         <code>pacstrap -K /mnt base <mark>linux</mark> linux-firmware <mark>iwd</mark> nano <mark>amd-ucode</mark> sudo pipewire-pulse</code>
         <!-- Passo 8 Gerar FSTAB -->
@@ -594,17 +821,6 @@
 <pre><code>127.0.0.1        localhost
 ::1              localhost
 127.0.1.1        <mark>meuhostname</mark></code></pre>
-        <!-- Configurar o DNS -->
-        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
-        <h3>Configurar o DNS</h3>
-        <p>Para fornecer resolução de DNS para softwares que lêem o <em>/etc/resolv.conf</em> crie o link simbólico com o comando:</p>
-        <code>ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</code>
-        <p>Caso queira configurar manualmente os endereços para DNS crie o diretório <mark>/etc/systemd/resolved.conf.d/</mark> para os arquivos de configuração com o comando:</p>
-        <code>mkdir /etc/systemd/resolved.conf.d</code>
-        <p>Em <mark>/etc/systemd/resolved.conf.d/dns_servers.conf</mark> adicione os seguintes endereços para o <mark>OpenDNS</mark> (ou substitua para os endereços que você preferir):</p>
-        <code>[Resolve]<br>DNS= 208.67.222.222 208.67.220.220 2620:119:35::35 2620:119:53::53</code>
-        <p>E caso não queira nenhum servidor de fallback basta acessar <mark>/etc/systemd/resolved.conf.d/fallback_dns.conf</mark> e adicionar:</p>
-        <code>[Resolve]<br>FallbackDNS=</code>
         <!-- Finalizando a configuração de rede -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h3>Finalizando a configuração de rede</h3>
@@ -634,6 +850,17 @@
         <code>EnableIPv6=true</code>
         <p>Agora habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com o comando:</p>
         <code>systemctl enable iwd.service systemd-resolved.service</code><p></p>
+        <!-- Configurar o DNS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Configurar o DNS</h3>
+        <p>Para fornecer resolução de DNS para softwares que lêem o <em>/etc/resolv.conf</em> crie o link simbólico com o comando:</p>
+        <code>ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</code>
+        <p>Caso queira configurar manualmente os endereços para DNS crie o diretório <mark>/etc/systemd/resolved.conf.d/</mark> para os arquivos de configuração com o comando:</p>
+        <code>mkdir /etc/systemd/resolved.conf.d</code>
+        <p>Em <mark>/etc/systemd/resolved.conf.d/dns_servers.conf</mark> adicione os seguintes endereços para o <mark>OpenDNS</mark> (ou substitua para os endereços que você preferir):</p>
+        <code>[Resolve]<br>DNS= 208.67.222.222 208.67.220.220 2620:119:35::35 2620:119:53::53</code>
+        <p>E caso não queira nenhum servidor de fallback basta acessar <mark>/etc/systemd/resolved.conf.d/fallback_dns.conf</mark> e adicionar:</p>
+        <code>[Resolve]<br>FallbackDNS=</code>
         <!-- Passo 11 Definir senha do administrador -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Passo 11 - Definir senha do administrador</h2>
@@ -702,36 +929,33 @@
         <!-- Pós instalação -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Retoques pós-instalação</h2>
-        <h3>Ativando o TRIM:</h3>
-        <p>Caso você utilize SSD's você pode otimizá-los ativando o serviço TRIM com o comando:</p>
-        <code>systemctl enable fstrim.timer</code>
-        <h3>Habilite cor no pacman:</h3>
-        <p>Para ativar cor no pacman basta acessar o arquivo de configuração do pacman com o nano com o comando:</p>
-        <code>nano /etc/pacman.conf</code>
-        <p>Descomente a linha deletando o <mark>#</mark> antes de <mark>Color</mark></p>
-        <h3>Melhore o desempenho do sistema Linux com noatime:</h3>
-        <p>Acesse o fstab com o nano com o comando:</p>
-        <code>nano /etc/fstab</code>
-        <p>Mude de:</p>
-        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>relatime</mark>,errors=remount-ro 0 1</code>
-        <p>Para:</p>
-        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
-        <p>E em seguida salve o arquivo</p>
-        <h3>Adicionando fontes para compatibilidade, suporte a línguas estrangeiras e símbolos:</h3>
-        <p>Para compatibilidade:</p>
-        <code>sudo pacman -S ttf-dejavu ttf-liberation</code>
-        <p>Para caracteres internacionais:</p>
-        <code>sudo pacman -S adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts</code>
-        <p>Para símbolos:</p>
-        <code>sudo pacman -S noto-fonts noto-fonts-emoji</code>
-        <h3>Habilitar NTP</h3>
-        <code>sudo timedatectl set-ntp true</code>        
-        <h2>Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
-        <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
-        <code>sudo pacman -S nvidia</code>
-        <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
-        <code>sudo pacman -S nvidia-lts</code>
-        <h2>Instalando ambiente gráfico básico com o Cinnamon</h2>
+        <p>Ok, você instalou o Arch, meus parabéns! Mas tudo que você vai ver ao fim dessa instalação é uma tela de login e nenhuma otimização. Mas tem muito que podemos fazer para deixar o Arch mais convidativo para um usuário final.</p>
+        <p>A minha primeira recomendação é que você instale uma das interfaces abaixo.</p>
+        <!-- Instalando ambiente gráfico -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Instalando um ambiente gráfico</h2>
+        <!-- GNOME -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Gnome</h3>
+        <p>Utilize o comando:</p>
+        <code>pacman -S gnome gnome-tweaks</code>
+        <p>Habilite o serviço do GDM com o comando:</p>
+        <code>systemctl enable gdm</code>
+        <!-- KDE -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>KDE</h3>
+        <p>Utilize o comando:</p>
+        <code>pacman -S plasma-wayland-session plasma-desktop sddm sddm-kcm plasma-nm plasma-pa konsole dolphin ark kdegraphics-thumbnailers ffmpegthumbs powerdevil kdeplasma-addons kde-gtk-config pipewire-pulse</code>
+        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
+        <ul>
+            <li><em>kcalc</em> (Se e somente se você utilizará uma calculadora)</li>
+            <li><em>kdenetwork-filesharing</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
+        </ul>
+        <p>Habilite o serviço do SDDM com o comando:</p>
+        <code>systemctl enable sddm</code>
+        <!-- CINNAMON -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Cinnamon</h3>
         <p>Utilize o comando:</p>
         <code>pacman -S xorg cinnamon cinnamon-translations lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings gnome-terminal nemo nemo-fileroller nemo-preview nemo-python ffmpegthumbnailer pipewire-pulse</code>
         <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
@@ -746,31 +970,67 @@
         <code>sudo pacman -S xdg-user-dirs</code>
         <p>Para atualizar a lista de diretórios utilize o comando:</p>
         <code>xdg-user-dirs-update</code>
-        <h2>Instalando ambiente gráfico básico com o KDE</h2>
-        <p>Utilize o comando:</p>
-        <code>pacman -S plasma-wayland-session plasma-desktop sddm sddm-kcm plasma-nm plasma-pa konsole dolphin ark kdegraphics-thumbnailers ffmpegthumbs powerdevil kdeplasma-addons kde-gtk-config pipewire-pulse</code>
-        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
-        <ul>
-            <li><em>kcalc</em> (Se e somente se você utilizará uma calculadora)</li>
-            <li><em>kdenetwork-filesharing</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
-        </ul>
-        <p>Habilite o serviço do SDDM com o comando:</p>
-        <code>systemctl enable sddm</code>
-        <h2>Instalando ambiente gráfico básico com o Gnome</h2>
-        <p>Utilize o comando:</p>
-        <code>pacman -S gnome gnome-tweaks</code>
-        <p>Habilite o serviço do GDM com o comando:</p>
-        <code>systemctl enable gdm</code>
-        <h2>Instalando ambiente gráfico básico com o LxQT</h2>
+        <!-- LXQT -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>LxQT</h3>
         <p>Utilize o comando:</p>
         <code>pacman -S lxqt oxygen-icons sddm</code>
         <p>Habilite o serviço do SDDM com o comando:</p>
         <code>systemctl enable sddm</code>
-        <h2>Instalando ambiente gráfico básico com o XFCE</h2>
+        <!-- XFCE -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>XFCE</h3>
         <p>Utilize o comando:</p>
         <code>pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
         <p>Habilite o serviço do LightDM com o comando:</p>
         <code>systemctl enable lightdm</code>
+        <!-- Adicionando fontes para compatibilidade, suporte a línguas estrangeiras e símbolos -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Adicionando fontes para compatibilidade, suporte a línguas estrangeiras e símbolos:</h3>
+        <p>Para compatibilidade:</p>
+        <code>sudo pacman -S ttf-dejavu ttf-liberation</code>
+        <p>Para caracteres internacionais:</p>
+        <code>sudo pacman -S adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts</code>
+        <p>Para símbolos:</p>
+        <code>sudo pacman -S noto-fonts noto-fonts-emoji</code>
+        <!-- Instalar Firefox com suporte a localização pt-br -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Instalar Firefox com suporte a localização pt-br</h2>
+        <code>pacman -S firefox firefox-i18n-pt-br</code>
+        <!-- Ativando o TRIM -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Ativando o TRIM:</h3>
+        <p>Caso você utilize SSD's você pode otimizá-los ativando o serviço TRIM com o comando:</p>
+        <code>systemctl enable fstrim.timer</code>
+        <!-- Habilite cor no pacman -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Habilite cor no pacman:</h3>
+        <p>Para ativar cor no pacman basta acessar o arquivo de configuração do pacman com o nano com o comando:</p>
+        <code>nano /etc/pacman.conf</code>
+        <p>Descomente a linha deletando o <mark>#</mark> antes de <mark>Color</mark></p>
+        <!-- Melhore o desempenho do sistema Linux com noatime -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Melhore o desempenho do sistema Linux com noatime:</h3>
+        <p>Acesse o fstab com o nano com o comando:</p>
+        <code>nano /etc/fstab</code>
+        <p>Mude de:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>relatime</mark>,errors=remount-ro 0 1</code>
+        <p>Para:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
+        <p>E em seguida salve o arquivo</p>
+        <!-- Habilitar NTP -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Habilitar NTP</h3>
+        <code>sudo timedatectl set-ntp true</code>        
+        <!-- Instalar drivers proprietários da Nvidia -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
+        <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
+        <code>sudo pacman -S nvidia</code>
+        <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
+        <code>sudo pacman -S nvidia-lts</code>
+        <!-- Instalando o YAY (opcional) -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Instalando o YAY (opcional):</h2>
         <p>Para facilitar a instalação e manutenção dos pacotes do aur utilizaremos o yay. Logue na sua conta de usuário (não na do root) e instale as dependências necessárias com o comando:</p>
         <code>sudo pacman -S git base-devel</code>
@@ -782,8 +1042,8 @@
         <code>makepkg -si</code>
         <p>Após o fim da instalação utilize o yay para instalar os pacotes necessários desejados com o comando:</p>
         <code>yay -S <mark>nome do pacote</mark></code>
-        <h2>Instalar Firefox com suporte a localização pt-br</h2>
-        <code>pacman -S firefox firefox-i18n-pt-br</code>
+        <!-- Melhorar renderização de fontes -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Melhorar renderização de fontes</h2>
         <!--
         <h3>1 - Editar o <mark>/etc/fonts/local.conf</mark></h3>
