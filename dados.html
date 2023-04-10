@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de dados</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Recuperação de dados"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Recupere os dados do seu HD defeituoso ou da sua partição deletada"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://ssl.gstatic.com/atari/images/public/favicon.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+	<main id="main-area">
+        	<h1>Recuperando dados de uma unidade de armazenamento</h1>
+        	<h2>Introdução</h2>
+        	<p>Assim como todo componente do seu computador, os dispositivos de armazenamento (HDs, SSDs, Pendrives, etc.) tem um limite de vída útil (mais ou menos 5 anos <strong>em atividade</strong> para um HD e de 3.000 e 100.000 usos para uma célula de armazenamento dentro dos chips dos SSDs variando conforme o modelo de chip), porém, muitas pessoas tratam os dados contidos nesses dispositivos como se fossem eternos e não deteriorassem, mas a verdade é uma só: <strong>Os seus dados estão tão saudáveis quanto os dispositivos que os carrega! </strong></p>
+        	<p>Existem diferenças da maneira que os HDs e SSDs se deterioram, em resumo os HDs não tem limite de gravação e leitura mas tem limites de tempo de operação (quanto tempo fica em processo de gravação, quanto tempo fica em processo de leitura, qual temperatura atinge durante a gravação/leitura e por quanto tempo permanece nessa temperatura, se é atingido por algum impacto ou vibração e por aí vai), já os SSDs não tem limite em termos de operação <strong>porém</strong> tem limite em termos de regravação (ou seja, dados gravados num SSDs podem durar mais e ele pode operar em leitura ad infinitum <strong>mas</strong> o "apaga, escreve, apaga, escreve, apaga, escreve de novo" acaba com um SSD fazendo que com o tempo as células gastas "esqueçam" os dados gravados).</p>
+        	<p>Também pode ser que aconteça alguma perda de energia durante um processo de gravação, ou mesmo a falha de algum programa (ou mesmo do usuário) que acabe deletando os arquivos, partições ou até mesmo a tabela de partição toda de uma vez só (<i>eu tô rezando pra você que foi usar o Ventoy e formatou o seu HD de backup sem querer...</i>).</p>
+        	<p>Então se você está aqui nessa página as chances são que alguma merda aconteceu, seja por sua falta de conhecimento ou descuido de sua parte ou apenas azar mesmo, então antes de continuarmos com o procedimento aqui vai algumas dicas para que esse problema, seja lá qual for, não ocorra novamente:</p>
+        	<ol>
+        		<li>Sempre verifique a condição das suas unidades de armazenamento (seja com Gnome Disks ou Crystal Disk Info), qualquer coisa que não seja <mark>"GOOD, 0 bad blocks"</mark> é <strong>inaceitável</strong> (se houver 1 bad block sequer substitua essa unidade o quanto antes!);</li>
+        		<li>Não manipule dados sensíveis (como documentos importantes) no seu computador em períodos de chuva ou com risco de queda de energia (e até uma tomada frouxa cabe nesse alerta aqui);</li>
+        		<li>Sempre atualize o firmware do seus SSD's (tanto faz se eles são SATA ou NVME) <strong>ANTES</strong> de instalar o sistema (ou formato de arquivo) desejado, se não pelo menos faça backup do seus dados e atualize o firmware;</li>
+        		<li>Caso você precise realizar alguma operação de particionamento ou formatação, desligue o computador e desconecte <strong>TODOS</strong> os dispositivos que você não deseja formatar antes de realizar a operação;</li>
+        		<li>HDs externos não devem ser tratados como unidades portáteis, HDs são extremamente sensíveis a vibração e se você é do tipo que vai pra cima e pra baixo com HD numa case e saída USB3.0 na mochila, seus dados cedo ou tarde vão virar ovos mexidos;</li>
+        		<li>Utilize sistemas operacionais e formatos de arquivo compatíveis em dispositivos seguros sempre que for lidar com os seus dados, exemplo:
+        			<ul>
+        				<li>Não tenha um disco de backup em NTFS para o seu Linux ou MacOS, pois o suporte ao NTFS para operações no Linux não é perfeito (e o mesmo serve para acessar EXT4 através do Windows e Mac ou acessar APFS através do Linux e Windows)!</li>
+                        <li>Não tenha um pendrive em FAT32 que você conecta em todo computador como dispositivo de backup pois se esse pendrive pegar vírus ou se o seu sistema pegar vírus você vai perder tudo!</li>
+                        <li>Não faça backup utilizando o cartão SD genérico que você tirou do celular, cartões SDs já são dispositivos bem menos confiáveis e aquele que você compra no camelô então nem se conta!</li>
+                        <li>Em resumo: Sempre use um dispositivo com menos chance de erros, em uma formatação que possa ser lida <strong>nativamente</strong> pelo sistema utilizado para fazer o backup (a menos que seja um ZoL), garanta a segurança do sistema que manipula os dados pois uma vez acessíveis ao sistema eles estão tão seguros quanto o sistema que os acessa!</li>
+        			</ul>
+        		</li>
+        	</ol>
+            <p>Uma vez que você entendeu tudo isso podemos seguir com a tentativa de recuperação dos dados, sim, tentativa, pois não existe garantia alguma nesse processo, tudo vai depender do estrago, das ferramentas utilizadas e da sua sorte, mas antes você precisa saber o básico sobre uma unidade de armazenamento.</p>
+            <h2>O básico que você precisa saber sobre uma unidade de armazenamento</h2>
+            <p>Quando você apaga um arquivo no computador, <mark>não significa que esse dado foi apagado no disco</mark>, na verdade quase nunca esse dado vai ser imediatamente apagado no disco, isso acontece devido a maneira que os dispositivos funcionam, e para entender isso você precisa entender 3 coisas: <mark>Tabelas de partição</mark>, <mark>sistemas de arquivo</mark> e <mark>blocos</mark>.</p>
+            <h3>Tabela de partição</h3>
+            <p>Em resumo a tabela de partição é um índice gravado no começo do disco e funciona como se fosse um "guia" que do que existe dentro do HD (ou SSD ou pendrive e por aí vai), ela aponta quais sistemas de arquivo estão gravados, onde cada sistema de arquivo começa e termina, as condições daquela partição (se ela deve ser ocultada ou se ela é extensão de outra) e por aí vai.</p>
+            <h3>Sistemas de arquivo</h3>
+            <p>Grosso modo, sistemas de arquivo são espaços no disco com um método e estrutura especificos para controlar os dados no disco, por exemplo, quando você formata um pendrive em FAT32 você basicamente prepara uma área do pendrive para gravar e ler arquivos de uma determinada maneira. É como se você delimitasse uma área para obras e colocasse aquela área na responsabilidade de um mestre de obras numa construção, mestre esse que determina como as coisas entram naquela área, como elas saem daquela área e de que forma a produção é feita.</p>
+            <h3>Blocos</h3>
+            <p>Já os blocos são um "pedaço" do HD que recebem a gravação fisicamente, basicamente são onde os dados ficam de fato.</p>
+            <h3>Então por qual razão o arquivo permanece no disco mesmo depois de apagado?</h3>
+            <p>É simples, ao invés de o seu computador apagar o arquivo em todos os blocos, ele avisa ao mestre de obras (sistema de arquivos): "Seja lá o que existia nesse espaço desse arquivo X considere vazio, caso você precise de gravar algo basta demolir isso e gravar por cima". Então a menos que algum outro arquivo utilize aquele espaço depois dele ser marcado para "demolição", o arquivo permanece lá! Então lembre-se: <strong>Caso você tenha apagado algo que não deveria no HD (ou qualquer outro dispositivo), cesse o uso do dispositivo IMEDIATAMENTE, desconecte do computador e não reconecte até ter uma unidade reserva para fazer o backup de dados!</strong></p>
+            <p>Quem utiliza Archlinux já deve ter reparado que em certo momento da instalação você faz a tabela de partições do dispositivo e em outro momento você formata aquele espaço da partição com o formato de arquivo, o que isso significa? Significa que uma área descrita no disco como <mark>Partição 1 - FAT32</mark> pode não conter nada de FAT32 lá e ser inoperável, ou também você pode perder a tabela da partições e aquele espaço que deveria ter um FAT32 fica invisível pro sistema.</p>
+            <p>O ponto é: Para que seu arquivo seja lido pelo sistema de maneira correta ele precisa de</p>
+            <ol>
+                <li>Uma tabela de partição descrevendo quais as partições existem no dispositivo;</li>
+                <li>Que as partições também precisam estar formatadas nas delimitações corretas informadas pela tabela de partições;</li>
+                <li>Que os arquivos no seu disco estejam inteiramente gravados em blocos funcionais;</li>
+            </ol> 
+            <p>Então, para recuperar seus arquivos depende do estrago que foi feito:</p>
+            <ul>
+                <li>Você deletou a partição? Então vai ter que reparar a tabela de partição para informar novamente que existe um espaço alí com um sistema de arquivo.</li>
+                <li>Você deletou a tabela de partições? Então você vai ter que buscar no dispositivo, bloco a bloco onde se localiza fisicamente aquele sistema de arquivos para recuperar seus dados.</li>
+                <li>Você gravou seus arquivos em blocos defeituosos ou continuou usando o disco após ter perdido os arquivos? Então você se fod**!</li>
+            </ul>
+            <h3>Então como recuperar meus arquivos?</h3>
+            <p>Via de regra, todo processo de recuperação de dados funciona da mesma maneira: As ferramentas de recuperação de arquivos leem a unidade (ou unidades) ou o arquivo de imagem (ou arquivos de imagem), procurando partes dos metadados do sistema de arquivos e montando um sistema de arquivos na memória, então eles usam isso como um mapa para extrair os dados do dispositivo(s) ou imagem(s) e permitem o acesso ou mesmo regravam isso em outro dispositivo(s) ou imagem(s).</p>
+            <p>Se e como os arquivos serão recuperados sempre depende do estado dos dispositivos e dos programas a serem utilizados, embora eu seja entusiasta de softwares livres eu tenho que ser sincero: Não há como comparar o desempenho de uma ferramenta feita por necessidade para uso individual e casos simples com as de um time de programadores especialistas em recuperação de dados, essas ferramentas usam algoritmos muito diferentes, todos proprietários. Essas ferramentas lidam com situações diferentes de maneiras diferentes e certamente não fornecem os mesmos resultados em todas as circunstâncias. Então se você tem algo muito importante para recuperar e dispositivos muito degradados, compre uma licença (<strong>Sim! Compre a por** de uma licença e não arrisque seus dados com programas craackeados!</strong>) de um <em>UFS Explorer</em>, <em>R-Studio</em> ou <em>DMDE</em> e boa sorte, esse tutorial definitivamente não é pra você.</p>
+            <p>Se você apagou uma partição ou tabela de partições e tem um hd em boas condições ou que apenas começou a dar problemas em setores específicos (nada de disco cantando ou cabeçote fisgando), se você ainda tem acesso aos seus dados sem problemas aí sim esse tutorial serve pra você.</p>
+            <h2>O que é necessario para recuperar?</h2>
+            <p>Bom, primeiramente você precisa passar a ver o HD (ou qualquer outro dispositivo a ser recuperado) como um paciente com um problema desconhecido: <em>Quando menos você mexer nele antes de ter a completa compreensão do problema e a solução definitiva melhor é!</em></p>
+            <p>O melhor a se fazer depende da situação, se o HD não tem arquivos excluídos a serem recuperados, se não há partições deletadas e a tabela de partição está intacta e você só precisa <em>mover</em> os arquivos para uma unidade saudável, o ideal é:</p>
+            <ul>
+                <li>Adquirir um HD <strong>novo</strong> para substituição do HD antigo;</li>
+                <li>Clonar o conteúdo do HD antigo para o novo;</li>
+            </ul>
+            <p>Porém, se você perdeu a partição de arquivos ou mesmo a tabela de partições e/ou apagou arquivos que não deveria então o melhor a se fazer é:</p>
+            <ul>
+                <li>Adquirir um HD <strong>novo</strong> (chamemos de HD substituto) para substituição do HD antigo (chamemos de HD paciente);</li>
+                <li>Adquirir um segundo HD <strong>novo</strong> (chamemos de HD de análise) <em>com pelo menos o dobro do espaço do hd paciente</em>, espaço esse que será usado em parte para salvar a imagem do hd paciente e análise do conteúdo e em parte para recuperação de dados do HD paciente;</li>
+                <li>Clonar o conteúdo do HD paciente para uma <em>imagem de disco</em> no sistema de arquivos do HD de análise;</li>
+                <li>Ler a imagem de disco gravada no sistema de arquivos HD de análise, recuperar os dados para o sistema de arquivos do hd de análise e só então mover os arquivos para o HD de substituto;</li>
+            </ul>
+            <p>Então, vamos lá?</p>
+            <h2>Caso 1 - Recuperação de dados de disco para disco</h2>
+            <p>Bom, a primeira coisa a saber é que esse procedimento deve ser feito pelo <em>Linux</em>, de preferência </em>Debian</em> ou  algum derivado (como o <em>Ubuntu)</em>. Existem diversas razões técnicas pra isso aqui que eu não entrarei em detalhes, então <em>antes de mais nada instale o Linux em alguma unidade</em> e <strong>que não seja nem o HD substituto e muito menos o HD paciente!</strong>  </p>
+            <p>Uma vez que você tenha o Linux instalado acesse o site do <a class="link" href="https://www.hddsuperclone.com/downloads">HDDSuperClone</a>, clique em <mark>Downloads Area</mark> e baixe a pasta <mark>HDDSuperClone</mark>. Instale o pacote <mark>hddsuperclone_2.3.3.pro-1_amd64.deb</mark> (ou <mark>i386.deb</mark> para 32 bits).</p>
+            <p>Abra um terminal de digite o comando:</p>
+            <code>sudo hddsuperclone</code>
+            <p>Você verá essa janela:</p>
+            <img class="responsiva" src="assets/images/hddsuperclone01.jpg" alt="">
+            <p>Basta clicar em <mark>Continue</mark>.</p>
+            <img class="responsiva" src="assets/images/hddsuperclone02.jpg" alt="">
+            <p>Para utilizar o programa precisamos primeiro criar um projeto, selecione então <mark>File > New Project</mark> para criá-lo e por padrão salve na pasta <mark>Documentos</mark> com o nome <mark>Projeto1</mark>, esse arquivo será usado pelo programa para acompanhamento de progresso da recuperação e informações a respeito dos seus dados.</p>
+            <img class="responsiva" src="assets/images/hddsuperclone03.jpg" alt="">
+            <p>Agora selecionaremos o <em>Drive de origem</em> (ou seja, o drive <em>que será lido</em>, o <strong>paciente!</strong>), para isso selecione <mark>Drivers > Choose Source Drive</mark>, clique no disco que deseja recuperar e depois clique em <mark>OK</mark>.</p>
+            <img class="responsiva" src="assets/images/hddsuperclone04.jpg" alt="">
+            <p>Por fim selecionaremos o <em>Drive de destino</em> (ou seja, o drive <em>que será gravado</em>, o <strong>substituto!</strong>), para isso selecione <mark>Drivers > Choose Destination > Drive</mark>, clique no disco que deseja usar como substituto e depois clique em <mark>OK</mark>.</p>
+            <img class="responsiva" src="assets/images/hddsuperclone05.jpg" alt="">
+            <p>Se tudo estiver correto, para iniciar o processo selecione <mark>Connect</mark> e em seguida <mark>Start</mark> e aguarde o fim do procedimento.</p>
+            <h2>Caso 2 - Recuperação de dados em caso de perda de arquivos, partições ou tabela de partição</h2>
+            <p>Para o seu caso a única diferença em comparação com o exemplo acima é que você precisa <em>antes de mais nada formatar o HD de análise</em> (de preferência em <em>EXT4</em>), e em seguida <em>montar a partição do HD de análise</em> para receber a imagem, e ao invés de selecionar <mark>Drivers > Choose Destination > Drive</mark> (para gravar a leitura em disco) você vai selecionar <mark>Drivers > Choose Destination > Image file</mark> (para gravar a leitura como arquivo de imagem) e <em>salvar na raiz da partição do HD de análise</em> como <mark>imagem.bin</mark>. Também crie na raíz do <em>HD de análise</em> uma pasta com o nome de <mark>Arquivos Recuperados</mark>.</p>
+        	<p>Uma vez que a imagem esteja completamente copiada, instale o <mark>testdisk</mark> com o comando:</p>
+            <code>sudo apt install testdisk</code>
+            <p>Abra um terminal na raiz do <em>HD de análise</em>, e faça o testdisk carregar a imagem com o comando:</p>
+            <code>testdisk imagem.bin</code>
+            <p>Ele vai mostrar uma tela com as seguintes opções:</p>
+            <code>Select a media (use Arrow keys, then press Enter):<br><mark>> Imagem de disco.bin - XXXX MB / XXXX MB</mark><br><mark>> [Proceed]</mark>[Quit]</code>
+            <p>Com as setas <em>↑ ↓</em> você seleciona a imagem, com as <em>← →</em> você a seleciona opção e <em>Enter</em> confirma.</p>
+            <p>Selecione então a imagem desejada e depois selecione <mark>[ Proceed ]</mark></p>
+            <p>Então você vai uma tela para seleção de tabela de partição como o exemplo abaixo:</p>
+            <code>Please select the partition table type, press Enter when done.<br>[Intel] Intel/PC partition<br>[EFI GPT] EFI GPT partition map (Mac i386, some x86_64...)<br>[Humax] Humax partition table<br>[Mac] Apple partition map (legacy)<br>[None] Non partitioned media<br>[Sun] Sun Solaris partition<br>[Xbox] Xbox partition<br>[Return] Return to disk selection<br> Hint: <mark>"TIPO"</mark> partition table type has been detected.</code>
+            <p>Via de regra, selecione o que está marcado <mark>TIPO</mark> para você</p>
+            <code>Partition&emsp;Start&emsp;End&emsp;Size in sectors<br><mark>> XXXX&emsp;XXXX&emsp;XXXX&emsp;XXXX</mark><br>[Type][Image creation]<mark>[Quit]</mark></code>
+            <p>Selecione <mark>[Quit]</mark> para ir par ao menu principal</p>
+            <code><mark>[ Analyse ] Analyse current partition structure and search for lost partitions</mark><br>[ Advanced] Filesystem Utils<br>[ Geometry ] Change disk geometry<br>[ Options ] Modify options<br>[ Quit ] Return do disk selection</code>
+            <p>No menu principal selecione a opção <mark>[Analyise]</mark></p>
+            <code>Partition&emsp;Start&emsp;End&emsp;Size in sectors<br><mark>> XXXX&emsp;XXXX&emsp;XXXX&emsp;XXXX</mark><br><mark>[Quick Search]</mark></code>
+            <p>Para fazer uma pesquisa rápida selecione a opção <mark>[ Quick Search ]</mark> e aguarde o fim do procedimento</p>
+            <p>Vamos supor que você tenha perdido uma partição <mark>NTFS</mark> de nome <mark>BACKUP</mark>, ela vai aparecer aqui mais ou menos assim:</p>
+            <code>Partition&emsp;Start&emsp;End&emsp;Size in sectors<br><mark>> P NTFS&emsp;XXXX&emsp;XXXX&emsp;[BACKUP]</mark><br>Keys <em>T</em>: change type, <em>P</em>: list files,<br><em>Enter</em>: to continue</code>
+            <p>Caso a partição desejada não tenha sido encontrada, aperte <em>q</em> e depois selecione opção <mark>[ Deeper Search ] e aguarde o fim do procedimento</mark></p>
+            <p><strong>Provavelmente muitas partições serão encontradas após um Deep Search, tenha a certeza de selecionar a partição desejada corretamente!</strong></p>
+            <p>Vamos supor que você encontrou a partição desejada, coloque o cursor sobre ela e para recuperar algum arquivo desse espaço aperte <mark>P</mark> para listar os arquivos</p>
+            <code>dr-xr-xr-x 0 0 0 15-Feb-2005 .<br>dr-xr-xr-x 0 0 0 15-Feb-2005 ..<br><mark>> dr-xr-xr-x 0 0 0 15-Feb-2005 Pasta1</mark><br>dr-xr-xr-x 0 0 0 15-Feb-2005 Pasta2<br>Use <em>Right</em> to change directory, <em>h</em> to hide Alternate Data Stream<br><em>q</em> to quit, <em>:</em> to select the current file, <em>a</em> to select all files<br><em>C</em> to copy selected files, <em>c</em> to copy current file</code>
+            <p><em>Nota:</em> Aqui essa interface segue as mesmas convenções da navegação do Linux  <mark>.</mark> é diretório atual, <mark>..</mark> é diretório acima.</p>
+            <p>E aqui basta navegar pela lista de arquivos e selecionar o que deseja, os comandos são:<br><mark>:</mark> seleciona arquivos isoladamente, <mark>a</mark> seleciona todos os arquivos, <mark>→</mark> para entrar numa pasta e <mark>←</mark> para sair da pasta.<br>Pressione <mark>C</mark> para copiar os arquivos selecionados ou <mark>c</mark> para copiar o arquivo marcado pelo cursor.</p>
+            <p>Assim que tiver selecionado o(s) arquivo(s) desejado(s), e o tipo de cópia a ser feita (pelos arquivos marcados ou o que está selecionado pelo cursor) basta navegar até a pasta <mark>Arquivos Recuperados</mark> <em>na raiz do HD de análise</em>, confirmar a cópia e aguardar o fim do procedimento, ao fim pressione <mark>Q</mark> para sair.</p>
+        </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 03/03/2023)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

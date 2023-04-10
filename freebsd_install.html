@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação do FreeBSD 13</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - FreeBSD"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda a instalar o FreeBSD 13"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://www.freebsd.org/favicon.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Instalação do FreeBSD 13</h1>
+        <h2>Introdução</h2>
+        <p><strong>Aviso: Não recomendo a instalação do FreeBSD em modo UEFI</strong></p>
+        <h3>Como proceder:</h3>
+        <ul>
+            <li>Para navegar nos menus utilize as setas (←↑↓→)</li>
+            <li>Para alterar o campo de seleção tecle ↹ Tab</li>
+            <li>Para selecionar as opções ( * ) nos menus tecle Espaço</li> 
+            <li>Enter ⏎ quando quiser confirmar a seleção.</li>
+        </ul>
+        <p>Essa é a tela de boas vindas do FreeBSD, tecle Enter ou aguarde o fim da contagem...</p>
+        <img class="responsiva" src="assets/images/bsd1.jpg" alt="">
+        <p>Selecione <mark>Install</mark> para iniciar o processo de instalação:</p>
+        <img class="responsiva" src="assets/images/bsd2.jpg" alt="">
+        <p>Selecione <mark>Brazilian (accent keys)</mark> e depois <mark>Continue with br.kbd keymap</mark>:</p>
+        <p>Se quiser você pode testar o teclado em <mark>Test br.kbd keymap.</mark></p>
+        <img class="responsiva" src="assets/images/bsd3.jpg" alt="">
+        <p>Escolha o <mark>hostname</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd4.jpg" alt="">
+        <p>Selecione os componentes, recomendo o <mark>lib32</mark> e o <mark>src</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd5.jpg" alt="">
+        <p>Para particionamento a nível de usuário final recomendo <mark>Auto (UFS)</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd6.jpg" alt="">
+        <p>Selecione <mark>Entire Disk</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd7.jpg" alt="">
+        <p>Na tabela de partição recomendo <mark>MBR para BIOS</mark> ou <mark>GPT para UEFI</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd8.jpg" alt="">
+        <p>Caso esteja de acordo com a tabela de partição selecione <mark>Finish</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd9.jpg" alt="">
+        <p>Caso esteja de acordo com as alterações em disco selecione <mark>Commit</mark>:</p>
+        <p><strong>Alerta: Todos os dados no disco serão perdidos! Tenha a certeza de ter selcionado o disco correto e/ou ter feito backup antes de prosseguir!</strong></p>
+        <img class="responsiva" src="assets/images/bsd10.jpg" alt="">
+        <p>Aguarde o fetch...</p>
+        <img class="responsiva" src="assets/images/bsd11.jpg" alt="">
+        <p>E o extract...</p>
+        <img class="responsiva" src="assets/images/bsd12.jpg" alt="">
+        <p>Insira a senha de administrador da máquina (root):</p>
+        <img class="responsiva" src="assets/images/bsd13.jpg" alt="">
+        <p>Selecione a interface de rede:</p>
+        <p><strong>AVISO: No meu caso estou instalando numa interface a cabo, caso você esteja utilizando uma interface de rede sem fio você deve selecionar o orgão regulador (<mark>FCC</mark>, <mark>Brazil</mark>), a rede e a senha da sua conexão (não obtive sucesso ao conectar no Wifi com caracteres especiais)</strong></p>
+        <img class="responsiva" src="assets/images/bsd14.jpg" alt="">
+        <p>Selecione se você quer configurar <mark>IPv4</mark> para essa interface (caso esteja em dúvida selecione <mark>Yes</mark>):</p>
+        <img class="responsiva" src="assets/images/bsd15.jpg" alt="">
+        <p>Selecione se você quer configurar DHCP para essa interface (caso esteja em dúvida selecione <mark>Yes</mark>):</p>
+        <img class="responsiva" src="assets/images/bsd16.jpg" alt="">
+        <p>Selecione se você quer configurar IPv6 para essa interface (caso esteja em dúvida selecione <mark>No</mark>):</p>
+        <img class="responsiva" src="assets/images/bsd17.jpg" alt="">
+        <p>Caso deseje você pode configurar o IP de DNS (por padrão será carregado o ip do gateway, caso esteja em dúvida selecione <mark>OK</mark>):</p>
+        <p>*Recomendo o uso do <mark>OpenDNS</mark> (IPs <mark>208.67.222.222</mark>/<mark>208.67.220.220</mark> para IPv4 e <mark>2620:119:35::35</mark>/<mark>2620:119:53::53</mark> para IPv6)</p>
+        <img class="responsiva" src="assets/images/bsd19.jpg" alt="">
+        <p>Selecione a sua região (<mark>America</mark> > <mark>Brazil</mark> > <mark>Estado</mark>):</p>
+        <img class="responsiva" src="assets/images/bsd20.jpg" alt="">
+        <p>Se estiver correto confirme:</p>
+        <img class="responsiva" src="assets/images/bsd21.jpg" alt="">
+        <p>Caso a data esteja correta selecione <mark>Skip</mark>, caso contrário altere em <mark>Set Date</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd22.jpg" alt="">
+        <p>Caso a hora esteja correta selecione <mark>Skip</mark>, caso contrário altere em <mark>Set Time</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd23.jpg" alt="">
+        <p>Selecione os serviços para serem iniciados no boot, recomendo deixar marcado <mark>ntpd</mark> e <mark>powerd</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd24.jpg" alt="">
+        <p>Aqui são as opções de enrigecimento de segurança, recomendo marcar <mark>clear_tmp</mark>, <mark>disable_syslogd</mark>, <mark>disable_sendmail</mark>, <mark>secure_console</mark>, <mark>disable_ddtrace</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd25.jpg" alt="">
+        <p>Selecione <mark>Yes</mark> para adicionar o seu usuário no sistema:</p>
+        <img class="responsiva" src="assets/images/bsd26.jpg" alt="">
+        <code>Username: <mark>insira aqui seu nome de usuário</mark></code>
+        <code>Full name: <mark>apenas tecle Enter</mark></code>
+        <code>Uid (Leave empty for default): <mark>apenas tecle Enter</mark></code>
+        <code>Login group [seuusuário]: <mark>apenas tecle Enter</mark></code>
+        <code>Login group is . Invite  into other groups? []: wheel <mark>para acesso administrativo ou você pode simplesmente adicionar o grupo</mark> video <mark> se não quiser ceder acesso administrativo a essa conta mas quiser fazer uso de interface gráfica</mark></code>
+        <code>Login class [default]: <mark>apenas tecle Enter</mark></code>
+        <code>Shell (sh csh tcsh nologin) [sh]: <mark>apenas tecle Enter</mark></code>
+        <code>Home Directory [/home/seuusuário]: <mark>apenas tecle Enter</mark></code>
+        <code>Home Directory Permissions (Leave empty for default): <mark>apenas tecle Enter</mark></code>
+        <code>User password-based authentication? [yes]: <mark>apenas tecle Enter</mark></code>
+        <code>Use an empty password? (yes/no) [no]: <mark>apenas tecle Enter</mark></code>
+        <code>Use a random password? (yes/no) [no]: <mark>apenas tecle Enter</mark></code>
+        <code>Enter password: <mark>insira sua senha</mark></code>
+        <code>Enter password again: <mark>confirme sua senha</mark></code>
+        <code>Lock out the account after creation? (yes/no) [no]: <mark>apenas tecle Enter</mark></code>
+        <code>Ok? (yes/no): <mark>yes</mark></code>
+        <code>Add another user? (yes/no): <mark>no</mark></code>
+        <img class="responsiva" src="assets/images/bsd30.jpg" alt="">
+        <p>Selecione <mark>Exit</mark> (a menos que queira alterar algo):</p>
+        <img class="responsiva" src="assets/images/bsd32.jpg" alt="">
+        <p>Selecione <mark>No</mark>:</p>
+        <img class="responsiva" src="assets/images/bsd33.jpg" alt="">
+        <p>Selecione <mark>Reboot</mark> para concluir a instalação e reiniciar a máquina para o sistema instalado.</p>
+        <img class="responsiva" src="assets/images/bsd34.jpg" alt="">
+        <h2>Pós Instalação</h2>
+        <p>Assim que o sistema iniciar logue na conta de administrador: (login: <mark>root</mark> - senha: <mark>senha que você digitou para acesso administrativo</mark>)</p>
+        <img class="responsiva" src="assets/images/bsd35.jpg" alt="">
+        <p>Assim que logado na conta de root vamos começar a preparar o sistema...</p>
+        <img class="responsiva" src="assets/images/bsd36.jpg" alt="">
+        <p>Para atualizar o núcleo do sistema use o comando:</p>
+        <code>freebsd-update fetch install</code>
+        <p>Para atualizar os pacotes insira o comando:</p>
+        <code>pkg update && upgrade</code>
+        <code>Do you want to fetch and install it now?: <mark>y</mark></code> 
+        <p>Se aparecer:</p>
+        <code>Your packages are up to date</code>
+        <p>Significa que seu sistema já está devidamente atualizado.</p>
+        <p>Caso tenha escolhido usar o <mark>ports</mark> use o comando abaixo  para fetch, extract e update do ports:</p>
+        <code>portsnap auto</code>
+        <p>Pronto! Seu sistema está devidamente instalado e atualizado... Mas ainda da pra melhorar.</p>
+        <h2>Configuração para Usuário Final</h2>
+            <h3>Instalação de Desktop Environment</h3>
+                <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
+                <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
+            <h3>Instalação do Xorg</h3>
+                <p>A primeira coisa que precisamos para instalar um ambiente gráfico é o Xorg, para instala-lo utilize o comando:</p>
+                <code>pkg install xorg</code>
+                <code>Proceed with this action? <mark>y</mark></code> 
+            <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
+                <p>Para instalação do Gnome:</p>
+                <code>pkg install gdm gnome3</code>
+                <p>Para instalação do KDE:</p>
+                <code>pkg install kde5</code>
+                <p>Para Instalação do XFCE:</p>
+                <code>pkg install xfce slim</code>
+                <p>Para Instalação do Mate:</p>
+                <code>pkg install mate slim</code>
+                <p>Para instalação do LxQT:</p>
+                <code>pkg install lxqt slim</code>
+                <p>Para instalação do Cinnamon:</p>
+                <code>pkg install cinnamon slim</code>
+            <h3>Edição do FSTAB</h3>
+                <p>Esses ambientes (por via de regra) dependem do <mark>process file system</mark> montados, para isso vamos editar o <mark>/etc/fstab</mark>. Caso nunca tenha utilizado um editor de texto por terminal antes eu recomendo instalar o <mark>nano</mark> para editar o arquivo, instale-o com o comando:</p>
+                <code>pkg install nano</code>
+                <p>Edite o arquivo com o comando:</p>
+                <code>nano /etc/fstab</code>
+                <p>Adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
+                <code>proc&emsp;/proc&emsp;procfs&emsp;rw&emsp;0&emsp;0</code>
+                <p>Para sair do nano o comando é <mark>Ctrl</mark> + <mark>x</mark>, quando utilizar esse comando caso não tenha salvado o arquivo ele vai perguntar se você deseja salvar antes de sair, obviamente escolha que <mark>sim</mark> e <mark>tecle Enter</mark> para confirmar o <mark>nome do arquivo</mark> (<strong>não edite o nome do arquivo!</strong>).</p>
+            <h3>Edição do RCCONF</h3>        
+                <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark>.</p>
+                <p>para editar o arquivo com o nano execute o comando:</p>
+                <code>nano /etc/rc.conf</code>
+                <p>acrescente essas linhas ao final do arquivo:</p>
+                <code>dbus_enable="YES"</code>
+                <code>hald_enable="YES"</code>
+                <p>(não mais necessário)</p>
+                <p>Os ambientes gráficos precisam da adição de linhas específicas.</p>
+                <p> Caso escolha o KDE ative o SDDM:</p>
+                <code>sddm_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição para o KDE)</p>
+                <p>Caso escolha o Gnome ative o GDM e os serviços do Gnome:</p>
+                <code>gdm_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição Gnome)</p>
+                <code>gnome_enable="YES"</code>
+                <p>(para iniciar os serviços do gnome)</p>
+                <p>Caso escolha os demais Ambientes ative o Slim:</p>
+                <code>slim_enable="YES"</code>
+                <p>(apenas para chamar o gerenciador de exibição SLiM para os demais desktop environments)</p>
+                <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
+            <h3>Edição do arquivo XINITRC</h3>
+                <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
+                <code>exit</code>
+                <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
+                <code>nano ~/.xinitrc</code>
+                <p>Acrescente as linhas:</p>
+                <code>export LC_ALL=pt_BR.UTF-8</code>
+                <code>export LANGUAGE=pt_BR.UTF-8</code>
+                <code>export LANG=pt_BR.UTF-8</code>
+                <code>setxkbmap -model abnt2 -layout br</code>
+                <p>Caso tenha selecionado algum ambiente que precisa ser iniciado pelo SLiM adicione a linha correspondente:</p>
+                <code>exec startxfce4</code>
+                <p>para iniciar o XFCE pelo SLiM</p>
+                <code>exec mate-session</code>
+                <p>para iniciar o Mate pelo SLiM</p>
+                <code>exec startlxqt</code>
+                <p>para iniciar o LxQT pelo SLiM</p>
+                <code>exec cinnamon-session</code>
+                <p>para iniciar o Cinnamon pelo SLiM</p>
+                <p>Feche o arquivo com <mark>Ctrl</mark> + <mark>x</mark>, confirme salvar.</p>
+            <h3>Ambiente gráfico devidamente instalado!</h3>
+                <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
+                <code>shutdown -r now</code>
+                <img class="responsiva" src="assets/images/mate.jpg" alt="">
+            <h3>Mas ainda é só o começo...</h3>
+                <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
+                <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
+            <h3>Caso queira continuar...</h3>
+                <p>Aqui vão algumas alterações recomendadas:</p>
+            <h3>/etc/rc.conf</h3>
+                <h4>Para desabilitar completamente o Sendmail:</h4>
+                    <code>sendmail_enable="NO"</code> 
+                    <p>(ao invés do depreciado <mark>sendmail_enable="NONE"</mark>)</p>
+                    <code>sendmail_submit_enable="NO"</code>
+                    <code>sendmail_outbound_enable="NO"</code>
+                    <code>sendmail_msp_queue_enable="NO"</code>
+                <h4>Para habilitar a sincronização de horário no boot:</h4>
+                <code>ntpd_sync_on_start="YES"</code>
+                <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
+            <h3>/boot/loader.conf</h3>
+                <h4>Para habilitar o novo virtual console:</h4>
+                    <code>kern.vty="vt"</code>
+                <h4>Para reduzir o tempo do prompt de autoboot para 5 segundos:</h4>
+                    <code>autoboot_delay="5"</code>
+                <h4>Mudar o ntpd para o openntpd:</h4>
+                    <code>pkg install openntpd</code>
+                    <p>edite o <mark>ntpd.conf</mark>:</p>
+                    <code>nano /usr/local/etc/ntpd.conf</code>
+                    <p>edite para o seguinte conteúdo:</p>
+                    <code>servers pool.ntp.br</code>
+                    <p>No <mark>rc.conf</mark>, edite a linha:</p>
+                    <code>ntpd_enable="YES"</code>
+                    <p>para:</p>
+                    <code>ntpd_enable="NO"</code>
+                    <p>e logo abaixo insira a linha:</p>
+                    <code>openntpd_enable="YES"</code>
+            <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
+                <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
+                <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
+                <p>Ao alterar o locale usando a codificação de caracteres UTF-8, o sistema pode entender e exibir cada um dos 1112064 caracteres no conjunto de caracteres Unicode, ao invés de apenas US ASCII como é o padrão com LANG=C.</p>
+                <p>Edite o banco de dados da classe de login em <mark>/etc/login.conf</mark> para adicionar um conjunto de caracteres e localidade padrão. Os shells de login herdarão as variáveis ​​de ambiente definidas aqui na classe padrão ou em uma classe mais restrita, se corresponder a uma.</p>
+                <p>altere de:</p>
+                <code>:charset=UTF-8:\</code>
+                <code>:lang=en_US.UTF-8:</code>
+                <p>para:</p>
+                <code>:charset=UTF-8:\</code>
+                <code>:lang=pt_BR.UTF-8:</code>
+                <p>Após fazer as alterações reconstrua o banco de dados de login com</p>
+                <code>cap_mkdb /etc/login.conf</code>
+                <p>Você pode ter que especificar a nova localidade em outro lugar (como <mark>/etc/profile</mark>) para usos de shell sem login, como GDM e outros gerenciadores de login.</p>
+                <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
+                <code>LANG=pt_BR.UTF-8;   export LANG</code>
+                <code>CHARSET=UTF-8;  export CHARSET</code>
+                <p>Para verificar a localização execute no seu próximo login o comando:</p>
+                <code>locale</code>
+                <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
+                <p>isso retira a necessidade das linhas...</p>
+                <code>export LC_ALL=pt_BR.UTF-8</code>
+                <code>export LANGUAGE=pt_BR.UTF-8</code>
+                <code>export LANG=pt_BR.UTF-8</code>
+                <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
+                <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
+            <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
+                <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
+                <code>fsck -y</code>
+                <code>mount -u /</code>
+                <code>mount -a -t ufs</code>
+                <code>swapon -a</code> 
+                <p>(caso utilize swap)</p>
+                <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 19/12/2021)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackintosh</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - Hackintosh"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda a instalar o MacOS em sua máquina de forma nativa"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+	<main id="main-area">
+        	<h1>Hackintosh</h1>
+        	<h2>Introdução</h2>
+        	<p>Quando se fala em tecnologia Apple, especialmente no território nacional, soa como algo mágico: Algo que vai além de um computador pois a maioria das pessoas que tiveram contato com computadores nunca sequer tocaram um hardware da Apple na vida e, grande parte das que tiveram um desses tratam como uma espécie de expressão da condição social. Como você que acompanha as minhas documentações bem sabe, aqui temos interesse em acesso a tecnologia sem distinção social (a menos que você tenha um Amiga500 com Vampire ou um Galaxy Book Go rodando Gentoo, nesse caso aí é full master race mesmo) e testar o MacOS num computador não Apple não é nenhuma vaca sagrada por aqui. Essa documentação será uma documentação de exemplo de como fazer um <em>Hackintosh</em> utilizando o OpenCore, mas desde já um aviso parafraseando o grande Isaque de Hermanoteu na Terra de Godah: "Cuidado rapaz, a barra aqui é pesadaa!"</p>
+            <p>Se leitura de documentação em inglês, diagnóstico de hardware e gerenciamento de arquivos de configuração é algo complicado pra você <strong>passe longe dessa documentação!</strong> É sério! Quase tudo a respeito de um Hackintosh é a base de gerenciamento de arquivos e argumentos em lista de propriedades após uma árdua pesquisa em documentações em inglês (por mais que hoje exista excelentes canais e até mesmo comunidades de Hackintosh aqui no Brasil).</p>
+            <p>Se mesmo assim você quer tentar a sorte, vamos começar!</p>
+            <h2>Instalação Alvo</h2>
+            <p>Quase tudo a respeito de um Hackintosh é específico para a máquina que você vai utilizar então nem inventa de seguir isso aqui a risca pois as configurações não serão iguais (diferente do Archlinux, é basicamente inútil compartilhar configurações de instalação pra fazer Hackintosh), porém, o processo de instalação (e repito: não as configurações mas sim o processo!) é basicamente idêntico para todos. A instalação alvo aqui é praparado através do um Windows 10 (para ser familiar para a maioria) para ser instalado em um <em>Desktop</em> com uma placa <em>Aorus H370 Gaming 3 Wifi</em> com um <em>i5 Coffee Lake 9400F</em> e uma gpu <em>RX 6600</em> com o <em>Monterey</em> rodando em <em>UEFI</em> através do <em>OpenCore 0.81</em>.</p>
+            <p>Repetindo: Não siga nada disso a risca se você não vai instalar para o mesmo hardware (mesmo processador, placas, controladores. etc.) e mesma versão do OpenCore! Utilize essa documentação apenas como um parâmetro de progresso (e eu não me responsabilizo de forma alguma pelo que pode acontecer com sua máquina, <strong>é por sua conta e risco!</strong>)</p>
+            <p>Essa é a documentação de referência do OpenCore:</p>
+            <a class="link" href="https://dortania.github.io/OpenCore-Install-Guide/">OpenCore Install Guide</a>
+            <p>Deixe ela aberta no seu navegador e acompanhe nela também cada passo para não se perder.</p>
+            <h2>Preparativos para a Instalação</h2>
+            <h3>Passo 0  - Identificação de Hardware</h3>
+            <p>MacOS não é Windows, Linux ou *BSD que você instala e pode esperar algum grau de funcionamento em todo tipo de hardware, então eu vou ser bem direto: <strong>Se você não tem um hardware compatível, não vai funcionar!</strong> Não adianta tentar sair modificando arquivo em sistema, o macOS é feito pra um range muito específico de dispositivos e se o seu computador não está nesse range (ou seja, não fez parte de uma plataforma Macintosh real) pode parar por aqui (embora exista uma segunda opção pelo Proxmox que tem aqui também mas aí já se trata de virtualização..). A única maneira de garantir uma compatibilidade com Hackintosh é comprando um hardware compatível com Hackintosh, ponto.</p>
+            <p>Eu recomendo que você veja <a class="link" href="https://dortania.github.io/OpenCore-Install-Guide/macos-limits.html">Hardware Limitations</a> para verificar a compatibilidade do seu hardware e caso queira comprar uma máquina para Hackintosh sugiro o <a class="link" href="https://dortania.github.io/Anti-Hackintosh-Buyers-Guide/">Anti-Hackintosh Buyers Guide</a> do OpenCore Guide, mas se você quiser um resumo simples do que tende a funcionar, aqui vai:</p>
+            <ul>
+                <li>Processadores: Desktop Intel dos Ivy Bridge aos Comet Lake</li>
+                <li>Placas de vídeo: AMD (RX 4XX, 5XX / RX Vega 56, 64 e VII / RX 5XXX, 6XXX) das marcas Sapphire, Asus ou Gigabyte</li>
+                <li>Placas mães: Z370 ou mais antiga (Gigabyte, Asus, MSI), Z390 (Asus, Gigabyte), Z490 (Asus, Gigabyte, AsRock)</li>
+                <li>Controlador de rede: Para ethernet basicamente todos os NIC Gigabit são suportados da Intel ou Realtek</li>
+                <li>Chipset de som: A maioria das placas são suportadas</li>
+            </ul>
+            <p>Vai um pouco além disso mas se você tem um processador AMD, uma placa de vídeo Nvidia, verificou na lista de compatibilidade do OpenCore e está como incompatível pode largar de mão o seu Hackintosh.</p>
+            <p>Caso o seu hardware seja compatível deixe anotado (pelo menos) qual é o seu processador, placa de vídeo, placa mãe e seus controladores (como de rede, de som, etc.). Se você tiver usando o Windows você pode utilizar os comandos abaixo para identificar os componentes:</p>
+            <p>Processador:</p>
+            <code>wmic cpu get name</code>
+            <p>Placa mãe:</p>
+            <code>wmic baseboard get product</code>
+            <p>Placa de vídeo:</p>
+            <code>wmic PATH Win32_VideoController GET Name</code>
+            <p>Controlador de rede:</p>
+            <code>wmic nic get Name</code>
+            <p>Saber qual é o hardware é fundamental para escolher os arquivos de configuração que serão utilizados para fazer a instalação do sistema.</p>
+            <h3>O que é necessário para ter um instalador de Hackintosh funcional?</h3>
+            <p>Aqui eu vou descrever todos os pontos que são necessários para a instalação, de modo que se você não está entendendo o que está sendo feito basta voltar nesse passo e verificar em qual ponto estamos. Para ter um mac funcional é preciso:</p>
+            <ol>
+                <li>Ter um pendrive de <em>pelo menos 4GB</em> com uma partição em <em>FAT32</em> com o nome <em>EFI</em>;</li>
+                <li>Mapear as portas USB do computador e salvar a <em>kext</em> de mapeamento;</li>
+                <li>Baixar e instalar o <em>Pyhton</em> adicionando ao <em>PATH</em> do sistema para utilizar os scripts;</li>
+                <li>Baixar o <em>OpenCore</em> e extrair para <em>pasta</em>;</li>
+                <li>Abrir um terminal na pasta <em>OpenCore-XXX-RELEASE\Utilities\macrecovery</em> e executar o comando de download da versão do MacOS desejada;</li>
+                <li>Copiar <em>BaseSystem.chunklist</em> e <em>BaseSystem.dmg</em> baixados em <em>OpenCore-XXX-RELEASE\Utilities\macrecovery</em> para uma pasta com o nome <em>com.apple.recovery.boot</em> na <em>raiz</em> do pendrive;</li>
+                <li>Copiar a pasta <em>OpenCore-XXX-RELEASE\X64\EFI</em> do OpenCore para a <em>raiz</em> do pendrive;</li>
+                <li>Seguir a documentação do OpenCore para a sua plataforma e baixar os drivers de UEFI descritos nela para a pasta <em>EFI\OC\Drivers\</em> do pendrive;</li>
+                <li>Seguir a documentação do OpenCore para a sua plataforma e baixar os kexts descritos nela para a pasta <em>EFI\OC\Kexts\</em> do pendrive;</li>
+                <li>Seguir a documentação do OpenCore, verificar na tabela os SSDT's necessários para a sua plataforma, baixar e copiar para a pasta <em>EFI\OC\ACPI\</em> do pendrive;</li>
+                <li>Verificar na documentação do OpenCore da sua plataforma na guia <em>PlatformInfo</em> as opções de hardware possíveis para <em>SMBIOS</em> para o sistema desejado;</li>
+                <li>Baixar o <em>GenSMBIOS</em>, executar e gerar as chaves para a <em>SMBIOS</em> da nossa máquina e salvar em um arquivo de texto;</li>
+                <li>Copiar o arquivo <em>OpenCore-0.8.1-RELEASE\Docs\Sample.plist</em> para <em>EFI\OC\</em> no pendrive, renomear para <em>config.plist</em>;</li>
+                <li>Baixar o <em>PropperTree</em>, abrir nele o arquivo <em>EFI\OC\config.plist</em> no pendrive e usar a opção <em>OC Clean Snapshot</em>, em seguida salve o arquivo;</li>
+                <li>Editar <em>EFI\OC\config.plist</em> no <em>PropperTree</em> e adicionar as configurações do arquivo de texto geradas pelo <em>GenSMBIOS</em>, fazer backup da <em>EFI\OC\</em> do pendrive;</li>
+                <li>Seguir a documentação do OpenCore para a sua plataforma e fazer TODAS as modificações necessárias no <em>EFI\OC\config.plist</em> do pendrive, em seguida salvar o arquivo;</li>
+                <li>Desligar o computador e remover <em>todos os dispositivos USB e de armazenamento</em>, deixando apenas teclado e mouse com fio conectados em portas <em>USB2.0</em> e o disco em que deseja instalar o MacOS;</li>
+                <li>Ligar o computador acessando a BIOS, ajustar todas as opções descritas na documentação do OpenCore para a sua plataforma, deixe inicializável apenas o pendrive em UEFI;</li>
+                <li>Iniciar o boot pelo pendrive em UEFI, verificar o acesso a internet e formatar o disco em <em>APFS para o MacOS</em>;</li>
+                <li>Instalar o MacOS;</li>
+                <li>Instalar o comando <em>MountEFI</em> e acessar a partição ESP do disco do MacOS;</li>
+                <li>Copiar a pasta EFI da raiz do pendrive para a raiz da partição ESP;</li>
+            </ol>
+            <h3>Mapeamento de Portas USB</h3>
+            <p>Em resumo, os Macs atuais tem um limite de <em>15 portas USB por controladora USB</em> e a maneira que o sistema trabalha presume que você esteja utilizando um hardware da Apple (por motivos óbvios), sendo assim é necessário mapear as portas do seu computador para que elas funcionem quando você estiver no MacOS. Sim! É isso mesmo que você leu: <strong>Sem mapear as portas USB elas podem não funcionar corretamente</strong>.</p>
+            <p>Para mapear é necessário ter um tipo de dispositivo USB para cada tipo de porta USB do seu computador.</p>
+            <p>Exemplo:</p>
+            <p>Se seu computador tem <em>apenas</em> portas <em>USB2.0</em> você precisa de <em>1 dispositivo USB2.0</em> para fazer o mapeamento;</p>
+            <p>Se seu computador <em>também tem portas USB3.0</em> você precisa de <em>1 dispositivo USB3.0</em> e <em>1 dispositivo USB2.0</em> (<i>já que as USB3.0 também podem funcionar como USB2.0</i>);</p>
+            <p>Se seu computador <em>também tem portas USB3.0 Type C</em> você precisa de <em>1 adaptador USB Type A para USB Type C</em>, <em>1 dispositivo USB3.0</em> e <em>1 dispositivo USB2.0</em> (<i>já que as USB3.0 também podem funcionar como USB2.0</i>);</p>
+            <p>E assim por diante...</p>
+            <p>Assim que tiver todos os dispositivos necessários para o mapeamento baixe o Python através desse link <a class="link" href="https://www.python.org/downloads/">aqui</a>. Lembre-se de marcar <em>Add Python to PATH</em> no processo de instalação, uma vez terminada a instalação verifique no terminal com o comando:</p>
+            <code>python –version</code>
+            <p>Se retornou a versão do Python que você acabou de instalar então podemos continuar.</p>
+            <!--
+                incompleto
+
+            
+            -->
+            <img class="responsiva" src="assets/images/badusb0.jpg" alt="">
+            <p>Primeiramente baixe a última versão do <em>USBToolBox</em> através desse link <a class="link" href="https://github.com/USBToolBox/tool/releases">aqui</a>, em <em>Assets</em> clique e baixe o <em>Windows.exe</em>.</p>
+            <img class="responsiva" src="assets/images/badusb1.jpg" alt="">
+            <br>
+            <img class="responsiva" src="assets/images/badusb2.jpg" alt="">
+            <p>Permita a execução do arquivo <em>Windows.exe</em> e assim que abrir a janela de terminal tecle <em>c</em> para selecionar a opção <em>C. Change Settings</em> e depois tecle <em>Enter</em> para confirmar, se no menu em seguida na opção <em>C. Bind Companions</em> estiver em <em>Enabled</em> tecle <em>c</em> e depois <em>Enter</em> para mudar para <em>Disabled</em>. Se <em>T. Show Friendly Types</em> estiver como <em>Disabled</em> tecle <em>c</em> e depois <em>Enter</em> para alterar para <em>Enabled</em>. Se <em>N. Use Native Classes</em> estiver como <em>Disabled</em> tecle <em>c</em> e depois <em>Enter</em> para alterar para <em>Enabled</em>. Assim que terminar essas alterações tecle <em>b</em> e depois <em>Enter</em> para voltar ao menu inicial.</p>
+            <img class="responsiva" src="assets/images/badusb3.jpg" alt="">
+            <p>De volta ao menu principal selecione a opção <em>D. Discover Ports</em> e comece a mapear <strong>todas as portas usb desejadas porém um tipo de porta por vez</strong>  (para que as portas sejam mapeadas basta conectar o dispositivo USB na porta USB e deixar conectado por mais ou menos 10 segundos retirar e conectar em outra porta e assim sucessivamente) lembrando de sempre mapear das menores para as maiores (todas as USB C que você vai usar, depois todas as USB2.0 que você vai usar, depois USB 3.0 e por aí vai) e se atentando para o limite máximo de 15 portas USB! Quando finalizar essas alterações tecle <em>b</em> e depois <em>Enter</em> para voltar ao menu inicial.</p>
+            <img class="responsiva" src="assets/images/badusb4.jpg" alt="">
+            <p>Depois de ter mapeado todas as portas de um tipo (por exemplo todas as USB2.0) devemos selecionar as portas e definir o tipo correto para construir o <em>.kext</em>, para isso selecione a opção <em>S. Select Ports and Build Kext</em>, utilizando a tabela <em>USB Types</em> da imagem abaixo como referência verifique se os tipos de portas estão corretos, caso não esteja utilize a sintaxe <em>T:NUMERO DA PORTA,NUMERO DA PORTA,NUMERO DA PORTA:TIPO DA PORTA</em> para corrigir. Por exemplo, vamos supor que eu quero corrigir as minhas portas <em>1, 2, 3, 4</em> que estão em tipo <em>USB 3 Type A</em> para o tipo <em>Type A</em> (que recebe o identificador <em>0</em>), então o código para essa alteração seria:</p>
+            <code>T:1,2,3,4:0</code>
+            <img class="responsiva" src="assets/images/badusb5.jpg" alt="">
+            <p>Caso queira selecionar ou desselecionar uma porta basta <em>digitar o código numérico da porta</em> e depois teclar <em>Enter</em>. Assim que terminar de configurar todas as portas de um tipo tecle <em>b</em> e depois <em>Enter</em> para retornar ao menu principal, depois opção <em>d</em> para descobrir portas, mapeie todas, <em>s</em> para <em>Select Ports</em>, configure os tipos, volte ao menu principal e repita o processo até ter todas as suas portas mapeadas E configuradas para o tipo certo e dentro do limite de 15 portas.</p>
+            <p>Quando tiver uma configuração de mapeamento USB válido basta selecionar a opção <em>K. Build USBmap.kext</em> e digite o modelo de SMBIOS que você vai utilizar (no meu caso vai ser o <em>iMac19,1</em>) para gerar a .kext correta. Depois de salvara .kext basta fechar o programa.</p>
+            <h3>Preparação do Pendrive de Instalação</h3>
+            <p>É recomendado um pendrive de pelo menos <em>4GB</em>, este pendrive precisa ser formatado em <em>FAT32</em>, através do próprio <em>Gerenciamento de disco</em> do Windows você pode criar uma partição <em>FAT32</em> de nome <em>EFI</em> nesse pendrive.</p>
+            <p>Uma vez que o pendrive está formatado vamos começar baixando os arquivos do OpenCore, acesse o link <a class="link" href="https://github.com/acidanthera/OpenCorePkg/releases">aqui</a> e nos detalhes de <em>Assets</em> da versão mais recente baixe o arquivo <em>OpenCoreXXX-RELEASE.zip</em> e extraia para pasta.</p>
+            <img class="responsiva" src="assets/images/opencoregithub.jpg" alt="">
+            <p>Acesse a pasta <em>OpenCore-XXX-RELEASE\Utilities\macrecovery</em>, e abra um terminal nessa janela (se você tiver utilizando um Windows segure shift e clique com o botão direito no mouse na área da janela e selecione <em>Abrir janela do PowerShell aqui</em>), como instalamos o Monterey utilizamos o comando abaixo:</p>
+            <code>python macrecovery.py -b Mac-E43C1C25D4880AD6 -m 00000000000000000 download</code>
+            <p>Assim que o macrecovery terminar de baixar os arquivos <em>BaseSystem.chunklist</em> e <em>BaseSystem.dmg</em> para a pasta <em>OpenCore-XXX-RELEASE\Utilities\macrecovery</em>, crie na raiz do pendrive uma pasta com o nome de <em>com.apple.recovery.boot</em> e mova os arquivos <em>BaseSystem.chunklist</em> e <em>BaseSystem.dmg</em> de <em>OpenCore-XXX-RELEASE\Utilities\macrecovery</em> para ela. Copie também para a raiz do pendrive a pasta <em>EFI</em> que está em <em>OpenCore-XXX-RELEASE\X64\EFI</em>.</p>
+            <img class="responsiva" src="assets/images/opencore0.jpg" alt="">
+            <h3>Preparação dos Drivers, SSDT's, kexts e .plist</h3>
+            <p>Antes de mais nada precisamos dos arquivos de <em>driver</em> de firmware usados pelo OpenCore em ambiente UEFI, são arquivos com extensão <em>.efi</em> que residem em <em>EFI\OC\Drivers\</em>. Para a nossa instalação será necessário o <em>HfsPlus.efi</em> (necessário para visualizar volumes HFS) e o <em>OpenRuntime.efi</em>.</p>
+            <p>Sendo assim a nossa pasta <em>EFI\OC\Drivers\</em> no pendrive contém os seguintes arquivos:</p>
+            <ul><em>
+                <li>HfsPlus.efi</li>
+                <li>OpenRuntime.efi</li>
+            </em></ul>
+            <img class="responsiva" src="assets/images/opencore1.jpg" alt="">
+            <p>Agora precisamos dos arquivos <em>kext</em>, esses arquivos são arquivos de extenção de kernel (<em>KE</em>rnel <em>XT</em>ension), são análogos aos drivers no Windows ou aos kmod no Linux, residem em <em>EFI\OC\Kexts\</em> e no Windows (e no Linux) são visualizados como pastas com o final <em>.kext</em>. Embora o <em>VirtualSMC</em> (e seus plugins), o <em>Lilu</em> e <em>WhateverGreen</em> são necessários em basicamente todas as instalações, escolha sempre os arquivos kext de acordo com a sua máquina e instalação alvo!</p>
+            <p>Os kexts da nossa instalação serão: <em>AppleALC</em> (para áudio), <em>IntelMausi</em> (para o controlador de rede Intel), <em>USBInjectAll</em> (para injetar controladores USB Intel em sistemas sem portas USB definidas em ACPI) e <em>XHCI-unsupported</em> (necessário para controladores USB não nativos), <em>AirportItlwm</em> e <em>IntelBluetoothFirmware</em> (wireless card Intel) com <em>BlueToolFixup</em> (já que estamos usando o Monterey), e por fim <em>NVMeFix</em> (usado para corrigir o gerenciamento de energia e a inicialização em NVMe que não são da Apple).</p>
+            <p>Sendo assim a nossa pasta <em>EFI\OC\Kexts\</em> no pendrive contém as seguintes pastas:</p>
+            <ul><em>
+                <li>AirportItlwm.kext</li>
+                <li>AppleALC.kext</li>
+                <li>BlueToolFixup.kext</li>
+                <li>IntelBluetoothFirmware.kext</li>
+                <li>IntelMausi.kext</li>
+                <li>Lilu.kext</li>
+                <li>NVMeFix.kext</li>
+                <li>SMCProcessor.kext</li>
+                <li>SMCSuperIO.kext</li>
+                <li>USBInjectAll.kext</li>
+                <li>VirtualSMC.kext</li>
+                <li>WhateverGreen.kext</li>
+                <li>XHCI-unsupported.kext</li>
+                <li>USBmap.kext</li>
+            </em></ul>
+            <img class="responsiva" src="assets/images/opencore2.jpg" alt="">
+            <p>Notas:</p>
+            <ul>
+                <li>Algumas kext's podem conter uma pasta com o final <em>.dSYM</em>, você pode simplesmente deletá-la já que elas são para debug.</li>
+                <li>Algumas kext's podem conter uma pasta com o final <em>.app</em>, você pode simplesmente deletá-la já que elas não serão usadas para a instalação.</li>
+                <li>Algumas kext's podem ser uma pasta específica para uma versão de MacOS (como a <em>IntelSnowMausi.kext</em> para o MacOS Snow Leopard ou <em>AirportItlwm_v2.1.0_stable_Mojave.kext.zip</em> que é uma versão específica para o MacOS Monterey), escolha pasta da versão correta para o seu sistema e delete as outras versões.</li>
+            </ul>
+            <p>Por fim falta os arquivos de <em>SSDT</em> (<em>S</em>econdary <em>S</em>ystem <em>D</em>escription <em>T</em>able), são arquivos com a extensão <em>.aml</em> que residem em <em>EFI\OC\ACPI\</em> usados para delinear dispositivos de hardware como controladores USB, threads de CPU, controladores incorporados, relógios do sistema entre outras coisas.</p>
+            <p>Para verificar quais arquivos são necessários para a sua plataforma basta acessar esse link <a class="link" href="https://dortania.github.io/Getting-Started-With-ACPI/ssdt-platform.html#desktop">aqui</a>, verificar na tabela igual está descrito abaixo:</p>
+            <img class="responsiva" src="assets/images/table.jpg" alt="">
+            <p>Segundo o gráfico os SSDT's necessários para nossa instalação serão: <em>SSDT-PLUG</em>, <em>SSDT-EC-USBX</em>, <em>SSDT-AWAC</em> e <em>SSDT-PMC</em>. Para poupar tempo baixaremos a versão pré-compilada (<i>Prebuilt</i>), então a nossa pasta <em>EFI\OC\ACPI\</em> do pendrive contém os seguintes arquivos:</p>
+            <ul><em>
+                <li>SSDT-AWAC.aml</li>
+                <li>SSDT-EC-USBX-DESKTOP.aml</li>
+                <li>SSDT-PLUG-DRTNIA.aml</li>
+                <li>SSDT-PMC.aml</li>
+            </em></ul>
+            <h3>Gerando SMBIOS</h3>
+            <p>A especificação do System Management BIOS (SMBIOS) define estruturas de dados (e métodos de acesso) que podem ser usadas para ler as informações de gerenciamento produzidas pelo BIOS de um computador. Isso elimina a necessidade de o sistema operacional investigar o hardware diretamente para descobrir quais dispositivos estão presentes no computador (sim, eu tirei isso da Wikipédia... Me julgue!). Seu SMBIOS determina o gerenciamento de energia da CPU, perfis de GPU, mapas USB entre outras coisas.</p>
+            <p>Quando se trata de Hackintosh SMBIOS é o conjunto de dados que indicará qual máquina estamos usando para o sistema, no guia de instalação do OpenCore na opção Coffee Lake temos essa indicação sobre SMBIOS:</p>
+            <p><em>iMac19,1</em>     Para Mojave e mais recentes<br><em>iMac18,3</em>     Para High Sierra e mais antigos</p>
+            <p>Como instalaremos o Monterey utilizaremos o <em>iMac19,1</em> para SMBIOS.</p>
+            <p>Agora temos que baixar o <em>GenSMBIOS</em> para gerar as demais informações, clique nesse link <a class="link" href="https://github.com/corpnewt/GenSMBIOS">aqui</a> para acessar a página no GitHub. Para baixar clique no botão verde <em>Code</em> e depois em <em>Download ZIP</em>.</p>
+            <p>Extraia o arquivo e Abra a pasta do GenSMBIOS e execute o <em>GenSMBIOS.bat</em>, selecione a opção <em>3. Generate SMBIOS</em>, o programa vai baixar alguns arquivos então basta aguardar. Quando o programa terminar de baixar e ir para a tela seguinte, quando aparecer a opção <em>Please type SMBIOS to gen and number of times to generate:</em>. Digite a SMBIOS desejada, no nosso caso vai ser <em>iMac19,1</em> para um Coffee Lake com BigSur, pressione <em>Enter</em> e as informações de SMBIOS serão geradas, <strong>salve essas informações em um arquivo de texto</strong>.</p>
+            <h3>Configurando o básico da .plist</h3>
+            <p>Antes de mais nada precisamos ter o arquivo .plist para configurar, para isso basta copiar o arquivo <em>OpenCore-XXX-RELEASE\Docs\Sample.plist</em> para a pasta <em>EFI\OC\</em> no pendrive e renomear esse <em>Sample.plist</em> do pendrive para <em>config.plist</em>, após isso baixe o <em>PropperTree</em> (assim como fez para o GenSMBIOS) nesse link <a class="link" href="https://github.com/corpnewt/ProperTree">aqui</a> e extraia para uma pasta. Abra a pasta em que extraiu o PropperTree e execute o <em>PropperTree.bat</em>, selecione <em>File</em> e depois <em>Open</em> e selecione o arquivo <em>config.plist</em> que você criou no pendrive em <em>EFI\OC\config.plist</em> e ele irá abrir toda a configuração da sua instalação.</p>
+            <p>Para evitar diversas configurações manuais usaremos a opção <em>OC Clean Snapshot</em> para declarar automaticamente tudo que está na pasta <em>EFI\OC\</em> do pendrive.</p>
+            <p>A primeira coisa a editar aqui manualmente é inserir as configurações geradas para SMBIOS, para isso vá em <em>PlatformInfo\Generic</em>, para editar as chaves basta dar 2 cliques e para confirmar basta apertar <em>Enter</em>.</p>
+            <p>Para a chave <em>SystemProductName</em> cole o valor de <em>Type</em> do arquivo de texto.<br>
+                Para a chave <em>SystemSerialNumber</em> cole o valor de <em>Serial</em> do arquivo de texto.<br>
+                Para a chave <em>MLB</em> cole o valor de <em>Board Serial</em> do arquivo de texto.<br>
+                Para a chave <em>SystemUUID</em> cole o valor de <em>SmUUID</em> do arquivo de texto.<br>
+                Para a chave <em>ROM</em> cole o valor de <em>Apple ROM</em> do arquivo de texto.<br>
+            </p>
+            <p>Após utilizar o <em>OC Clean Snapshot</em> no <em>config.plist do pendrive</em> e adicionar os valores gerados no <em>GenSMBIOS.bat</em> eu recomendo você salvar essas modificações selecionando <em>File</em>, <em>Save</em> no <em>PropperTree</em> e após isso fazer um backup da pasta <em>EFI</em> da raiz do pendrive para algum outro lugar para não ter que repetir todo esse procedimento caso algo seja configurado incorretamente, pois essas configurações são fixas para a máquina e são um bom ponto de retorno para não ter que começar tudo do 0. Já que até aqui já temos os drivers mais fundamentais, os kexts, SSDT's e SMBIOS e as próximas configurações do PropperTree serão bem minuciosas.</p>
+            <h3>Finalizando a configuração da .plist</h3>
+            <p>Creio que essa seja a parte mais tensa para se fazer um Hackintosh, acesse <a class="link" href="https://dortania.github.io/OpenCore-Install-Guide/config.plist/#selecting-your-platform">Selecting your platform</a>, clique na sua plataforma e configure as opções da plist do pendrive de acordo a documentação da sua plataforma e o sistema escolhido. <strong>Leia todas as opções e configure exatamente igual está aí!</strong> Um exemplo do que precisei mudar ou não mudar na minha .plist:</p>
+            <p>Booter\Quirks</p>
+            <ul>
+                <li>DevirtualiseMmio = YES</li>
+                <li>EnableWriteUnprotector = NO</li>
+                <li>ProtectUefiServices = NO</li>
+                <li>RebuildAppleMemoryMap = YES</li>
+                <li>SyncRuntimePermissions = YES</li>
+            </ul>
+            <p><em>Observação:</em> ProtectUefiServices = NO pois não vamos rodar em VMs, em Icelake ou numa Z390.</p>
+            <p>Kernel\Quirks</p>
+            <ul>
+                <li>AppleXcpmCfgLock = YES</li>
+                <li>DisableIoMapper = YES</li>
+                <li>LapicKernelPanic = NO</li>
+                <li>PanicNoKextDump = YES</li>
+                <li>PowerTimeoutKernelPanic = YES</li>
+                <li>XhciPortLimit = NO</li>
+            </ul>
+            <p><em>Observação:</em> AppleXcpmCfgLock = YES não é necessário se o CFG-Lock for desabilitado no BIOS, DisableIoMapper = YES não é necessário se o VT-D for desabilitado no BIOS.</p>
+            <p>Misc\Debug</p>
+            <ul>
+                <li>AppleDebug = YES</li>
+                <li>ApplePanic = YES</li>
+                <li>DisableWatchDog = YES</li>
+                <li>Target = 0</li>
+            </ul>
+            <p><em>Observação:</em> Target = 0 desativa a criação da pasta de log.</p>
+            <p>Misc\Security</p>
+            <ul>
+                <li>AllowNvramReset = YES</li>
+                <li>AllowSetDefault = YES</li>
+                <li>BlacklistAppleUpdate = YES</li>
+                <li>ScanPolicy = 0</li>
+                <li>SecureBootModel = Default</li>
+                <li>Vault = Optional</li>
+            </ul>
+            <p>NVRAM\Add\7C436110-AB2A-4BBB-A880-FE41995C9F82</p>
+            <ul>
+                <li>boot-args = -v debug=0x100 keepsyms=1 alcid=1 agdpmod=pikera</li>
+                <li>prev-lang:kbd = String = pt-BR:128</li>
+            </ul>
+            <p>NVRAM\Delete</p>
+            <ul>
+                <li>WriteFlash = YES</li>
+            </ul>
+            <p>PlatformInfo</p>
+            <ul>
+                <li>Automatic = YES</li>
+            </ul>
+            <p>UEFI\Drivers</p>
+            <ul>
+                <li>HfsPlus.efi</li>
+                <li>OpenRuntime.efi</li>
+            </ul>
+            <p><em>Observação:</em> Deixe apenas essas duas entradas de driver para a instalação senão o sistema não vai iniciar.</p>
+            <p>UEFI\Quirks</p>
+            <ul>
+                <li>UnblockFsConnect = NO</li>
+            </ul>
+            <p>Assim que tiver certeza de ter configurado todas as chaves exatamente como pede a documentação selecione <em>File</em> e depois <em>Save</em> para salvar as alterações. Lembrando que essas configurações daqui da página são para para o <strong>meu</strong> setup, mas basta você seguir de acordo com o seu setup, sistema escolhido e a documentação do OpenCore para a sua plataforma. Assim que terminar apenas desligue o pc.</p>
+            <h3>Configurando a BIOS</h3>
+            <p>Com o pendrive já configurado e conectado no computador precisamos alterar as configurações da bios para o devido funcionamento do MacOS, ligue o computador e entre no setup e configure de acordo a sua documentação. Segundo a documentação do OpenCore essas são as configurações que eu devo seguir:</p>
+            <p>Desabilitar:</p>
+            <ul>
+                <li>Fast Boot</li>
+                <li>Secure Boot</li>
+                <li>Serial/COM Port</li>
+                <li>Parallel Port</li>
+                <li>VT-d</li>
+                <li>CSM</li>
+                <li>Thunderbolt</li>
+                <li>Intel SGX</li>
+                <li>Intel Platform Trust</li>
+                <li>CFG Lock (MSR 0xE2 write protection)</li>
+            </ul>
+            <p>Habilitar:</p>
+            <ul>
+                <li>VT-x</li>
+                <li>Above 4G decoding</li>
+                <li>Hyper-Threading</li>
+                <li>Execute Disable Bit</li>
+                <li>EHCI/XHCI Hand-off</li>
+                <li>OS type: Windows 8.1/10 UEFI Mode</li>
+                <li>DVMT Pre-Allocated(iGPU Memory): 64MB</li>
+                <li>SATA Mode: AHCI</li>
+            </ul>
+            <p>Uma vez que tiver alterado todas essas opções, clique em salvar e sair e depois desligue o computador.</p>
+            <h3>Iniciando a Instalação</h3>
+            <p>Antes de iniciar o computador e começar a instalação:</p>
+            <strong>
+            <ul>
+                <li>Remova todos os dispositivos conectados as portas USB do computador e deixe somente teclado e mouse conectados nas portas USB 2.0 (com fio, nada de dispositivos com dongles usb!).</li>
+                <li>Desconecte todos os dispositivos de armazenamento do computador fora o pendrive de instalação e o dispositivo em que você deseja instalar o MacOS</li>
+            </ul>
+            </strong>
+            <p>Ligue o computador e no menu de boot selecione o pendrive em modo <em>UEFI</em>, se você fez tudo certo o instalador do sistema será carregado.</p>
+            <h4>Teste de Rede</h4>
+            <img class="responsiva" src="assets/images/mac01.jpg" alt="">
+            <p>Antes de começar o processo de instalação do sistema é recomendável selecionar o navegador <em>Safari</em> na tela inicial e acessar qualquer página para verificar o acesso a internet.</p>
+            <img class="responsiva" src="assets/images/mac2.jpg" alt="">
+            <p>Se acessou alguma página de internet sem problema algum podemos continuar com a instalação.</p>
+            <h4>Preparação da partição:</h4>
+            <img class="responsiva" src="assets/images/mac3.jpg" alt="">
+            <p>Na tela de recuperação selecione <em>Utilitário de Disco</em> e <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/mac4.jpg" alt="">
+            <p>No painel de unidades de armazenamento à esquerda selecione a partição que deseja instalar o Mac, selecione <em>Apagar</em> no canto superior direito da janela.</p>
+            <img class="responsiva" src="assets/images/mac5.jpg" alt="">
+            <p>O utilitário vai perguntar qual é o <em>Nome</em> e <em>Formato</em> desejados para a partição e também o tipo de esquema de partição, recomendo colocar o nome da partição como <em>macOS</em> e formato de arquivo <em>APFS</em> e o esquema <em>GUID Partition Map</em>, clique em apagar e espere o fim do procedimento.<br>Após o término clique em <em>OK</em> e depois feche o <em>Utilitário de Disco</em>.</p>
+            <h4>Instalação do sistema</h4>
+            <img class="responsiva" src="assets/images/mac6.jpg" alt="">
+            <p>De volta à tela inicial selecione <em>Instalação do macOS/Reinstalação do macOS</em> e <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/mac7.jpg" alt="">
+            <p>Clique novamente em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos8.jpg" alt="">
+            <p>Na tela dos termos de licença selecione <em>Concordar</em>.</p>
+            <img class="responsiva" src="assets/images/macos9.jpg" alt="">
+            <p>Dê aceite mais uma vez.</p>
+            <img class="responsiva" src="assets/images/macos11.jpg" alt="">
+            <p>Selecione a partição que você preparou e clique em <em>Continuar</em>. Aguarde o fim da instalação...</p>
+            <img class="responsiva" src="assets/images/macos12.jpg" alt="">
+            <p>...Pois vai demorar.</p>
+            <h4>Configuração inicial do sistema</h4>
+            <img class="responsiva" src="assets/images/mac13.jpg" alt="">
+            <p>Na tela de <em>Selecione País ou Região</em> selecione <em>Brasil</em> (a menos que esteja em outro país obviamente) e clique em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos14.jpg" alt="">
+            <p>Personalize as configurações de <em>Idiomas Escritos e Falados</em> ou clique em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos15.jpg" alt="">
+            <p>No painel de <em>Acessibilidade</em> selecione <em>Agora Não</em> (a menos que tenha alguma necessidade individual, do contrário configure suas preferências).</p>
+            <img class="responsiva" src="assets/images/macos16.jpg" alt="">
+            <p>Em <em>Dados e Privacidade</em> selecione <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos17.jpg" alt="">
+            <p>Em <em>Assistente de Migração</em> selecione <em>Agora Não</em> à esquerda da janela.</p>
+            <img class="responsiva" src="assets/images/macos18.jpg" alt="">
+            <p>Em <em>Inicie a Sessão com o Seu ID Apple</em> selecione <em>Configurar Mais Tarde</em> à esquerda da janela e depois...</p>
+            <img class="responsiva" src="assets/images/macos19.jpg" alt="">
+            <p>...selecione <em>Ignorar</em>.</p>
+            <img class="responsiva" src="assets/images/macos20.jpg" alt="">
+            <p>Em <em>Termos e Condições</em> selecione <em>Aceitar</em>...</p>
+            <img class="responsiva" src="assets/images/macos21.jpg" alt="">
+            <p>...E mais uma vez.</p>
+            <img class="responsiva" src="assets/images/macos22.jpg" alt="">
+            <p>Digite o <em>Nome completo do usuário</em> (caso desejar), o <em>nome da conta</em> do usuário, a <em>senha</em> e a dica de senha (caso desejar) e clique em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos23.jpg" alt="">
+            <p>Em <em>Habilitar Serviços de Localização</em> habilite a caixa de <em>Habilitar Serviços de Localização nesse Mac</em> e selecione <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos25.jpg" alt="">
+            <p>Selecione a sua região de depois clique em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos26.jpg" alt="">
+            <p>Em <em>Análise</em> clique em <em>Continuar</em>.</p>
+            <img class="responsiva" src="assets/images/macos27.jpg" alt="">
+            <p>Em <em>Tempo de Uso</em> clique em <em>Configurar Mais Tarde</em> à esquerda da janela.</p>
+            <img class="responsiva" src="assets/images/macos28.jpg" alt="">
+            <p>Em <em>Selecione a Aparência</em> selecione o tema preferido e clique em <em>Continuar</em> e aguarde o fim da configuração do sistema.</p>
+            <img class="responsiva" src="assets/images/macos29.jpg" alt="">
+            <p>Pronto! Com o sistema funcionando siga com a identificação do esquema de teclado.</p>
+            <h3>Pós-instalação</h3>
+            <p>O sistema está instalado mas ainda não possui bootloader, ou seja, ainda não existe maneira de fazer com que o sistema inicialize o macOS ainda (portanto não deslique ou reinicie a máquina para não ter dor de cabeça desnecessária). Então vamos resolver isso...</p>
+            <img class="responsiva" src="assets/images/macpost00.jpg" alt="">
+            <p>Primeiramente acesse o pendrive (que provavelmente vai ser exibido na sua tela) e copie a pasta <em>EFI</em> na raiz do pendrive para a área de trabalho</p>
+            <img class="responsiva" src="assets/images/macpost01.jpg" alt="">
+            <p>Depois ejete o pendrive.</p>
+            <img class="responsiva" src="assets/images/macpost1.jpg" alt="">
+            <p>Para acessar a partição EFI do computador utilizaremos o script <em>MountEFI</em>. Para isso acesse <a class="link" href="https://github.com/corpnewt/MountEFI">esse link</a> e clique em <em>Mount EFI Automator Quick Action.zip</em>.</p>
+            <img class="responsiva" src="assets/images/macpost2.jpg" alt="">
+            <p>Depois clique em <em>Download</em></p>
+            <img class="responsiva" src="assets/images/macpost3.jpg" alt="">
+            <p>Conceda acesso de downloads para o Github.</p>
+            <img class="responsiva" src="assets/images/macpost4.jpg" alt="">
+            <p>Assim que o download finalizar clique na pasta de Downloads e abra o Mount EFI.</p>
+            <img class="responsiva" src="assets/images/macpost5.jpg" alt="">
+            <p>O sistema vai perguntar se você deseja instalar o script, selecione <em>Instalar</em>.</p>
+            <img class="responsiva" src="assets/images/macpost6.jpg" alt="">
+            <p>O Mac provavelmente vai mostrar uma janela com os scripts instalados, você pode simplesmente fechar essa janela.</p>
+            <img class="responsiva" src="assets/images/macpost7.jpg" alt="">
+            <p>Depois na barra de tarefas selecione o <em>Finder</em> no canto superior esquerdo da tela, e depois em <em>Preferências</em>.</p>
+            <img class="responsiva" src="assets/images/macpost8.jpg" alt="">
+            <p>Marque a opção <em>Discos rígidos</em> e então o ícone do HD vai aparecer na área de trabalho.</p>
+            <img class="responsiva" src="assets/images/macpost9.jpg" alt="">
+            <p>Clique com o botão direito no ícone do HD e selecione a opção <em>Mount EFI</em>, insira a senha para garantir a permissão.</p></p>
+            <br>
+            <h4><em>Configuração de sistema único:</em></h4>
+            <img class="responsiva" src="assets/images/macpost10.jpg" alt="">
+            <p>Arraste a pasta <em>EFI</em> que você copiou do pendrive para a área de trabalho para a raiz da partição EFI do HD. Após isso, reinicie o computador e verifique se ele inicia sem problemas. 😉</p>
+            <br>
+            <h4><em>Configuração para Dualboot (Windows / macOS):</em></h4>
+            <p>Uma vez no macOS com a partição <em>EFI</em> do HD montada, você vai perceber que a partição EFI já tem a pasta da EFI do Windows, acesse a pasta <em>EFI\Boot</em> e renomeie para <em>Boot.backup</em> para fallback em caso de falha.</p>
+            <p>Agora acesse a pasta <em>EFI\Microsoft\Boot</em> e renomeie o arquivo <em>bootmgfw.efi</em> para <em>bootmgfw.efi-backup</em>.</p>
+            <p>Volte na raiz da partição <em>EFI</em> do HD e copie as pastas <em>BOOT</em> e <em>OC</em> contidos na pasta EFI do pendrive, desmonte o pendrive e reinicie a máquina.</p>
+            <p>Verifique as configurações de boot na bios da máquina e se certifique que é possível inicializar o macOS diretamente pelo disco.</p>
+            <p>Se o macOS iniciou perfeitamente monte a partição EFI, acesse a pasta <em>EFI\Microsoft\Boot</em> e renomeie o arquivo <em>bootmgfw.efi-backup</em> para <em>bootmgfw.efi</em> e reinicie a máquina. Se tudo foi feito corretamente a opção do Windows poderá ser selecionada pelo OpenCore.</p>
+            <p>Por fim é recomendável que você deixe apenas a opção de boot do OpenCore habilitada (<em>UEFI OS</em>), não deixe o Windows como primeira opção de boot (<em>Windows Boot manager</em>).</p>
+            <h2>Configurações Adicionais - Atualização do OpenCore</h2>
+            <p>Embora nos tutoriais pela internet seja mais comum o uso do <em>OpenCore Configurator</em>, eu <strong>não recomendo o uso dele!</strong> Não só por ser de código fechado mas também por ser incompleto, caso você precise fazer algum ajuste (como mudança na ordem de kexts) eu recomendo o uso do <a class="link" href="https://github.com/ic005k/OCAuxiliaryTools/releases">OpenCore Auxiliary Tools - OCAT</a>.</p>
+            <img class="responsiva" src="https://user-images.githubusercontent.com/76865553/165901706-abbccb4a-89bc-4b03-b6e5-f52dcb10b53c.png" alt="">
+        </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 22/08/2022)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

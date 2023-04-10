@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T.</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="O técnico disse que seu HD queimou?"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/osinstall"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da verificação de discos pra técnico nenhum te passar a perna"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Checando o HD/SSD através do S.M.A.R.T.</h1>
+        <h2>Introdução</h2>
+        <p>Assim como todo dispositivo elétrônico o seu computador tem um período de vida útil, e essa vida útil varia conforme cada peça do seu computador, processadores tendem a sempre funcionar enquanto HDs tendem a ter problemas entre 3 a 5 anos (as vezes até menos dependendo do tipo do uso, quedas de energia e etc.), devido a isso dispositivos de armazenamento tem um sistema de auto-moniramento chamado <em>S.M.A.R.T. (Self-Monitoring, Analysis and Reporting Technology).</em></p>
+        <p><strong>O s.m.a.r.t. não é uma bala mágica. Ele não vai prever com 100% de certeza que seu dispositivo de armazenamento deve ser trocado ou mesmo que ele está 100% saudável</strong>, porém, ele consegue captar diversas anomalias no funcionamento do dispositivo que (mais uma vez: <em>embora não seja com 100% de certeza</em>) delimitam muito bem como deve estar a condição do mesmo.</p>
+        <h2>E como verificar?</h2>
+        <h3>Através do próprio Windows:</h3>
+        <p>Para uma verificação simples de maneira rápida através do Windows basta usar o comando <mark>wmic diskdrive get status</mark> no terminal e verificar se o status é dos discos é <mark>OK</mark>, qualquer outro status pode indicar problemas com o seu disco e nesse caso <strong>você deve fazer backup dos arquivos e trocar o disco o quanto antes.</strong></p>
+        <h3>Através do Crystal Disk Info:</h3>
+        <p>Baixe através desse link <a class="link" href="https://crystalmark.info/redirect.php?product=CrystalDiskInfoInstaller">aqui</a> e verifique se o seu disco está <mark>Saudável</mark>, qualquer outro status como em <mark>Alerta</mark> ou em <mark>Perigo</mark> pode indicar problemas com o seu disco e (mais uma vez...) nesse caso você deve fazer backup dos arquivos e trocar o disco o quanto antes.</p>
+        <img class="responsiva" src="https://www.howtogeek.com/wp-content/uploads/2017/03/wsa_1-1-650x450.png" alt="">
+        <h2><strong>Alerta</strong></h2>
+        <p>Tem muito técnico picareta por aí que aproveita que seu disco está degradado e oferece uma <i>"formatação"</i> para resolver o problema (pois é óbvio que depois de 2 ou 3 meses de uso de um dispositivo quase morto você vai ter que voltar lá pra instalar o sistema novamente) ou mesmo inventa que <i>"seu hd queimou"</i> para trocar seu dispositivo 100% funcional por algum outro usado que ele tem e ainda fazendo você pagar a troca. A regra é: <em>Se vai mandar o computador para o técnico verifique o estado do disco antes (se possível anote o número identificador do mesmo) e se o seu dispositivo não está Saudável e OK </em><strong>FORMATAÇÃO NENHUMA RESOLVE!</strong></p>
+        <p>Basicamente, a nível de usuário final reparo de HD/SSD <strong>Não existe!</strong> Sem entrar muito nos detalhes técnicos aqui mas falando bem por cima: No máximo pode haver uma <em>doação de placa e/ou um reparo na leitura somente para backup imediato dos arquivos</em>, <strong>se o seu HD/SSD deu defeito JÁ ERA!</strong> Capíche?</p>
+        <p>E se por algum motivo o seu computador <em>realmente</em> apresentar algum problema em HDD/SSD <strong>não compre na mão do seu técnico!</strong> </p>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 19/12/2021)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

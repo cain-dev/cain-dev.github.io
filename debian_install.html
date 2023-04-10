@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação do Debian 11 (NetInstall)</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - Debian"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Traga de volta a vida aquele seu pc antigo utilizando o Debian"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://www.debian.org/favicon.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+	<main id="main-area">
+        	<h1>Instalação do Debian</h1>
+            <p><strong>Alerta:</strong> Esse tutorial presume que você viu a página de Introdução de Instalação de Sistemas, acessou os links para download das isos e já passou ela para um pendrive através de um dos métodos descritos! Caso não tenha feito isso, clique <a class="link" href="os_install.html">aqui</a> para ser direcionado para a Introdução de Instalação de Sistemas.</p>
+        	<h2>Introdução</h2>
+            <p>Era 2005, tempos que um computador com Celeron D de 2ghz, 40 de HD e 256 de RAM custava 4K! Quase todo mundo com o famoso "pc branco da Positivo" que veio com alguma localização de Linux (mas que você mudou pro Win xispezão piratex que eu sei) acessando Orkut e MSN (saudades do MSN), e é muito provável que você manteve essa usina de 90nm até meados de 2012 quando você montou um segundo pc de mesa já considerando upgrade futuro ou (o caso mais comum) comprou aquele notebook de entrada com APU AMD com o famoso "combo da desgraça": 2 núcleos, 2ghz e 2gb de ram. Hoje em dia? Abre nem o Chrome mais sem travar. </p>
+            <p>Seja lá qual for a sua história, sempre tem aquele computador, seja de mesa ou notebook, seja que você comprou e ficou guardado ou a sua tia que te deu, que AINDA funciona! E que você poderia usar nem que fosse pra baixar filmes ou escutar música, mas que fazer essa porcaria funcionar num Windows 7 atual é como pedir perdão pra receita federal ou tentar justificar algo pra uma mulher na TPM.</p>
+            <p>A maior parte dos sistemas está simplesmente abandonando os pcs de arquitetura 32 bits... E agora? Será que existe algum sistema com suporte pra 32 bits e que faça essa carroça funcionar minimamente bem? Tem sim! E ele se chama <em>Debian</em>!</p>
+            <p>Se você conhece um mínimo do universo Linux o Debian não precisa de apresentações, mas se você não é desse universo, basta entender que o Debian é um distribuição multiarquitetura com muito suporte e estabilidade que é tão influente e referência que chega a ser chamado de "pai de todos" pois tem uma absurda quantidade de distribuições de Linux que são baseadas nele.</p>
+            <p>O Debian definitivamente não é uma distribuição para iniciantes! Ela se foca em atender servidores e não usuários finais... O que não quer dizer que não vai rodar muito melhor e mais seguro no seu pc do que aquela porcaria de Windows 7 32 bits Home crackeado que você tem a cara de pau de chamar de sistema.</p>
+            <p>Aqui você não vai ter lojinha e 1001 aplicações para "amortecer" a sua experiência com o Linux, mas pra um pc velho? Nem precisa pois já vem com quase tudo instalado. Vamos começar?</p>
+            <p>A instalação alvo aqui é por meio da mídia oficial com <em>NetInstall</em> justamente devido a leveza, a instalação será feita com cabo de rede (mas basta configurar o seu WiFi durante a instalação também que tá tudo certo) e graficamente (para ser mais fácil já que basta clicar na opção que deseja e depois em continuar) mas caso queira um processo de instalação ainda mais rápido você pode simplesmente selecionar a opção <em>Install</em> ao invés de <em>Graphical Install</em> e seguir esse mesmo tutorial já que as opções são basicamente as mesmas e basta usar as <em>Setas</em> do teclado para navegar, <em>Espaço</em> para marcar e desmarcar caixas de diálogo, <em>Enter</em> para confirmar e <em>Tab</em> para alterar entre as opções. </p>
+            <h2>Instalação</h2>
+            <img class="responsiva" src="assets/images/debian01.jpg" alt="">
+            <p>Em <em>Selecione o seu idioma</em> vamos no <em>Português do Brazil</em> no nosso caso. </p>
+            <img class="responsiva" src="assets/images/debian02.jpg" alt="">
+            <p>Em  <em>Selecionar sua localidade</em> vamos de <em>Brasil</em> (mas se você tá lendo isso de Portugal abraços 😄)</p>
+            <img class="responsiva" src="assets/images/debian03.jpg" alt="">
+            <p>Em <em>Configure o teclado</em> vamos de <em>Português Brasileiro</em> para ABNT2</p>
+            <img class="responsiva" src="assets/images/debian04.jpg" alt="">
+            <p>Em <em>Configurar a rede</em> coloque o nome para identificar seu computador na sua rede local, eu recomendo colocar marca do computador + número do modelo (como por exemplo asus-h61m)... Mas nada impede de chamar o seu computador de "Joãozinho" se você quiser...</p>
+            <img class="responsiva" src="assets/images/debian05.jpg" alt="">
+            <p>Nessa tela escreva o nome do domínio mas se você não tem domínio ou nem sabe o que é isso basta deixar em branco</p>
+            <img class="responsiva" src="assets/images/debian06.jpg" alt="">
+            <p>Aqui defina a senha da conta administrativa do computador, recomendo que seja uma senha forte de pelo menos 8 caractéres com maiúsculas, minúsculas, números e caracteres especiais</p>
+            <img class="responsiva" src="assets/images/debian07.jpg" alt="">
+            <p>Aqui é para inserir seu nome real e completo... Mas nem precisa então pode deixar em branco mesmo</p>
+            <img class="responsiva" src="assets/images/debian08.jpg" alt="">
+            <p>Insira o nome da conta de usuário</p>
+            <img class="responsiva" src="assets/images/debian09.jpg" alt="">
+            <p>Insira e confirme a senha para esse usuário padrão</p>
+            <img class="responsiva" src="assets/images/debian10.jpg" alt="">
+            <p>Selecione a sua região de fuso horário</p>
+            <img class="responsiva" src="assets/images/debian11.jpg" alt="">
+            <p>Aqui você seleciona como quer particionar o disco, eu recomendo escolher <em>Assistido - usar o disco inteiro</em> a menos que você saiba muito bem o que esteja fazendo</p>
+            <img class="responsiva" src="assets/images/debian12.jpg" alt="">
+            <p>Selecione disco <strong>que você deseja formatar inteiro para instalar o sistema</strong> </p>
+            <img class="responsiva" src="assets/images/debian13.jpg" alt="">
+            <p>Aqui você seleciona como quer a sua tabela de partição, eu recomendo escolher <em>Todos os arquivos em uma partição</em> a menos que você saiba muito bem o que esteja fazendo</p>
+            <img class="responsiva" src="assets/images/debian14.jpg" alt="">
+            <p><strong>Verifique o que será mudado e se você tiver ciente das alterações no disco</strong> (que você escolheu o disco certo e tem certeza que pode ser apagado e tal) basta selecionar <em>Finalizar o particionamento e escrever as mudanças no disco</em></p>
+            <img class="responsiva" src="assets/images/debian15.jpg" alt="">
+            <p>Selecione <em>Sim</em> para <em>Escrever as mudanças nos discos</em> para continuar</p>
+            <img class="responsiva" src="assets/images/debian16.jpg" alt="">
+            <p>Se você tivesse uma mídia adicional pro gerenciador de pacotes você declararia agora... Então basta selecionar <em>Não</em> para <em>Ler mídia de instalação adicional?</em> e <em>Continuar</em></p>
+            <img class="responsiva" src="assets/images/debian17.jpg" alt="">
+            <p>Selecione a região para os servidores mirror, no nosso caso é <em>Brasil</em></p>
+            <img class="responsiva" src="assets/images/debian18.jpg" alt="">
+            <p>E você pode selecionar qualquer um desses servidores dessa região, porém eu recomendo o <em>debian.c3sl.ufpr.br</em></p>
+            <img class="responsiva" src="assets/images/debian19.jpg" alt="">
+            <p>Aqui você pode configurar o proxy, mas deixe em branco e <em>Continuar</em> </p>
+            <img class="responsiva" src="assets/images/debian20.jpg" alt="">
+            <p>Participa não...</p>
+            <img class="responsiva" src="assets/images/debian21.jpg" alt="">
+            <p>E aqui você pode selecionar como o sistema será instalado, a minha recomendação é: <em>ambiente de área de trabalho no Debian + utilitários de sistema padrão + LxQT</em>.<br>Nada impede você de selecionar outra interface que deseje no lugar do LxQT, mas já que isso é um tutorial de como salvar pc antigo LxQT tende a ser a melhor opção</p>
+            <img class="responsiva" src="assets/images/debian22.jpg" alt="">
+            <p>Selecione <em>Sim</em> para instalar o <em>GRUB2</em> no disco primário</p>
+            <img class="responsiva" src="assets/images/debian23.jpg" alt="">
+            <p>Selecione o disco novamente</p>
+            <img class="responsiva" src="assets/images/debian24.jpg" alt="">
+            <p>E dê continuar para para reiniciar para o novo sistema, lembre-se de remover o pendrive</p>
+            <img class="responsiva" src="assets/images/debian25.jpg" alt="">
+            <p>Se você fez tudo direitinho o sistema vai ser carregado</p>
+            <img class="responsiva" src="assets/images/debian26.jpg" alt="">
+            <p>Basta inserir a conta de usuário padrão e senha que você vai ter acesso a área de trabalho</p>
+            <img class="responsiva" src="assets/images/debian27.jpg" alt="">
+            <br>
+            <img class="responsiva" src="assets/images/debian28.jpg" alt="">
+            <h2>Pós-instalação</h2>
+            <h3>Adicionar seu usuário ao grupo <em>sudo</em></h3>
+            <p>Algumas alterações do sistema precisam de acesso administrativo, para não ter a necessidade de ficar logando como administrador sempre que for fazer uma alteração do sistema você pode adicionar o seu usuário ao grupo <em>sudo</em> e aí basta adicionar <mark>sudo</mark> antes do comando para executá-lo como administrador. Só precisamos acessar como administrador uma única vez para fazer essa mudança, para isso utilize o comando abaixo para acessar a conta de administrador e insira a sua senha de administrador:</p>
+            <code>su</code>
+            <p>Após inserir a sua senha de administrador use o comando abaixo para adicionar o seu usuário ao grupo <em>sudo</em>:</p>
+            <code>sudo usermod -aG sudo <mark>seunomedeusuário</mark> </code>
+            <p>Pronto! Agora basta acrescentar <mark>sudo</mark> antes de um comando e inserir a sua senha de usuário padrão para ter acesso administrativo.</p>
+            <h3>Mudar o gerenciador de redes</h3>
+            <p>Por padrão o Debian instala o <mark>ConnMan</mark> para gerenciar redes, para ter um gerenciamento mais intuitivo com ícone na barra de tarefas abra o terminal <mark>QTerminal</mark>, utilize o comando abaixo e depois tecle <mark>Enter</mark>:</p>
+            <code>sudo apt install -y network-manager nm-tray</code>
+            <code>sudo systemctl disable connman.service</code>
+            <code>sudo systemctl enable systemd-resolved.service NetworkManager.service</code>
+            <h3>Aceleração de hardware</h3>
+            <h4>Por VA-API</h4>
+            <p>Para aceleração de hardware nos drivers <em>Noveau</em> ou <em>AMD</em> instale o pacote <mark>mesa-va-drivers</mark> com o comando abaixo:</p>
+            <code>sudo apt install -y mesa-va-drivers</code>
+            <p>Para aceleração de hardware nos drivers <em>Intel</em> em computadores mais antigos instale o <mark>i965-va-driver</mark> com o comando abaixo:</p>
+            <code>sudo apt install -y i965-va-driver</code>
+            <h4>Habilitando a aceleração de hardware no <em>Firefox</em></h4>
+            <p>Abra o Firefox, digite <mark>about:config</mark> e tecle <mark>Enter</mark>.</p>
+            <p>Mude o valor de <mark>media.ffmpeg.vaapi.enabled</mark> para <mark>true</mark>.</p>
+            <p>Mude o valor de <mark>media.ffvpx.enabled</mark> para <mark>false</mark>.</p>
+            <p>Depois utilize o comando abaixo para que o Firefox sempre inicie com aceleração de hardware:</p>
+            <code>sudo echo "MOZ_X11_EGL=1" >> /etc/environment</code>
+            <h3>Melhoria das Fontes</h3>
+            <p>Abra o gerenciador de arquivos <mark>PCManFM-Qt</mark>, clique na guia <mark>Exibir</mark>, ative a opção <mark>Exibir itens ocultos</mark>, acesse a pasta <mark>.config</mark> e dentro dela crie a pasta <mark>fontconfig</mark>, nessa pasta </mark> crie o arquivo <mark>fonts.conf</mark> e salve com o seguinte conteúdo:</p>
+<pre>
+<code>
+&lt;?xml version='1.0'?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM 'fonts.dtd'&gt;
+&lt;fontconfig&gt;
+    &lt;match target=&quot;font&quot;&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;antialias&quot;&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;embeddedbitmap&quot;&gt;
+            &lt;bool&gt;false&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;hinting&quot;&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;hintstyle&quot;&gt;
+            &lt;const&gt;hintslight&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;lcdfilter&quot;&gt;
+            &lt;const&gt;lcddefault&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode=&quot;assign&quot; name=&quot;rgba&quot;&gt;
+            &lt;const&gt;rgb&lt;/const&gt;
+        &lt;/edit&gt;
+    &lt;/match&gt;
+&lt;/fontconfig&gt;
+</code></pre>
+<p>Para ver a diferença deslogue e logue novamente para surtir efeito.</p>
+        </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 15/03/2023)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

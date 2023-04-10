@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação do Arch Linux</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - Arch Linux"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda a instalar o famoso Arch Linux, acredite: Não é tão difícil quanto falam"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://archlinux.org/static/favicon.29302f683ff8.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Instalação do Arch Linux v2.0</h1>
+        <img class="responsiva" src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="">
+        <h2>Introdução</h2>
+        <p>Inicialmente essa página de instalação do Archlinux foi feita com a intenção de possibilitar a instalação deste sistema operacional em uma máquina de testes, mas como diversas pessoas passaram a utilizar essa documentação como referência de instalação pra uso final eu resolvi refazer este guia de instalação para deixar ele não só mais organizado como também mais completo. Ainda assim é necessário o mesmo <i>disclaimer</i> de antes: O Arch Linux é uma distribuição Linux absurdamente customizável e não existe uma maneira definitiva de instalá-lo contanto que você cumpra todos os passos necessários para a instalação, por via de regra todo tutorial de instalação completa do Archlinux tem uma espécie de "instalação alvo", ou seja, uma maneira específica entre diversas outras maneiras para executar cada passo da instalação e visando um resultado específico para essa instalação. </p>
+        <h2>Instalação Alvo</h2>
+        <p>A instalação alvo para essa documentação baseia-se em um sistema em modo <mark>BIOS</mark> com o <mark>GRUB</mark> como inicializador <strong>ou</strong> em modo <mark>UEFI</mark> com <mark>systemd-boot</mark> como inicializador; com a raiz do sistema com o sistema de arquivos <mark>EXT4</mark>; com rede baseada em <mark>iwd</mark> com <mark>systemd-resolved</mark> para instalações minimalistas (como <i>laptops</i> menos potentes que só precisam de uma conexão sem fio) <strong>ou</strong> <mark>Network Manager</mark> com <mark>systemd-resolved</mark> para um gerenciamento de rede com maior compatibilidade; utilizando o <mark>PipeWire</mark> como servidor de áudio.</p>
+        <p>Se por acaso você tem interesse na instalação de um outro bootloader como o <mark>rEFInd</mark> ou deseja utilizar outro sistema de arquivos para a raiz do sistema como o <mark>F2FS</mark>, <mark>BTRFS</mark> ou <mark>ZFS</mark> <strong>Não siga essa documentação como guia para fazer o particionamento do disco, formatação das partições e instalação de <i>bootloader</i>!</strong>.</p>
+        <p><strong>⚠️&nbsp;Alerta: É necessário experiência prévia com terminais e sistemas Unixlike!</strong></p>
+        <!-- Passo 1 Configurar o layout do teclado -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 1 - Configurar o <i>layout</i> do teclado</h2>
+        <p>Antes de digitar qualquer outro comando é necessário que o teclado esteja devidamente configurado, supondo que você tenha um teclado padrão <mark>ABNT2</mark> utilize o comando abaixo para selecionar o layout correto:</p>
+        <code>loadkeys br-abnt2</code>
+        <!-- Passo opcional - Mudar a fonte da padrão do terminal -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo opcional - Mudar a fonte padrão do terminal</h2>
+        <p>Eu frequentemente tenho que instalar o ArchLinux em um <i>laptop</i> que possuo e a fonte fica pequena demais na tela para o meu gosto, caso você tenha o mesmo problema que eu e queira alterar a fonte para uma fonte que fique mais agradável em telas menores utilize o comando abaixo:</p>
+        <code>setfont ter-124b</code>
+        <!-- Passo opcional - Verificar o ambiente de inicialização -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo opcional - Verificar o ambiente de inicialização</h2>
+        <p>Para garantir que você iniciou o sistema da forma correta você pode utilizar o comando:</p>
+        <code>ls /sys/firmware/efi/efivars</code>
+        <p>Se o comando mostrar o diretório sem erro, o sistema está inicializado no modo UEFI. Se o diretório não existir, o sistema pode ser estar no modo BIOS (ou CSM). Caso não esteja no ambiente correto reinicie o seu computador e configure a placa mãe corretamente.</p>
+        <!-- Passo 2 Conectar-se a internet -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 2 - Conectar-se a internet</h2>
+        <!-- Passo 2 Opção A - Caso esteja conectado com cabo de rede-->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->     
+        <h3>Opção A - Caso esteja conectado com cabo de rede</h3>
+        <p>Caso tenha conectado o computador ao cabo de rede para acessar a internet basta verificar se há aquisição de um endereço IP válido e se há conexão com a rede local através do comando:</p>
+        <code>ip address show</code>
+        <p>Se recebemos um endereço IP válido podemos conferir se há conexão com a internet com o comando:</p>
+        <code>ping google.com</code>
+        <p>Se a conexão com o Google não teve falhas você pode pular para o Passo 3</p>
+        <!-- Passo 2 Opção B - Caso queira se conectar a internet através de uma rede sem fio -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Opção B - Caso queira se conectar a internet através de uma rede sem fio</h3>
+        <p>Caso você queira utilizar uma conexão sem fio para se conectar a internet podemos utilizar a ferramenta <mark>iwd</mark> para fazer a conexão, para acessá-la execute o comando:</p>
+        <code>iwctl</code>
+        <p>Uma vez que estamos no controle do <mark>iwctl</mark> podemos listar os dispositivos disponíveis para conexão sem fio, para isso utilize o comando:</p>
+        <code>device list</code>
+        <p>Os dispositivos reconhecidos pelo sistema serão listados, uma vez que você sabe qual é o nome do dispositivo de conexão sem fio no seu computador, utilize o comando abaixo para iniciar uma varredura das redes disponíveis para conexão substituindo o trecho <mark>device</mark> pelo nome (o que está abaixo da guia <mark>Name</mark>) do seu dispositivo:</p>
+        <code>station <mark>device</mark> scan</code>
+        <p>Agora podemos listar as redes sem fio disponíveis, para isso podemos utilizar o comando:</p>
+        <code>station <mark>device</mark> get-networks</code>
+        <p>Esse comando vai retornar uma lista das redes encontradas pelo dispositivo, assim que você achar a rede que você deseja se conectar basta utilizar o comando abaixo para se conectar substituindo <mark>SSID</mark> pelo <mark>nome</mark> da sua rede:</p>
+        <code>station <mark>device</mark> connect <mark>SSID</mark></code>
+        <p>Caso você esteja fazendo uso de uma rede oculta, você pode se conectar a ela utilizando o comando:</p>
+        <code>station <mark>device</mark> connect-hidden <mark>SSID</mark></code>
+        <p>Uma vez que temos conexão podemos sair do programa e continuar com a instalação, para sair do <em>iwctl</em> utilize o comando:</p>
+        <code>exit</code>
+        <p>Podemos verificar se há aquisição de um endereço IP válido e se há conexão com a rede local através do comando:</p>
+        <code>ip addr show</code>
+        <p>Se recebemos um endereço IP válido podemos conferir se há conexão com a internet com o comando:</p>
+        <code>ping google.com</code>
+        <p>Se a conexão com o Google não teve falhas você pode prosseguir para o Passo 3</p>
+        <!-- Passo opcional - Verificar a hora -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo opcional - Verificar a hora</h2>
+        <p>No ambiente de instalação o <em>systemd-timesyncd</em> é ativado por padrão e o horário será sincronizado automaticamente assim que uma conexão com a internet for estabelecida. Para garantir que o relógio do sistema está correto utilize o comando:</p>
+        <code>timedatectl</code>
+        <!-- Passo 3 Edição do arquivo de mirrors -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 3 - Mudança de servidores <i>mirrors</i></h2>
+        <p>Existem diversas maneiras de editar o arquivo que lista os servidores <i>mirrors</i> e habilitar apenas os servidores brasileiros para uma melhor conexão para o processo de instal, mas a que eu recomendo é através dos comandos de substituição do <mark>vim</mark>. Você pode abrir o arquivo de <i>mirrors</i> no <mark>vim</mark> com o seguinte comando:</p>
+        <code>vim /etc/pacman.d/mirrorlist</code>
+        <p>Com o vim aberto <strong>não aperte nenhuma outra tecla!</strong> (a menos que esteja acostumado a usar o vim), apenas escreva o comando abaixo e depois tecle <em>Enter</em> para comentar e desabilitar todos os servidores de uma vez só:</p>
+        <code>:%s/Server/#Server/g</code>
+        <p>Uma vez que todos os servidores foram comentados, utilize as <em>setas do teclado</em> e o <em>delete</em> para apagar o <mark>#</mark> que precede o link dos servidores brasileiros. Quando finalizar utilize o comando abaixo para salvar e sair:</p>
+        <code>:wq</code>
+        <p>Então você pode atualizar o banco de dados dos pacotes com o seguinte comando:</p>
+        <code>pacman -Syy</code>
+        <p><strong>Observação</strong>: Se você demorar muito a chegar nesse paso o próprio Arch fara uma busca pelos melhores mirrors.</p>
+        <!-- Passo 4 Particionar as unidades de armazenamento -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 4 - Particionar as unidades de armazenamento</h2>
+        <p>Antes de começar qualquer alteração é importante ter certeza de qual unidade vamos alterar, para listar as unidades de armazenamento utilize o comando:</p>
+        <code>fdisk -l</code>
+        <p>Verifique (e se possível anote) o(s) nome(s) da(s) unidade(s) que deseja utilizar. Uma vez que você tem a certeza de qual (ou quais) unidade(s) vai alterar e em qual vai instalar o sistema, escolha uma das opções abaixo (Preparação para armazenamento em sistemas baseados em BIOS <strong>OU</strong> Preparação para armazenamento em sistemas baseados em UEFI) para iniciar o particionamento. Lembre-se de substituir o <mark>storage</mark> em <mark>/dev/storage</mark> pelo endereço do dispositivo desejado.</p>
+        <p>Nesse guia trataremos os endereços de dispositivos diferentes como uma sequência alfabética, como no exemplo abaixo:</p>
+        <ul>
+            <li>/dev/<mark>storageA</mark></li>
+            <li>/dev/<mark>storageB</mark></li>
+            <li>/dev/<mark>storageC</mark></li>
+        </ul>
+        <p>E os endereços das partições como <em>P</em> seguido do número da partição, como no exemplo abaixo:</p>
+        <ul>
+            <li>/dev/<mark>storageAP1</mark></li>
+            <li>/dev/<mark>storageAP2</mark></li>
+            <li>/dev/<mark>storageAP3</mark></li>
+        </ul>
+        <p>Então, se o seu dispositivo de armazenamento por acaso for um disco com o endereço <em>/dev/sda</em> ou mesmo um NVME em <em>/dev/nvme0n1</em> e se a sua partição alvo for a <em>/dev/sda5</em> ao invés de <em>P1</em> <strong>lembre-se de alterar conforme a sua necessidade</strong>.</p>
+        <!-- Passo extra para quem utiliza NVME -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <details class="spoiler" >
+            <summary>Passo extra para quem utiliza NVME</summary>
+            <p>Como alternativa à substituição manual do tamanho do setor detectado automaticamente, alguns SSDs podem ter o tamanho do setor alterado durante a formatação, para que reportem um número mais próximo do tamanho real do setor e portanto podendo melhorar sua performance.</p>
+            <p>Para ver se um determinado dispositivo NVMe oferece suporte a isso, use o comando abaixo:</p>
+            <code>nvme id-ns -H /dev/<mark>nvme0n1</mark> | grep "Relative Performance"</code>
+            <p>Verifique o retorno dos formatos possíveis:</p>
+            <code>LBA Format  0 : Metadata Size: 0   bytes - Data Size: 512 bytes - Relative Performance: 0x2 Good (in use)<br>LBA Format  1 : Metadata Size: 0   bytes - Data Size: 4096 bytes - Relative Performance: 0x1 Better</code>
+            <p>O <em>Relative Performance</em> indica qual formato fornecerá o melhor desempenho. Para alterar o tamanho do setor, use o nvme format e especifique o valor preferencial com o parâmetro --lbaf como no comando abaixo:</p>
+            <code>nvme format --lbaf=1 /dev/<mark>nvme0n1</mark></code>
+            <p>Isso deve levar apenas alguns segundos para finalizar.</p>
+            <p>Observação: Fique atento para o passo <em>formatação avançada</em> abaixo.</p>
+        </details>
+        <!-- Passo 4 Opção A - armazenamento em sistemas baseados em BIOS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Opção A - Preparação para armazenamento em sistemas baseados em <mark>BIOS</mark></h3>
+        <p>Para particionar o disco utilizaremos a ferramenta <em>fdisk</em> na unidade desejada, para isso utilize o comando:</p>
+        <code>fdisk /dev/<mark>storageA</mark></code>
+        <p>Com o <mark>fdisk</mark> aberto na unidade desejada criaremos uma nova tabela de partição em <mark>MBR</mark> com o comando:</p>
+        <code>o</code>
+        <details class="spoiler" >
+            <summary>Modo Easy</summary>
+            <p>Uma vez que você criou uma nova tabela em <em>MBR</em> você pode imediatamente usar o comando abaixo para escrever as alterações:</p>
+            <code>w</code>
+            <p>E fazer as partições de uma forma mais gráfica através do <em>cfdisk</em> com o comando:</p>
+            <code>cfdisk /dev/<mark>storageA</mark></code>
+        </details>
+        <!-- Partição SWAP em BIOS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>Partição SWAP (opcional mas altamente recomendado)</h4>
+        <p>A memória Swap é um espaço que é utilizado quando o sistema operacional fica sobrecarregado, evita a queda de desempenho, travamentos e desligamentos automáticos. A quantidade de memória swap necessária varia conforme a quantidade de memória ram que seu sistema possui e se você vai ou não utilizar hibernação, também pode variar conforme o tipo de dispositivo de armazenamento e não sendo recomendado o uso na sua configuração padrão em SSD's e NVME's. Fique tranquilo, você pode (e em grande parte dos casos deve) ter algum espaço voltado para swap ainda que seja no seu SSD ou NVME, apenas lembre de verificar a otimização de swap ao fim desse guia.</p>
+        <p>Em vez de uma partição swap você também pode utilizar um arquivo de memória swap, assim você não precisa dedicar uma partição no disco especificamente para a swap, essa opção tende a ser preferida pelos usuários de SSD e NVME apesar da partição swap poder resultar numa melhor performance. Independente do caso utilize a partição swap <strong>ou</strong> o arquivo de swap, <strong>não use ambos e também não fique sem nenhum dos dois</strong> (ainda que seja em um outro dispositivo), vai te evitar muita dor de cabeça.</p>
+        <p id="tabela-swap">Para saber quanto de swap pode ser necessário para o seu caso verifique na tabela abaixo:</p>
+        <figure>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>RAM</th>
+                        <th>Swap (sem hibernação)</th>
+                        <th>&nbsp;Swap (com hibernação)</th>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;512MB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;1GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;2GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;3GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;5GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;6GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;8GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;11GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;12GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;15GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;16GB</td>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;20GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;24GB</td>
+                        <td>&nbsp;5GB</td>
+                        <td>&nbsp;29GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;32GB</td>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;38GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;64GB</td>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;72GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;128GB</td>
+                        <td>&nbsp;11GB</td>
+                        <td>&nbsp;139GB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+        <p>Para criar a nova partição que será usada como swap utilize o comando:</p>
+        <code>n</code>
+        <p>O programa vai perguntar que tipo de partição você deseja como no exemplo abaixo:</p>
+        <code>Partition type<br>&nbsp;p&nbsp;primary<br>&nbsp;e&nbsp;extended<br>Select (default p):</code>
+        <p>Tecle <em>e</em> (para <i>extended</i>) e dê enter para a criar uma nova partição extendida.</p>
+        <p>O programa vai perguntar o número da partição como no exemplo abaixo:</p>
+        <code>Partition number:</code>
+        <p>Você pode selecionar qual vai ser o número da partição ou apenas teclar <em>Enter</em>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, supondo que eu tenha uma máquina com 2GB de ram e pretendo utilizar hibernação o recomendado conforme a tabela é utilizar 3G, para criar uma partição de 3GB o comando seria:</p>
+        <code>last sector: +<mark>3G</mark></code>
+        <p><strong>Observação:</strong> Se essa área já servia alguma outra partição vai aparecer um erro como o exemplo abaixo:</p>
+        <code><strong>Partition #X contains a X signature.</strong><br>Do you want to remove the signature?[Y]es/[N]o:</code>
+        <p>Apenas use o comando <em>Y</em> para confirmar a remoção de assinatura.</p>
+        <p>Agora, precisamos informar o tipo da partição, para mudar o tipo da partição use o comando:</p>
+        <code>t</code>
+        <p>Para ver os códigos disponíveis use o comando:</p>
+        <code>L</code>
+        <p>O código para o tipo swap é o <em>82</em>, digite 82 e dê enter para mudar o tipo para "Linux swap"</p>
+        <!-- Partição raiz do sistema em BIOS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->        
+        <h4>Partição raiz do sistema (root ou /)</h4>
+        <p>A partição mais importante do sistema, é a partição em que todos os arquivos de sistema ficam e que tudo é montado. Via de regra, essa é a partição que ocupada todo o resto do armazenamento. No entanto, algumas pessoas preferem delimitar o espaço dessa partição para o tamanho necessário apenas para o funcionamento do sistema e ocupar o resto do armazenamento com uma partição dedicada para a pasta de usuários (/home). Dessa forma, se algum problema ocorrer com a partição do sistema não haverá perdas para os dados de usuário.</p>
+        <p>É importante ressaltar que pastas de usuário <strong>não são compatíveis entre distribuições distintas</strong> e ainda numa mesma distribuição podem gerar problemas de incompatibilidade ou com configurações de aplicativos, variáveis e afins. Recomendo delimitar o tamanho da partição de sistema apenas e somente se você pretende fazer mudanças na partição de raiz do sistema sem ter que reinstalar o sistema.</p>
+        <p>Se você é um usuário iniciante ou não pretende fazer tais mudanças, faça backup dos seus arquivos num outro dispositivo e <strong>e não delimite o tamanho da partição raiz e também não faça uma partição separada para a /home!</strong></p>
+        <p>Para criar a nova partição que será usada como raiz do sistema utilize o comando:</p>
+        <code>n</code>
+        <p>O programa vai perguntar que tipo de partição você deseja como no exemplo abaixo:</p>
+        <code>Partition type<br>&nbsp;p&nbsp;primary<br>&nbsp;e&nbsp;extended<br>Select (default p):</code>
+        <p>Tecle <em>p</em> (para <i>primary</i>) e dê enter para a criar uma nova partição primária.</p>
+        <p>O programa vai perguntar o número da partição como no exemplo abaixo:</p>
+        <code>Partition number:</code>
+        <p>Você pode selecionar qual vai ser o número da partição ou apenas teclar <em>Enter</em>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, caso você queira que a partição de sistema ocupe todo o resto do armazenamento apenas tecle <em>Enter</em> (recomendado), caso você queira uma partição de sistema com espaço delimitado insira o comando abaixo trocando o valor de 20G pelo valor desejado (não recomendado): </p>
+        <code>last sector: +<mark>20G</mark></code>
+        <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
+        <p>Agora, precisamos informar o tipo da partição, para mudar o tipo da partição use o comando:</p>
+        <code>t</code>
+        <p>Supondo que a partição raiz seja a segunda partição criada use tecle <em>2</em> e depois tecle <em>Enter</em>.</p>
+        <p>Para ver os códigos disponíveis use o comando:</p>
+        <code>L</code>
+        <p>O código para o tipo Linux é o <em>83</em>, digite 83 e dê enter para mudar o tipo para "Linux"</p>
+        <!-- Partição /home em BIOS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>Partição para /home separada (opcional)</h4>
+        <p>Para criar a nova partição que será usada como /home utilize o comando:</p>
+        <code>n</code>
+        <p>O programa vai perguntar que tipo de partição você deseja como no exemplo abaixo:</p>
+        <code>Partition type<br>&nbsp;p&nbsp;primary<br>&nbsp;e&nbsp;extended<br>Select (default p):</code>
+        <p>Tecle <em>e</em> (para <i>extended</i>) e dê enter para a criar uma nova partição extendida.</p>
+        <p>O programa vai perguntar o número da partição como no exemplo abaixo:</p>
+        <code>Partition number:</code>
+        <p>Você pode selecionar qual vai ser o número da partição ou apenas teclar <em>Enter</em>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, recomendo que apenas tecle <em>Enter</em> para ocupar o resto do armazenamento (embora você também pode delimitar o tanho dessa partição digitando da mesma maneira que a raiz).</p>
+        <code>last sector: default</code>
+        <p>Agora, precisamos informar o tipo da partição, para mudar o tipo da partição use o comando:</p>
+        <code>t</code>
+        <p>Supondo que a partição /home seja a segunda partição criada use tecle <em>3</em> e depois tecle <em>Enter</em>.</p>
+        <p>Para ver os códigos disponíveis use o comando:</p>
+        <code>L</code>
+        <p>O código para o tipo Linux é o <em>83</em>, digite 83 e dê enter para mudar o tipo para "Linux"</p>
+        <!-- Gravar as alterações -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>Gravar as alterações</h4>
+        <p>Para gravar as alterações da tabela de partição e sair do programa utilize o comando abaixo:</p>
+        <code>w</code>
+        <!-- Passo 4 Opção B - armazenamento em sistemas baseados em UEFI -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Opção B - Preparação para armazenamento em sistemas baseados em <mark>UEFI</mark></h3>
+        <p>Para particionar o disco utilizaremos a ferramenta <em>gdisk</em> na unidade desejada, para isso utilize o comando:</p>
+        <code>gdisk /dev/<mark>storageA</mark></code>
+        <p>Com o <mark>gdisk</mark> aberto na unidade desejada criaremos uma nova tabela de partição em <mark>GPT</mark> com o comando:</p>
+        <code>o</code>
+        <h4>Partição ESP (EFI system partition)</h4>
+        <p>Para uma instalação de sistema em modo UEFI precisamos criar uma partição <em>ESP</em>, que é uma partição específica para ser acessada pela placa mãe para iniciar os sistemas. Para criar a partição <em>ESP</em> use o comando:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, por questões de compatibilidade recomendo <mark>550M</mark>, sendo assim deveremos utilizar o comando <mark>+550M</mark> e teclar <mark>Enter</mark>, de maneira que o diálogo no terminal fique da seguinte forma:</p>
+        <code>last sector: +550M</code>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>ESP</mark> devemos digitar o tipo <mark>ef00</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): ef00</code>
+        <p>Com isso temos uma partição no início do armazenamento, de 550M e do tipo EFI system partition.</p>
+        <h4>Partição SWAP (opcional mas altamente recomendado)</h4>
+        <p>A memória Swap é um espaço que é utilizado quando o sistema operacional fica sobrecarregado, evita a queda de desempenho, travamentos e desligamentos automáticos. A quantidade de memória swap necessária varia conforme a quantidade de memória ram que seu sistema possui e se você vai ou não utilizar hibernação, também pode variar conforme o tipo de dispositivo de armazenamento e não sendo recomendado o uso na sua configuração padrão em SSD's e NVME's. Fique tranquilo, você pode (e em grande parte dos casos deve) ter algum espaço voltado para swap ainda que seja no seu SSD ou NVME, apenas lembre de verificar a otimização de swap ao fim desse guia.</p>
+        <p>Em vez de uma partição swap você também pode utilizar um arquivo de memória swap, assim você não precisa dedicar uma partição no disco especificamente para a swap, essa opção tende a ser preferida pelos usuários de SSD e NVME apesar da partição swap poder resultar numa melhor performance. Independente do caso utilize a partição swap <strong>ou</strong> o arquivo de swap, <strong>não use ambos e também não fique sem nenhum dos dois</strong> (ainda que seja em um outro dispositivo), vai te evitar muita dor de cabeça.</p>
+        <p id="tabela-swap">Para saber quanto de swap pode ser necessário para o seu caso verifique na tabela abaixo:</p>
+        <figure>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>RAM</th>
+                        <th>Swap (sem hibernação)</th>
+                        <th>&nbsp;Swap (com hibernação)</th>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;512MB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;1GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;2GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;3GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;5GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;6GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;8GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;11GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;12GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;15GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;16GB</td>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;20GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;24GB</td>
+                        <td>&nbsp;5GB</td>
+                        <td>&nbsp;29GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;32GB</td>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;38GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;64GB</td>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;72GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;128GB</td>
+                        <td>&nbsp;11GB</td>
+                        <td>&nbsp;139GB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+        <p>Para criar a nova partição que será usada como swap utilize o comando:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, supondo que eu tenha uma máquina com 2GB de ram e pretendo utilizar hibernação o recomendado conforme a tabela é utilizar 3G, para criar uma partição de 3GB o comando seria:</p>
+        <code>last sector: +<mark>3G</mark></code>
+        <p><strong>Lembre-se de substituir o valor acima para o valor ideal para o seu caso!</strong></p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>SWAP</mark> devemos digitar o tipo <mark>8200</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): 8200</code>
+        <p>Com isso temos uma nova partição de 3G e do tipo Linux swap.</p>
+        <!-- Partição raiz do sistema (root ou /) em UEFI -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>Partição raiz do sistema (root ou /)</h4>
+        <p>A partição mais importante do sistema, é a partição em que todos os arquivos de sistema ficam e que tudo é montado. Via de regra, essa é a partição que ocupada todo o resto do armazenamento. No entanto, algumas pessoas preferem delimitar o espaço dessa partição para o tamanho necessário apenas para o funcionamento do sistema e ocupar o resto do armazenamento com uma partição dedicada para a pasta de usuários (/home). Dessa forma, se algum problema ocorrer com a partição do sistema não haverá perdas para os dados de usuário.</p>
+        <p>É importante ressaltar que pastas de usuário <strong>não são compatíveis entre distribuições distintas</strong> e ainda numa mesma distribuição podem gerar problemas de incompatibilidade ou com configurações de aplicativos, variáveis e afins. Recomendo delimitar o tamanho da partição de sistema apenas e somente se você pretende fazer mudanças na partição de raiz do sistema sem ter que reinstalar o sistema.</p>
+        <p>Se você é um usuário iniciante ou não pretende fazer tais mudanças, faça backup dos seus arquivos num outro dispositivo e <strong>e não delimite o tamanho da partição raiz e também não faça uma partição separada para a /home!</strong></p>
+        <p>Para criar a nova partição que será usada como raiz do sistema utilize o comando:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, caso você queira que a partição de sistema ocupe todo o resto do armazenamento apenas tecle <em>Enter</em> (recomendado), caso você queira uma partição de sistema com espaço delimitado insira o comando abaixo trocando o valor de 20G pelo valor desejado (não recomendado): </p>
+        <code>last sector: +<mark>20G</mark></code>
+        <p><strong>Observação:</strong> Existe muito debate a respeito de qual é o tamanho necessário para uma partição raiz do sistema, obviamente o necessário varia conforme o tipo da instalação e a quantidade de programas a serem instalados. Na maioria das documentações que vi a recomendação é de no mínimo <em>20G</em> para a grande maioria dos usuários e de <em>40G</em> a <em>60G</em> para casos mais extremos. Lembrando que <strong>se você pretende usar um arquivo swap na partição do sistema você deve contabilizar o espaço necessário para o arquivo de swap aqui também!</strong></p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>root ou /</mark> devemos digitar o tipo <mark>8304</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): 8304</code>
+        <p>Com isso temos uma nova partição de 20G e do tipo Linux x86-64 root (/).</p>
+        <!-- Partição /home separada em UEFI -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>Partição para /home separada (opcional)</h4>
+        <p>Para criar a nova partição que será usada como /home utilize o comando:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o ponto de início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark>.</p>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o ponto de término da partição e delimite o seu tamanho, recomendo que apenas tecle <em>Enter</em> para ocupar o resto do armazenamento (embora você também pode delimitar o tanho dessa partição digitando da mesma maneira que a raiz).</p>
+        <code>last sector: default</code>
+        <p>Logo em seguida o sistema irá exibir a linha abaixo para que você escolha o tipo da partição, para o tipo <mark>/home</mark> devemos utilizar o comando <mark>8302</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal fique da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): 8302</code>
+        <p>Com isso temos uma nova partição que ocupa todo o resto do disco e do tipo Linux /home.</p>
+        <h4>Gravar as alterações</h4>
+        <p>Para gravar as alterações da tabela de partição e sair do programa utilize o comando abaixo:</p>
+        <code>w</code>
+        <!-- Passo 5 - Formatar as partições -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 5 - Formatar as partições</h2>
+        <p>Antes de prosseguir com a formatação e montagem das partições é importante ter certeza de que a tabela está correta, para checar as partições utilize o comando abaixo:</p>
+        <code>lsblk</code>
+        <p>Uma vez que a tabela de partição foi devidamente configurada, é necessário formatar cada partição para o seu devido sistema de arquivos. <strong>Lembrando que este é um passo necessário!</strong> A tabela de partição tem por função <strong>apenas</strong> descrever o endereço de cada espaço no armazenamento.</p>
+        <h3>Formatando a partição ESP <strong>(Apenas se você seguiu "Opção B para sistemas baseados em UEFI")</strong> </h3>
+        <p> A primeira partição para ser formatada é a partição <mark>ESP</mark>, ela deve ser formatada em <mark>FAT32</mark>. Supondo que por acaso a sua partição <mark>ESP</mark> é a <mark>/dev/storageAP1</mark>, utilize o comando abaixo para formatar a partição substituindo o <mark>/dev/storageAP1</mark> para o devido endereço da partição <mark>ESP</mark> no seu dispositivo:</p>
+        <code>mkfs.fat -F32 /dev/<mark>storageAP1</mark></code>
+        <details class="spoiler" >
+            <summary>Formatação avançada</summary>
+            <p>Diferentes sistemas de arquivo (e até mesmo ferramentas) podem ter por padrão o uso de tamanhos distintos de setor. Caso você queira especificar o tamanho do setor utilize o argumento <em>-S</em> como no exemplo abaixo:</p>
+            <code>mkfs.fat -F 32 <em>-S 4096</em> /dev/<mark>storageAP1</mark></code>
+        </details>
+        <h3>Formatando a partição SWAP</h3>
+        <p>A segunda partição para ser formatada será a partição <mark>swap</mark> <strong>caso você a tenha feito</strong>, ela deve ser formatada em formato <mark>swap</mark>. Considerando que a sua partição <mark>swap</mark> é a <mark>/dev/storageAP2</mark> utilize o comando abaixo para formatar a partição:</p>
+        <code>mkswap /dev/<mark>storageAP2</mark></code>
+        <h3>Formatando a partição / e /home</h3>
+        <p>Tanto a partição raiz do sistema <em>/</em> quanto a partição <em>/home</em> devem ser formatadas em <mark>EXT4</mark>. Considerando que elas estão no endereço <mark>/dev/storageAP3</mark> utilize o comando abaixo para formatar cada uma delas:</p>
+        <code>mkfs.ext4 /dev/<mark>storageAP3</mark></code>
+        <details class="spoiler" >
+            <summary>Formatação avançada</summary>
+            <p>Diferentes sistemas de arquivo (e até mesmo ferramentas) podem ter por padrão o uso de tamanhos distintos de setor. Caso você queira especificar o tamanho do setor utilize o argumento <em>-b</em> como no exemplo abaixo:</p>
+            <code>mkfs.ext4  <em>-b 4096</em> /dev/<mark>storageAP3</mark></code>
+        </details>
+        <!-- Passo 6 - Montar as partições -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 6 - Montar as partições</h2>
+        <p>Até aqui temos o armazenamento particionado e formatado, pronto para a instalação do sistema, agora só é necessário montar as partições para que elas fiquem acessíveis para a instalação.</p>
+        <h3>Montagem da raiz do sistema</h3>
+        <p>Por questão de conveniêcia montaremos a partição raiz do sistema em <em>/mnt</em>, basta substituir <mark>storageAP3</mark> pelo endereço da partição raiz no <em>seu</em> armazenamento.</p>
+        <code>mount /dev/<mark>storageAP3</mark> /mnt</code>
+        <h3>Montagem da /home</h3>
+        <p><strong>Se e somente se</strong> você fez uma partição separada para o diretório <em>/home</em> você deve criar o diretório <em>/mnt/home</em> com o comando abaixo:</p>
+        <code>mkdir /mnt/home</code>
+        <p>Por questão de conveniêcia montaremos a <em>/home</em> em <em>/mnt/home</em>, basta substituir <mark>storageAP3</mark> pelo endereço da partição <em>/home</em> no seu armazenamento.</p>
+        <code>mount /dev/<mark>storageAP4</mark> /mnt/home</code>
+        <h3>Montagem da swap</h3>
+        <p><strong>Se e somente se</strong> você fez uma partição separada para swap é recomendável você montar ela agora com o comando abaixo, basta substituir <mark>storageAP2</mark> pelo endereço da partição <em>swap</em> no seu armazenamento:</p>
+        <code>swapon /dev/<mark>storageAP2</mark></code>
+        <h3>Montagem da partição ESP <strong>(Apenas se você seguiu "Opção B para sistemas baseados em UEFI")</strong> </h3>
+        <p><strong>Se e somente se</strong> você está instalando o sistema em modo UEFI, será necessário criar um diretório <em>/mnt/boot</em> e montá-lo, para criar o diretório utilize o comando abaixo:</p>
+        <code>mkdir /mnt/boot</code>
+        <p>Uma vez que o diretório foi criado monte-o com o comando abaixo:</p>
+        <code>mount /dev/<mark>storageAP1</mark> /mnt/boot</code>
+        <!-- Passo 7 Instalar sistema -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 7 - Instalar sistema</h2>
+        <p>Uma vez que todos os diretórios foram criados e montados, podemos instalar o sistema através do comando <mark>pacstrap</mark>, tendo de referência uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, som com o <mark>pipewire-pulse</mark>, <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>.</p>
+        <p><strong>Porém:</strong> </p>
+        <ul>
+            <li><p>Caso você queira utilizar um kernel lts você pode substituir o pacote <mark>linux</mark> por <mark>linux-lts</mark>;</p></li>
+            <li><p>Caso você não deseje um gerenciamento de rede mínimo para wifi e quer mais compatibilidade e integração com a interface gráfica deve substituir o pacote <mark>iwd</mark> por <mark>networkmanager</mark>;</p></li>
+            <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o pacote <mark>amd-ucode</mark> por <mark>intel-ucode</mark>;</p></li>
+            <li><p><strong>Se e somente se</strong> você está instalando em modo BIOS adicione <mark>grub</mark> na lista de pacotes para serem instalados.</p></li>
+        </ul>
+        <code>pacstrap -K /mnt base <mark>linux</mark> linux-firmware <mark>iwd</mark> nano <mark>amd-ucode</mark> sudo pipewire-pulse</code>
+        <!-- Passo 8 Gerar FSTAB -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 8 - Gerar FSTAB</h2>
+        <p>Já com os pacotes instalados precisamos gerar o arquivo da tabela do sistema de arquivos para migrar para o sistema recém instalado para finalizarmos a instalação, para isso utilize o comando abaixo:</p>
+        <code>genfstab -U /mnt >> /mnt/etc/fstab</code>
+        <p>Caso queira verificar o arquivo da tabela do sistema de arquivos pra ver se está tudo certo utilize o comando abaixo:</p>
+        <code>cat /mnt/etc/fstab</code>
+        <!-- Passo 9 "CHROOT" para a instalação -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 9 - "CHROOT" para a instalação</h2>
+        <p>Com a tabela pronta e verificada acessaremos a instalação com o comando:</p>
+        <code>arch-chroot /mnt</code>
+        <h2>Passo opcional - Criar swapfile </h2>
+        <p><strong>Se e somente se</strong> você não tenha feito uma partição dedicada para swap mas ainda deseja utilizar swap através de arquivo swap, você pode gerar o arquivo swap com o comando abaixo (lembre se de mudar o valor de <mark>3</mark>GB para o <em>seu</em> caso conforme a <a class="link" href="#tabela-swap">tabela</a>):</p>
+        <code>fallocate -l <mark>3</mark>GB /swapfile</code>
+        <p>Mude a permissão do swapfile com o comando abaixo:</p>
+        <code>chmod 600 /swapfile</code>
+        <p>Configure o arquivo como área para troca de swap com o comando abaixo:</p>
+        <code>mkswap /swapfile</code>
+        <p>Ative a swap com o comando abaixo:</p>
+        <code>swapon /swapfile</code>
+        <p>Para fazer com que este arquivo seja montado automaticamente basta adicioná-lo na tabela de sistema de arquivos, para acessar o arquivo da tabela de sistema de arquivos utilize o comando:</p>
+        <code>nano /etc/fstab</code>
+        <p>E aqui podemos adicionar ao final do arquivo uma linha para a montagem do arquivo swap, conforme o exemplo abaixo:</p>
+        <code>/swapfile     none    swap    defaults    0   0</code>
+        <!-- Passo 10 Configurar o sistema instalado -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 10 - Configurar o sistema instalado</h2>
+        <p>Existem algumas configurações necessárias de fuso-horário, localização para e rede para que o sistema inicie sem problemas.</p>
+        <!-- Fuso-horário -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Fuso-horário</h3>
+        <p>Você pode setar o fuso-horário com um link simbólico como no comando abaixo:</p>
+        <code>ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime</code>
+        <p><strong>Observação:</strong> Caso você precise escolher uma outra região de fuso horário basta verificar as regiões disponíveis com o comando abaixo:</p>
+        <code>ls -R /usr/share/zoneinfo | more</code>
+        <p>Agora execute o hwclock para gerar o ajuste de relógio com o comando abaixo:</p>
+        <code>hwclock --systohc</code>
+        <!-- Localização -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Localização</h3>
+        <p>Edite o <em>/etc/locale.gen</em> com o nano com o comando:</p>
+        <code>nano /etc/locale.gen</code>
+        </p>Descomente a linha "pt_BR.UTF-8 UTF-8" e gere a localização com o comando:</p>
+        <code>locale-gen</code>
+        <details class="spoiler" >
+            <summary>Maneira preguiçosa de configurar o locale-gen (clique para ver) </summary>
+            <p>Você pode encontrar em alguns vídeos uma maneira bastante preguiçosa porém bastante objetiva de gerar o locale-gen com um comando só, que é através do comando abaixo:</p>
+            <code>echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen</code>
+            <p>O que esse comando vai fazer é simplesmente adicionar outra linha de locale ao final do arquivo e gerar o locale-gen através dela.</p>
+        </details>
+        <p>Para fazer com que a mudança de layout de teclado seja persistente utilize o comando:</p>
+        <code>echo "KEYMAP=br-abnt2" >> /etc/vconsole.conf</code>
+        <!-- Configuração básica de rede -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Configuração básica de rede</h3>
+        <p>Utilize o comando abaixo para selecionar o nome do host substituindo <mark>meuhostname</mark> para o nome de host desejado:</p>
+        <code>echo "<mark>meuhostname</mark>" >> /etc/hostname</code>
+        <p>Logo em seguida edite o arquivo de hosts com o nano com o comando:</p>
+        <code>nano /etc/hosts</code>
+        <p>Nesse arquivo adicione as linhas abaixo substituindo <mark>meuhostname</mark> para o nome de host desejado:</p>
+<pre><code>127.0.0.1        localhost
+::1              localhost
+127.0.1.1        <mark>meuhostname</mark></code></pre>
+        <!-- Configurar o DNS -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Configurar o DNS</h3>
+        <p>Para fornecer resolução de DNS para softwares que lêem o <em>/etc/resolv.conf</em> crie o link simbólico com o comando:</p>
+        <code>ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</code>
+        <p>Caso queira configurar manualmente os endereços para DNS crie o diretório <mark>/etc/systemd/resolved.conf.d/</mark> para os arquivos de configuração com o comando:</p>
+        <code>mkdir /etc/systemd/resolved.conf.d</code>
+        <p>Em <mark>/etc/systemd/resolved.conf.d/dns_servers.conf</mark> adicione os seguintes endereços para o <mark>OpenDNS</mark> (ou substitua para os endereços que você preferir):</p>
+        <code>[Resolve]<br>DNS= 208.67.222.222 208.67.220.220 2620:119:35::35 2620:119:53::53</code>
+        <p>E caso não queira nenhum servidor de fallback basta acessar <mark>/etc/systemd/resolved.conf.d/fallback_dns.conf</mark> e adicionar:</p>
+        <code>[Resolve]<br>FallbackDNS=</code>
+        <!-- Finalizando a configuração de rede -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Finalizando a configuração de rede</h3>
+        <p>Aqui você deve escolher entre uma instalação padrão para desktop e uma instalação minimalista (para laptops sem muitos recursos que só utilizam conexão sem fio no mesmo local), então basta escolher <strong>1 dos casos abaixo</strong>:</p>
+        <!-- NetworkManager e systemd-resolved -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>NetworkManager e systemd-resolved</h4>
+        <p>Apenas habilite os serviços <mark>NetworkManager</mark> e <mark>systemd-resolved</mark> com o comando:</p>
+        <code>systemctl enable NetworkManager.service systemd-resolved.service</code>
+        <!-- iwd e systemd-resolved -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h4>iwd e systemd-resolved</h4>
+        <p>Primeiro crie a pasta e o arquivo de configuração do iwd:</p>
+        <code>mkdir /etc/iwd</code>
+        <p>Crie o arquivo <em>/etc/iwd/main.conf</em> o arquivo pelo nano utilize o comando:</p>
+        <code>nano /etc/iwd/main.conf</code>
+        <p>Desde a versão 0.19, o iwd pode atribuir endereços IP e configurar rotas usando um cliente DHCP integrado, para habilitar essa configuração adicione as linhas:</p></p>
+        <code>
+            [General]<br>
+            EnableNetworkConfiguration=true
+        </code>
+        <p>Para habilitar o systemd-resolved adicione as linhas:</p>
+        <code>[Network]<br>
+            NameResolvingService=systemd
+        </code>
+        <p>Desde a versão 1.10, o iwd suporta IPv6, mas está desabilitado por padrão. Caso queira habilitá-lo ainda nas opções de <mark>[Network]</mark> adicione a linha:</p>
+        <code>EnableIPv6=true</code>
+        <p>Agora habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com o comando:</p>
+        <code>systemctl enable iwd.service systemd-resolved.service</code><p></p>
+        <!-- Passo 11 Definir senha do administrador -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 11 - Definir senha do administrador</h2>
+        <p>Para definir a senha de administrador utilize o comando abaixo:</p>
+        <code>passwd</code>
+        <!-- Passo 12 Criar usuário padrão e habilitar elevação de privilégios com sudo -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 12 - Criar usuário padrão e habilitar elevação de privilégios com sudo</h2>
+        <p>Para criar um novo usuário, com uma pasta em <em>/home</em> e que possa utilizar sudo (por fazer parte do grupo <em>wheel</em>) utilize o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo nome de usuário que você deseja:</p>
+        <code>useradd -mG wheel seunomedeusuário</code>
+        <p>Para configurar a senha da conta desse usuário use o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo seu nome de usuário:</p>
+        <code>passwd seunomedeusuário</code>
+        <p>Edite o arquivo sudoers com o nano utilizando o comando abaixo:</p>
+        <code>sudo env EDITOR=nano visudo</code>
+        <p>Habilite a elevação de privilégio para o grupo <mark>wheel</mark> descomentando a linha deletando o <mark>#</mark> antes dele em:</p>
+        <code>%wheel ALL=(ALL) ALL</code>
+        <!-- Passo 13 Instalação de inicializador -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 13 - Instalação de inicializador</h2>
+        <p>Assim como foi dito na introdução, este guia trata da instalação tanto para BIOS quanto para UEFI, escolha uma das opções abaixo para prosseguir:</p>
+        <h3>Opção A - systemd-boot (UEFI)</h3>
+        <p>Para instalar inicializador systemd-boot utilize o comando abaixo:</p>
+        <code>bootctl --path=/boot install</code>
+        <p>Uma vez que o bootloader foi instalado vamos definir o arquivo <em>arch.conf</em> como o arquivo de inicialização padrão do bootloader com o comando:</p>
+        <code>echo "default arch.conf" >> /boot/loader/loader.conf</code>
+        <p>Para criar o arquivo de inicialização <em>arch.conf</em>, que informa os arquivos a serem carregados e o endereço da partição raiz do sistema podemos fazer de 2 formas:</p>
+        <details class="spoiler" >
+            <summary>Indicando o endereço da partição raiz por Block device names (mais simples / ID genérico)</summary>
+            <p>Crie o arquivo <em>arch.conf</em> com o nano com o comando:</p>
+            <code>nano /boot/loader/entries/arch.conf</code>
+            <p>Edite o arquivo para ficar da seguinte forma:</p>
+            <code>title&emsp;Archlinux<br>linux&emsp;/vmlinuz-linux<br>initrd&emsp;/amd-ucode.img<br>initrd&emsp;/initramfs-linux.img<br>options&emsp;root=/dev/<mark>storageAP1</mark> rw</code>
+        </details>
+        <details class="spoiler" >
+            <summary>Indicando o endereço da partição raiz por UUID (mais complexo / ID único)</summary>
+            <p>Para criar o arquivo da configuração de inicialização do sistema precisamos do identificador único da partição (UUID). Para criar o arquivo já com o identificador único da partição raiz utilize o comando:</p>
+            <code>blkid -s UUID -o value /dev/<mark>storageAP3</mark> >> /boot/loader/entries/arch.conf</code>
+            <p><strong>Observação:</strong> lembre-se de substituir o endereço /dev/<mark>storageAP3</mark> pelo endereço da sua partição raiz.</p>
+            <p>Agora basta acessar o arquivo com o nano com o comando:</p>
+            <code>nano /boot/loader/entries/arch.conf</code>
+            <p>Edite o arquivo para ficar da seguinte forma:</p>
+            <code>title&emsp;Archlinux<br>linux&emsp;/vmlinuz-linux<br>initrd&emsp;/amd-ucode.img<br>initrd&emsp;/initramfs-linux.img<br>options&emsp;root="UUID=<mark>UUID da partição</mark>" rw</code>
+        </details>
+        <p><strong>Observações:</strong></p>
+            <ul>
+                <li><p>Caso você utilize kernel Linux LTS lembre-se de modificar a linha <mark>/vmlinuz-linux</mark> para <mark>/vmlinuz-linux-lts</mark> e <mark>initramfs-linux.img</mark> para <mark>initramfs-linux-lts.img</mark></p></li>
+                <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
+            </ul>
+        <h3>Opção B - GRUB2 (BIOS)</h3>
+        <p>A instalação do GRUB é extremamente simples, basta usar o comando <em>grub-install</em> e selecionar a unidade (e não a partição) em que você deseja instalar como no comando abaixo:</p>
+        <code>grub-install --target=i386-pc /dev/<mark>storageA</mark></code>
+        <p>Uma vez que o GRUB está instalado, use a ferramenta <em>grub-mkconfig</em> para gerar o <em>/boot/grub/grub.cfg</em>:</p>
+        <code>grub-mkconfig -o /boot/grub/grub.cfg</code>
+        <!-- Passo 14 Finalizando a instalação -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Passo 14 - Finalizando a instalação</h2>
+        <p>Com tudo pronto podemos sair do ambiente chroot com o comando:</p>
+        <code>exit</code>
+        <p><strong>Se e somente se</strong> você ativou a swap desligue-a com o comando:</p>
+        <code>swapoff</code>
+        <p>Agora desmontaremos as partições restantes com o comando:</p>
+        <code>umount -a</code>
+        <p>Para desligar o computador e concluir a instalação execute o comando:</p>
+        <code>shutdown now</code>
+        <p><strong>Lembre-se de remover a mídia de instalação assim que o computador desligar!</strong></p>
+        <!-- Pós instalação -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h2>Retoques pós-instalação</h2>
+        <h3>Ativando o TRIM:</h3>
+        <p>Caso você utilize SSD's você pode otimizá-los ativando o serviço TRIM com o comando:</p>
+        <code>systemctl enable fstrim.timer</code>
+        <h3>Habilite cor no pacman:</h3>
+        <p>Para ativar cor no pacman basta acessar o arquivo de configuração do pacman com o nano com o comando:</p>
+        <code>nano /etc/pacman.conf</code>
+        <p>Descomente a linha deletando o <mark>#</mark> antes de <mark>Color</mark></p>
+        <h3>Melhore o desempenho do sistema Linux com noatime:</h3>
+        <p>Acesse o fstab com o nano com o comando:</p>
+        <code>nano /etc/fstab</code>
+        <p>Mude de:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>relatime</mark>,errors=remount-ro 0 1</code>
+        <p>Para:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
+        <p>E em seguida salve o arquivo</p>
+        <h3>Adicionando fontes para compatibilidade, suporte a línguas estrangeiras e símbolos:</h3>
+        <p>Para compatibilidade:</p>
+        <code>sudo pacman -S ttf-dejavu ttf-liberation</code>
+        <p>Para caracteres internacionais:</p>
+        <code>sudo pacman -S adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts</code>
+        <p>Para símbolos:</p>
+        <code>sudo pacman -S noto-fonts noto-fonts-emoji</code>
+        <h3>Habilitar NTP</h3>
+        <code>sudo timedatectl set-ntp true</code>        
+        <h2>Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
+        <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
+        <code>sudo pacman -S nvidia</code>
+        <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
+        <code>sudo pacman -S nvidia-lts</code>
+        <h2>Instalando ambiente gráfico básico com o Cinnamon</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S xorg cinnamon cinnamon-translations lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings gnome-terminal nemo nemo-fileroller nemo-preview nemo-python ffmpegthumbnailer pipewire-pulse</code>
+        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
+        <ul>
+            <li><em>gnome-calculator</em> (Se e somente se você utilizará uma calculadora)</li>
+            <li><em>nemo-share</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
+            <li><em>network-manager-applet</em> (Se e somente se você utilizará o NetworkManager como gerenciador de rede)</li>
+        </ul>
+        <p>Habilite o serviço do LightDM com o comando:</p>
+        <code>systemctl enable lightdm</code>
+        <p>Ao instalar o Cinnamon ele não gera os diretórios padrão de usuário (Downloads, Músicas, Imagens, etc.) , para corrigir isso precisamos instalar o <mark>XDG User Directories</mark> com o comando:</p>
+        <code>sudo pacman -S xdg-user-dirs</code>
+        <p>Para atualizar a lista de diretórios utilize o comando:</p>
+        <code>xdg-user-dirs-update</code>
+        <h2>Instalando ambiente gráfico básico com o KDE</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S plasma-wayland-session plasma-desktop sddm sddm-kcm plasma-nm plasma-pa konsole dolphin ark kdegraphics-thumbnailers ffmpegthumbs powerdevil kdeplasma-addons kde-gtk-config pipewire-pulse</code>
+        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
+        <ul>
+            <li><em>kcalc</em> (Se e somente se você utilizará uma calculadora)</li>
+            <li><em>kdenetwork-filesharing</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
+        </ul>
+        <p>Habilite o serviço do SDDM com o comando:</p>
+        <code>systemctl enable sddm</code>
+        <h2>Instalando ambiente gráfico básico com o Gnome</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S gnome gnome-tweaks</code>
+        <p>Habilite o serviço do GDM com o comando:</p>
+        <code>systemctl enable gdm</code>
+        <h2>Instalando ambiente gráfico básico com o LxQT</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S lxqt oxygen-icons sddm</code>
+        <p>Habilite o serviço do SDDM com o comando:</p>
+        <code>systemctl enable sddm</code>
+        <h2>Instalando ambiente gráfico básico com o XFCE</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
+        <p>Habilite o serviço do LightDM com o comando:</p>
+        <code>systemctl enable lightdm</code>
+        <h2>Instalando o YAY (opcional):</h2>
+        <p>Para facilitar a instalação e manutenção dos pacotes do aur utilizaremos o yay. Logue na sua conta de usuário (não na do root) e instale as dependências necessárias com o comando:</p>
+        <code>sudo pacman -S git base-devel</code>
+        <p>Clone o diretório do github com o comando:</p>
+        <code>git clone https://aur.archlinux.org/yay.git</code>
+        <p>Acesse o diretório do yay com o comando:</p>
+        <code>cd yay</code>
+        <p>Crie o pacote e instale o yay com o comando:</p>
+        <code>makepkg -si</code>
+        <p>Após o fim da instalação utilize o yay para instalar os pacotes necessários desejados com o comando:</p>
+        <code>yay -S <mark>nome do pacote</mark></code>
+        <h2>Instalar Firefox com suporte a localização pt-br</h2>
+        <code>pacman -S firefox firefox-i18n-pt-br</code>
+        <h2>Melhorar renderização de fontes</h2>
+        <!--
+        <h3>1 - Editar o <mark>/etc/fonts/local.conf</mark></h3>
+        <code>sudo nano /etc/fonts/local.conf</code>
+        <p>Adicione as linhas:</p>
+        <pre>
+            <code>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+&lt;fontconfig&gt;
+    &lt;match target="font"&gt;
+        &lt;edit name="antialias" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit name="hinting" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit mode="assign" name="rgba"&gt;
+            &lt;const&gt;rgb&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="hintstyle"&gt;
+            &lt;const&gt;hintslight&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="lcdfilter"&gt;
+            &lt;const&gt;lcddefault&lt;/const&gt;
+        &lt;/edit&gt;
+    &lt;/match&gt;
+&lt;/fontconfig&gt;
+            </code>
+        </pre>
+        <h3>2 - Editar o <mark>~/.Xresources</mark></h3>
+        <p><strong>IMPORTANTE:</strong>Este arquivo deve ser alterado na conta do seu usuário e não como <mark>root</mark>, lembre-se de trocar para a sua conta caso necessário.<br>Uma vez logado na sua conta de usuário edite o arquivo com o comando:</p>
+        <code>nano ~/.Xresources</code>
+        <p>Se as seguintes linhas ainda não estão presentes, adicione ao final do arquivo os seguintes valores:</p>
+        <code>
+            Xft.antialias: 1<br>
+            Xft.hinting: 1<br>
+            Xft.rgba: rgb<br>
+            Xft.hintstyle: hintslight<br>
+            Xft.lcdfilter: lcddefault
+        </code>
+        -->
+        <h3>Crie links simbólicos com algumas das predefinições disponíveis</h3>
+        <p>Utilize os comandos abaixo:</p>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/</code>
+        <h3>Habilite FreeType2</h3>
+        <p>Edite o arquivo <mark>freetype2.sh</mark> com o comando:</p>
+        <code>nano /etc/profile.d/freetype2.sh</code>
+        <p>Descomente a linha:</p>
+        <code>export FREETYPE_PROPERTIES="truetype:interpreter-version=NN"</code>
+        <p>Reconstrua o cache do fontconfig com o comando:</p>
+        <code>sudo fc-cache -fv</code>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 29/03/2023)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

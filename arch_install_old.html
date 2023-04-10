@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação do Arch Linux</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - Arch Linux"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda a instalar o famoso Arch Linux, acredite: Não é tão difícil quanto falam"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://archlinux.org/static/favicon.29302f683ff8.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Instalação do Arch Linux</h1>
+        <img class="responsiva" src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="">
+        <h2>Instalação Alvo</h2>
+        <p>Como o Arch Linux é uma distribuição bastante configurável, toda instalação tem um alvo de como ser finalizada. A instalação alvo dessa documentação trata-se de um sistema em <mark>UEFI</mark> com <mark>systemd-boot</mark>, com raiz em <mark>EXT4</mark> e <mark>iwd</mark>+<mark>resolved</mark> OU <mark>NetworkManager</mark>+<mark>resolved</mark> para interface de rede e utilizando o <mark>PipeWire</mark> para servidor de áudio. Portanto, se você tem um computador que funciona somente com <mark>BIOS</mark> ou queira outro bootloader como o <mark>GRUB</mark> para utilizar dualboot <strong>Não siga essa documentação para particionamento e instalação de bootloader</strong>.</p>
+        <p><strong>⚠️Alerta: Necessário um mínimo de experiência prévia com sistemas Unixlike</strong></p>
+        <h2>// 1 - Configurar teclado</h2>
+        <p>Antes de digitar qualquer comando é necessário que o teclado esteja configurado corretamente no padrão ABNT2, para isso utilize o comando:</p>
+        <code>loadkeys br-abnt2</code>
+        <h2>// 1B - Mudar a fonte da padrão do terminal (opcional)</h2>
+        <p>Eu frequentemente tenho que instalar o ArchLinux num laptop e a fonte fica pequena demais, para alterar para uma fonte mais agradável eu utilizo o comando:</p>
+        <code>setfont ter-124b</code>
+        <h2>// 2 - Configurar rede</h2>
+        <h3>para cabo Ethernet</h3>
+        <p>Caso você utilize um cabo de rede basta verificar aquisição de um endereço IP válido e conexão com a rede através dos comandos:</p>
+        <code>ip address show</code>
+        <p>E</p>
+        <code>ping google.com</code>
+        <p>Se a conexão com o Google não teve falhas você pode prosseguir para a edição de mirrors</p>
+        <h3>para Wifi</h3>
+        <p>Caso você esteja utilizando uma conexão sem fio é necessário utilizar o <mark>iwd</mark> para fazer a conexão, para iniciá-lo execute:</p>
+        <code>iwctl</code>
+        <p>Agora é necessário listar os dispositivos de conexão sem fio que estão disponíveis, para isso utilize o comando:</p>
+        <code>device list</code>
+        <p>Uma vez que você sabe qual é o nome do dispositivo responsável pela conexão sem fio no seu computador utilize os comandos abaixo para listar as redes disponíveis substituindo <mark>device</mark> para o nome do seu dispositivo:</p>
+        <code>station <mark>device</mark> scan</code>
+        <code>station <mark>device</mark> get-networks</code>
+        <p>Depois que você achou a rede Wifi basta utilizar o comando abaixo para se conectar substituindo <mark>SSID</mark> pelo nome da sua rede:</p>
+        <code>station <mark>device</mark> connect <mark>SSID</mark></code>
+        <p>Assim que se conectar você pode sair do programa e continuar para a instalação através do comando:</p>
+        <code>exit</code>
+        <p>Verifique a aquisição de um endereço IP válido e conexão com a rede através dos comandos</p>
+        <code>ip addr show</code>
+        <p>E</p>
+        <code>ping google.com</code>
+        <p>Se a conexão com o Google não teve falhas você pode prosseguir para a edição de mirrors</p>
+        <h2>// 3 - Editar o arquivo de mirrors</h2>
+        <p>Existem diversas maneiras de editar o arquivo de mirrors e habilitar apenas os servidores brasileiros, mas a que geralmente uso é através do comando de substituição do <mark>vim</mark>, você pode abrir o arquivo de mirrors no vim com o seguinte comando:</p>
+        <code>vim /etc/pacman.d/mirrorlist</code>
+        <p>Com o vim aberto, escreva o comando abaixo para comentar e desabilitar todos os servidores:</p>
+        <code>:%s/Server/#Server/g</code>
+        <p>Uma vez que todos os servidores foram comentados, utilize as setas do teclado e o delete para apagar o <mark>#</mark> dos servidores brasileiros. Quando finalizar utilize o comando abaixo para salvar e sair:</p>
+        <code>:wq</code>
+        <h2>// 4 - Atualizar pacotes</h2>
+        <p>Antes de interagir qualquer outro programa do sistema é interessante atualizar os pacotes com o seguinte comando:</p>
+        <code>pacman -Syy</code>
+        <h2>// 5 - Particionamento</h2>
+        <p>Antes de começar qualquer particionamento é importante ter certeza de qual disco vamos alterar, para listar os discos da máquina utilize o comando:</p>
+        <code>fdisk -l</code>
+        <p>Uma vez que você tem a certeza de qual disco vai alterar e instalar o sistema utilize o comando abaixo para iniciar o particionamento, lembre-se de substituir o <mark>x</mark> em <mark>sdx</mark> pela letra do seu disco:</p>
+        <h3><strong>ADENDO:</strong> Instalação para <em>BIOS</em> com o <em>GRUB</em></h3>
+        <p>Alguns amigos estavam utilizando esse tutorial para instalação do Arch em computadores que utilizam BIOS e queriam que eu colocasse aqui um passo opcional para formatação para esse situação. Então caso você utilize BIOS utilize os passos imediatamente abaixo e ignore a sessão <em>EFI{}</em>, e caso você utilize EFI ignore os comandos abaixo e pule para a sessão <em>EFI{}</em>.</p>
+        <code>cfdisk /dev/sdx</code>
+        <p>Com as setas ↑↓ (cima e baixo) você seleciona as partiçoes e com as setas ←→ (esquerda e direita) você seleciona as ações, <em>Enter</em> para confirmar.</p>
+        <p>Coloque o cursor sobre as partições que deseja excluir e depois selecione <em>[ Delete ]</em> para remover as partições.</p>
+        <p>Coloque o cursor sobre <em>Free Space</em> depois selecione <em>[ New ]</em> para criar a partição raiz do sistema, digite o tamanho desejado ou apenas tecle <em>Enter</em> para usar todo o espaço. Essa partição deve ser do tipo <em>[ Primary ]</em>.</p>
+        <p>Coloque o cursor sobre a partição raiz que você acabou de criar e selecione a opção <em>[ Type ]</em>, para a raiz o tipo deve ser <em>83 Linux</em>.</p>
+        <p><strong>Opcional para criação de SWAP:</strong> Coloque o cursor sobre <em>Free Space</em> depois selecione <em>[ New ]</em> para criar a swap, digite o tamanho desejado e aperte <em>Enter</em>. Essa partição deve ser do tipo <em>[ Primary ]</em>.</p>
+        <p>Coloque o cursor sobre a partição SWAP que você acabou de criar e selecione a opção <em>[ Type ]</em>, para a raiz o tipo deve ser <em>82 Linux Swap</em>.</p>
+        <p>Por fim selecione a opção <em>[ Write ]</em> e confirme digitando <em>yes</em> e teclando <em>Enter</em>.</p>
+        <h3><em> EFI Início {</em></h3>
+        <code>gdisk /dev/sdx</code>
+	<p><strong>*Obs:</strong> Caso você queira realizar o particionamento de maneira mais gráfica você pode utilizar o comando <mark>cgdisk /dev/sdx</mark>.</p>
+	<p>Já com o <mark>gdisk</mark> aberto no disco selecionado criaremos uma nova tabela de partição em <mark>GPT</mark> com o comando:</p>
+        <code>o</code>
+        <h4>Partição EFI</h4>
+        <p>Antes de mais nada é importante criarmos a partição <mark>EFI</mark>, o comando para criar uma nova partição é:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o término da partição e delimite o seu tamanho, por desencargo de consciência utilizaremos <mark>512MiB</mark>, sendo assim deveremos utilizar o comando <mark>+512M</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal ficará da seguinte forma:</p>
+        <code>last sector: +512M</code>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o tipo da partição, utilizaremos o tipo <mark>ESP</mark>, sendo assim deveremos utilizar o comando <mark>ef00</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal ficará da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): ef00</code>
+        <h4>Partição de swap (opcional)</h4>
+        <p>Digite o comando abaixo para criar uma nova partição:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o término da partição e delimite o seu tamanho, o tamanho recomendado dessa partição varia conforme o quanto de memória ram tem no seu computador e se você vai ou não utilizar hibernação. Verifique a tabela abaixo e substitua os valores de acordo com o seu caso, no meu caso utilizarei <mark>3G</mark> portanto devo utilizar o comando <mark>+3G</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal ficará da seguinte forma:</p>
+        <code>last sector: +3G</code>
+        <figure class="wp-block-table tg">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>RAM</th>
+                        <th>Swap (sem hibernação)</th>
+                        <th>&nbsp;Swap (com hibernação)</th>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;256MB</td>
+                        <td>&nbsp;512MB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;512MB</td>
+                        <td>&nbsp;1GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;2GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;1GB</td>
+                        <td>&nbsp;3GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;5GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;6GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;2GB</td>
+                        <td>&nbsp;8GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;11GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;12GB</td>
+                        <td>&nbsp;3GB</td>
+                        <td>&nbsp;15GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;16GB</td>
+                        <td>&nbsp;4GB</td>
+                        <td>&nbsp;20GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;24GB</td>
+                        <td>&nbsp;5GB</td>
+                        <td>&nbsp;29GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;32GB</td>
+                        <td>&nbsp;6GB</td>
+                        <td>&nbsp;38GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;64GB</td>
+                        <td>&nbsp;8GB</td>
+                        <td>&nbsp;72GB</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;128GB</td>
+                        <td>&nbsp;11GB</td>
+                        <td>&nbsp;139GB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o tipo da partição, para a partição <mark>swap</mark> deveremos utilizar o comando <mark>8200</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal ficará da seguinte forma:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300): 8200</code>
+        <h4>Para / (ou para /home)</h4>
+        <p>Digite o comando abaixo para criar uma nova partição:</p>
+        <code>n</code>
+        <p>O sistema irá exibir a seguinte linha para que você escolha o número da partição:</p>
+        <code>partition number: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o início da partição:</p>
+        <code>first sector: default</code>
+        <p>Apenas tecle <mark>Enter</mark></p>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o término da partição e delimite o seu tamanho, caso que você queira que essa partição vá até o fim do disco apenas tecle <mark>Enter</mark>, caso você queira que ela tenha <mark>100G</mark> você deve utilizar o comando <mark>+100G</mark> e teclar <mark>Enter</mark> de maneira que o diálogo no terminal ficará da seguinte forma:</p>
+        <code>last sector: +100G</code>
+        <p>Logo em seguida o sistema irá exibir a seguinte linha para que você escolha o tipo da partição, utilizaremos o tipo <mark>8300</mark>, seja para <mark>/</mark> ou <mark>/home</mark>, o tipo <mark>8300</mark> já é o padrão portanto basta teclar <mark>Enter</mark> no diálogo abaixo:</p>
+        <code>Hex code or GUID (L to show codes, Enter = 8300):</code>
+        <h4>Gravar e sair</h4>
+        <p>Para gravar as alterações da tabela de partição e sair do programa utilize o comando:</p>
+        <code>w</code>
+        <h3><em>} EFI Fim</em></h3>
+        <h2>// 6 - Verificar partições</h2>
+        <p>Antes de prosseguir com a formatação e montagem das partições é importante ter certeza de que a tabela está correta, para listar as partições de disco utilize o comando abaixo:</p>
+        <code>lsblk</code>
+        <h2>// 7 - Formatar partições</h2>
+        <p>Uma vez que a tabela de partição já foi terminada é importante formatarmos cada partição para o seu devido formato de arquivos, a primeira partição a ser formatada será a partição <mark>ESP</mark>, ela deve ser formatada em formato <mark>FAT32</mark>. Considerando que a sua partição <mark>ESP</mark> é a <mark>/dev/sda1</mark> utilize o comando abaixo para formatar (OU substitua <mark>/dev/sda1</mark> para o devido endereço da sua tabela de partições):</p>
+        <code>mkfs.fat -F32 /dev/sda1</code>
+        <p>(considerando o seu disco como /dev/sda e 1 como o número da partição efi)</p>
+        <p>A segunda partição a ser formatada será a partição <mark>swap</mark> caso você a tenha feito, ela deve ser formatada em formato <mark>swap</mark>. Considerando que a sua partição <mark>swap</mark> é a <mark>/dev/sda2</mark> utilize o comando abaixo para formatar (OU substitua <mark>/dev/sda2</mark> para o devido endereço da sua tabela de partições):</p>
+        <code>mkswap /dev/sda2</code>
+        <p>(caso use partição swap e considerando o seu disco como /dev/sda e 2 como o número da partição swap)</p>
+        <p>Por fim formataremos a partição raiz do sistema <mark>/</mark>, ela deve ser formatada em formato <mark>EXT4</mark>. Considerando que a sua partição <mark>/</mark> é a <mark>/dev/sda3</mark> utilize o comando abaixo para formatar (OU substitua <mark>/dev/sda3</mark> para o devido endereço da sua tabela de partições):</p>
+        <code>mkfs.ext4 /dev/sda3</code>
+        <p>(considerando o seu disco como /dev/sda e 3 como o número da partição raiz, caso você tenha feito uma partição <mark>/home</mark> ela deve ser formatada com o mesmo comando <mark>mkfs.ext4 /dev/sdax</mark> substituindo o <mark>x</mark> pela devida numeração na sua tabela de partições)</p>
+        <h2>// 8 - Montar partições</h2>
+        <p>Uma vez que a tabela de partições está pronta e as partições já estão com os seus devidos formatos de arquivo agora falta montá-las nos seus devidos endereços para proseguirmos com a instalação. Para montar a partição raíz do sistema (<mark>/</mark>) utilize o comando:</p>
+        <code>mount /dev/sdxy /mnt</code>
+        <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>)</p>
+        <p>Se e somente se você tenha feito uma partição separada para o diretório <mark>/home</mark> você deve criar o diretório <mark>/home</mark> com o comando:</p>
+        <code>mkdir /mnt/home</code>
+        <p>E montá-la partição com o comando:</p>
+        <code>mount /dev/sdxy /mnt/home</code>
+        <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/home</mark>)</p>
+        <p>Se e somente se você tenha feito uma partição dedicada para <mark>swap</mark> você deve ativá-la com o comando:</p>
+        <code>swapon /dev/sdxy</code>
+        <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para a partição <mark>swap</mark>)</p>
+        <h3><strong>ADENDO:</strong> Instalação para <em>BIOS</em> com o <em>GRUB</em></h3>
+        <p>Alguns amigos estavam utilizando esse tutorial para instalação do Arch em computadores que utilizam BIOS e queriam que eu colocasse aqui um passo opcional para montagem para esse situação. Então caso você utilize EFI utilize os passos imediatamente abaixo</em>, e caso você utilize BIOS ignore os comandos abaixo e pule para o <em>PASSO 9 - Instalar Sistema</em>.</p>
+        <h3><em> EFI Início {</em></h3>
+        <p>Agora precisamos criar o diretório de inicialização, para isso utilize o comando:</p>
+        <code>mkdir /mnt/boot</code>
+        <p>E monte-o com o comando:</p>
+        <code>mount /dev/sdxy /mnt/boot</code>
+        <p>(altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>ESP</mark>)</p>
+        <h3><em> } EFI Fim</em></h3>
+        <h2>// 9 - Instalar sistema</h2>
+        <p>Uma vez que todos os diretórios foram criados e montados só falta agora instalar o sistema através do <mark>pacstrap</mark>, no meu caso utilizarei uma instalação mínima com o kernel <mark>linux</mark> padrão, wifi com o <mark>iwd</mark>, com o <mark>nano</mark> para editor de texto, updates de microcódigo com o pacote <mark>amd-ucode</mark> e elevação de privilégios com o <mark>sudo</mark>. Então esse vai ser o MEU comando de instalação:</p>
+        <code>pacstrap /mnt base linux linux-firmware iwd nano amd-ucode sudo</code>
+        <p>Porém:</p>
+        <ul>
+            <li><p>Caso você queira utilizar um kernel lts você pode substituir o pacote <mark>linux</mark> por <mark>linux-lts</mark>;</p></li>
+            <li>Caso você utilize cabo de rede ao invés de wifi você deve substituir o pacote <mark>iwd</mark> por <mark>networkmanager</mark>;</p></li>
+            <li>Caso você utilize processadores Intel ao invés de AMD você deve substituir o pacote <mark>amd-ucode</mark> por <mark>intel-ucode</mark>;</p></li>
+        </ul>
+        <h3><strong>ADENDO:</strong> Instalação para <em>BIOS</em> com o <em>GRUB</em></h3>
+        <p>Alguns amigos estavam utilizando esse tutorial para instalação do Arch em computadores que utilizam BIOS e queriam que eu colocasse aqui um passo opcional para instalação de sistema para esse situação. Então <strong>se e somente se</strong> você utiliza BIOS adicione <mark>grub</mark> aos pacotes para serem instalados.</p>
+        <h2>// 10 - Gerar FSTAB</h2>
+        <p>Já com o sistema instalado podemos gerar o arquivo da tabela do sistema de arquivos com o comando:</p>
+        <code>genfstab -U /mnt >> /mnt/etc/fstab</code>
+        <p>Para verificar o arquivo da tabela do sistema de arquivos utilize o comando:</p>
+        <code>cat /mnt/etc/fstab</code>
+        <h2>//11 - CHROOT para a instalação</h2>
+        <p>Com a tabela pronta e verificada acessaremos a instalação com o comando:</p>
+        <code>arch-chroot /mnt</code>
+        <h2>//11B - Criar swapfile (OPCIONAL)</h2>
+        <p>Se e somente se você não tenha feito partição dedicada para swap mas ainda deseje utilizar swap através de arquivo swap, aloque o espaço de arquivo swap com o comando:</p>
+        <code>fallocate -l 3GB /swapfile</code>
+        <p>(Considerando que você queira utilizar <mark>3GiB</mark> de swap, altere o <mark>3</mark> para a quantia de swap desejada)</p>
+        <p>Mude a permissão do swapfile com o comando:</p>
+        <code>chmod 600 /swapfile</code>
+        <p>Configure o arquivo como área para troca de swap com o comando:</p>
+        <code>mkswap /swapfile</code>
+        <p>Ative a swap com o comando:</p>
+        <code>swapon /swapfile</code>
+        <p>Agora devemos adicionar esse arquivo como parte da tabela de sistema de arquivos, para acessar o arquivo da tabela de sistema de arquivos utilize o comando:</p>
+        <code>nano /etc/fstab</code>
+        <p>E ao final do arquivo adicione a linha:</p>
+        <code>/swapfile    	none    	swap    	defaults    	0    	0</code>
+        <h2>//12 - Configurar o sistema instalado para teclado ABNT2</h2>
+        <code>echo "KEYMAP=br-abnt2" >> /etc/vconsole.conf</code>
+        <h2>//13 - Setar timezone e ajustar relógio do sistema</h2>
+        <code>ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime</code>
+        <code>hwclock --systohc</code>
+        <h2>//14 - Setar locale</h2>
+        <p>Utilize o nano para acessar o arquivo de configuração de localização com o comando:</p>
+        <code>nano /etc/locale.gen</code>
+        <p>Habilite a localização <mark>pt_BR.UTF-8 UTF-8</mark> descomentando a linha deletando o <mark>#</mark> antes dele e após isso gere os arquivos de localização com o comando:</p>
+        <code>locale-gen</code>
+        <p>Para setar a configuração padrão de localização do sistema utilize o comando:</p>
+        <code>echo "LANG=pt_BR.UTF-8" >> /etc/locale.conf</code>
+        <h2>//15 - Configurar o arquivo de hosts da instalação</h2>
+        <p>Utilize o comando abaixo para selecionar o nome do host substituindo <mark>meuhostname</mark> para o nome de host desejado:</p>
+        <code>echo meuhostname >> /etc/hostname</code>
+        <p>Logo em seguida edite o arquivo de hosts com o nano com o comando:</p>
+        <code>nano /etc/hosts</code>
+        <p>Nesse arquivo adicione as linhas abaixo <mark>meuhostname</mark> para o nome de host desejado:</p>
+        <code>127.0.0.1&emsp;localhost<br>::1&emsp;localhost<br>127.0.1.1&emsp;meuhostname.localdomain&emsp;meuhostname</code>
+        <h2>//16 - Adicionar senha do administrador</h2>
+        <p>Para definir a senha de administrador utilize o comando:</p>
+        <code>passwd</code>
+        <h2>//17 - Instalar bootloader</h2>
+        <h3><strong>ADENDO:</strong> Instalação para <em>BIOS</em> com o <em>GRUB</em></h3>
+        <p>Alguns amigos estavam utilizando esse tutorial para instalação do Arch em computadores que utilizam BIOS e queriam que eu colocasse aqui um passo opcional para instalação de um bootloader para esse situação. Então caso você utilize BIOS utilize os passos imediatamente abaixo e ignore a sessão <em>Systemd-boot{}</em>, e caso você utilize EFI ignore os comandos abaixo e pule para a sessão <em>Systemd-boot{}</em>.</p>
+        <code>pacman -S grub<br>grub-install --target=i386-pc /dev/sd<em>X</em></code>
+        <p><strong>Atenção!</strong> Repare que o alvo de instalação é <em>/dev/sdX</em> e não <em>/dev/sdXY</em>, ou seja, você vai selecionar <em>apenas o disco</em> <strong>e não o disco e a partição!</strong></p>
+        <h3><em>Systemd-boot início {</em></h3>
+        <p>Para instalar o bootloader systemd-boot utilize o comando:</p>
+        <code>bootctl --path=/boot install</code>
+        <p>Uma vez que o bootloader foi instalado vamos definir o arquivo <em>arch.conf</em> como o arquivo de inicialização padrão do bootloader com o comando:</p>
+        <code>echo "default arch.conf" >> /boot/loader/loader.conf</code>
+        <p>Então precisamos agora criar o arquivo da configuração de inicialização do sistema, mas antes precisamos do identificador da partição. Para criar o arquivo já com o identificador da partição utilize o comando:</p>
+        <code>blkid -s UUID -o value /dev/<mark>sdxy</mark> >> /boot/loader/entries/arch.conf</code>
+        <p>Agora basta acessar o arquivo com o nano com o comando:</p>
+        <code>nano /boot/loader/entries/arch.conf</code>
+        <p>Edite o arquivo para ficar da seguinte forma:</p>
+        <code>title&emsp;Archlinux<br>linux&emsp;/vmlinuz-linux<br>initrd&emsp;/amd-ucode.img<br>initrd&emsp;/initramfs-linux.img<br>options&emsp;root="UUID=<mark>UUID da partição</mark>" rw</code>
+        <p>Observações:</p>
+        <ul>
+            <li><p>Caso você utilize kernal lts lembre-se de modificar a linha <mark>/vmlinuz-linux</mark> para <mark>/vmlinuz-linux-lts</mark> e <mark>initramfs-linux.img</mark> para <mark>initramfs-linux-lts.img</mark></p></li>
+            <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
+            <li><p>Em <mark>options root=/dev/sdxy rw</mark> altere o <mark>x</mark> para a letra do disco e o <mark>y</mark> para o número da partição <mark>/</mark>;</p></li>
+        </ul>
+        <h3><em>} Systemd-boot Fim</em></h3>
+        <h2>//18 - Habilitar e configurar serviços de rede</h2>        
+        <h3>Para Wifi</h3>
+        <p>Caso você tenha optado por utilizar Wifi habilite os serviços <mark>iwd</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
+        <code>systemctl enable iwd.service</code><p></p>
+        <code>systemctl enable systemd-resolved.service</code>
+        <p>Agora devemos criar a pasta e o arquivo de configuração do iwd, para acessar o arquivo pelo nano utilize o comando:</p>
+        <code>mkdir /etc/iwd</code>
+        <code>nano /etc/iwd/main.conf</code>
+        <p>Desde a versão 0.19, o iwd pode atribuir endereços IP e configurar rotas usando um cliente DHCP integrado, para habilitar essa configuração adicione as linhas:</p></p>
+        <code>
+            [General]<br>
+            EnableNetworkConfiguration=true
+        </code>
+        <p>Para habilitar o systemd-resolved adicione as linhas:</p>
+        <code>[Network]<br>
+            NameResolvingService=systemd
+        </code>
+        <p>Desde a versão 1.10, o iwd suporta IPv6, mas está desabilitado por padrão. Caso queira habilitá-lo ainda nas opções de <mark>[Network]</mark> adicione a linha:</p>
+        <code>EnableIPv6=true</code>
+        <h3>Para cabo Ethernet</h3>
+        <p>Caso você tenha optado por utilizar cabo Ethernet habilite os serviços <mark>NetworkManager</mark> e <mark>systemd-resolved</mark> com os comandos:</p>
+        <code>systemctl enable NetworkManager.service</code>
+        <code>systemctl enable systemd-resolved.service</code>
+        <h3>Configurar o DNS</h3>
+        <p>Para fornecer resolução de DNS para softwares que lêem o <em>/etc/resolv.conf</em> crie o link simbólico com o comando:</p>
+        <code>ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</code>
+        <p>Caso queira configurar manualmente os endereços para DNS crie o diretório <mark>/etc/systemd/resolved.conf.d/</mark> para os arquivos de configuração com o comando:</p>
+        <code>mkdir /etc/systemd/resolved.conf.d</code>
+        <p>Em <mark>/etc/systemd/resolved.conf.d/dns_servers.conf</mark> adicione os seguintes endereços para o <mark>OpenDNS</mark> (ou substitua para os endereços que você preferir):</p>
+        <code>[Resolve]<br>DNS= 208.67.222.222 208.67.220.220 2620:119:35::35 2620:119:53::53</code>
+        <p>E caso não queira nenhum servidor de fallback basta acessar <mark>/etc/systemd/resolved.conf.d/fallback_dns.conf</mark> e adicionar:</p>
+        <code>[Resolve]<br>FallbackDNS=</code>
+        <p>Reinicie o serviço <mark>resolved</mark> com os comando:</p>
+        <code>systemctl restart systemd-resolved.service</code>
+        <p>Verifique o status do DNS com os comandos:</p>
+        <code>resolvectl status<br>systemd-resolve --status</code>
+        <h4>NOTA:</h4>
+        <p>Essa configuração foi escolhida focando por mais se encaixar no meu perfil de uso e não necessariamente em facilidade de uso. Utilizo o <mark>iwd</mark> por basicamente ser um sucessor do <mark>wpa_supplicant</mark> e já ter cliente DHCP integrado, sendo assim basta a integração com o <mark>resolved</mark>. E no caso do <mark>NetworkManager</mark> por também ter cliente DHCP integrado, altíssima compatibilidade com outros pacotes e ser o <i>go to option</i> da maioria das distribuições.</p>
+        <h2>//19 - Criar usuário e habilitar elevação de privilégios com sudo</h2>
+        <p>Para adicionar um usuário que possa utilizar sudo utilize o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo nome de usuário que você deseja:</p>
+        <code>useradd -mG wheel seunomedeusuário</code>
+        <p>Para configurar a senha da conta desse usuário use o comando abaixo substituindo o <mark>seunomedeusuário</mark> pelo seu nome de usuário:</p>
+        <code>passwd seunomedeusuário</code>
+        <p>Para editar o arquivo sudoers com o nano utilize o comando abaixo:</p>
+        <code>sudo env EDITOR=nano visudo</code>
+        <p>Habilite a elevação de privilégio para o grupo <mark>wheel</mark> descomentando a linha deletando o <mark>#</mark> antes dele em:</p>
+        <code>%wheel ALL=(ALL) ALL</code>
+        <h2>//20 - Finalizando a instalação</h2>
+        <p>Primeiramente precisamos sair do ambiente chroot com o comando:</p>
+        <code>exit</code>
+        <p>Se e somente se você ativou swap desligue-a com o comando:</p>
+        <code>swapoff</code>
+        <p>Agora desmontaremos as partições restantes com o comando:</p>
+        <code>umount -a</code>
+        <p>Para reiniciar o computador e concluir a instalação execute o comando:</p>
+        <code>reboot</code>
+        <p>Lembre-se de remover a mídia de instalação assim que o computador desligar</p>
+        <h2>//Retoques pós-instalação</h2>
+        <h3>Ativando o TRIM:</h3>
+        <p>Caso você utilize SSD's você pode otimizá-los ativando o serviço TRIM com o comando:</p>
+        <code>systemctl enable fstrim.timer</code>
+        <h3>Habilite cor no pacman:</h3>
+        <p>Para ativar cor no pacman basta acessar o arquivo de configuração do pacman com o nano com o comando:</p>
+        <code>nano /etc/pacman.conf</code>
+        <p>Descomente a linha deletando o <mark>#</mark> antes de <mark>Color</mark></p>
+        <h3>Habilite noatime:</h3>
+        <p>Acesse o fstab com o nano com o comando:</p>
+        <code>nano /etc/fstab</code>
+        <p>Mude de:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>relatime</mark>,errors=remount-ro 0 1</code>
+        <p>Para:</p>
+        <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
+        <p>E em seguida salve o arquivo</p>
+        <h3>Adicionando fontes para compatibilidade, suporte a línguas estrangeiras e símbolos:</h3>
+        <p>Para compatibilidade:</p>
+        <code>sudo pacman -S ttf-dejavu ttf-liberation</code>
+        <p>Para caracteres internacionais:</p>
+        <code>sudo pacman -S adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts</code>
+        <p>Para símbolos:</p>
+        <code>sudo pacman -S noto-fonts noto-fonts-emoji</code>
+        <h3>Habilitar NTP</h3>
+        <code>sudo timedatectl set-ntp true</code>        
+        <h2>//Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
+        <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
+        <code>sudo pacman -S nvidia</code>
+        <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
+        <code>sudo pacman -S nvidia-lts</code>
+        <h2>//Instalando ambiente gráfico básico com o Cinnamon</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S xorg cinnamon cinnamon-translations lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings gnome-terminal nemo nemo-fileroller nemo-preview nemo-python ffmpegthumbnailer pipewire-pulse</code>
+        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
+        <ul>
+            <li><em>gnome-calculator</em> (Se e somente se você utilizará uma calculadora)</li>
+            <li><em>nemo-share</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
+            <li><em>network-manager-applet</em> (Se e somente se você utilizará o NetworkManager como gerenciador de rede)</li>
+        </ul>
+        <p>Habilite o serviço do LightDM com o comando:</p>
+        <code>systemctl enable lightdm</code>
+        <p>Ao instalar o Cinnamon ele não gera os diretórios padrão de usuário (Downloads, Músicas, Imagens, etc.) , para corrigir isso precisamos instalar o <mark>XDG User Directories</mark> com o comando:</p>
+        <code>sudo pacman -S xdg-user-dirs</code>
+        <p>Para atualizar a lista de diretórios utilize o comando:</p>
+        <code>xdg-user-dirs-update</code>
+        <h2>//Instalando ambiente gráfico básico com o KDE</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S plasma-wayland-session plasma-desktop sddm sddm-kcm plasma-nm plasma-pa konsole dolphin ark kdegraphics-thumbnailers ffmpegthumbs powerdevil kdeplasma-addons kde-gtk-config pipewire-pulse</code>
+        <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
+        <ul>
+            <li><em>kcalc</em> (Se e somente se você utilizará uma calculadora)</li>
+            <li><em>kdenetwork-filesharing</em> (Se e somente se você utilizará compartilhamento de arquivos)</li>
+        </ul>
+        <p>Habilite o serviço do SDDM com o comando:</p>
+        <code>systemctl enable sddm</code>
+        <h2>//Instalando ambiente gráfico básico com o Gnome</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S gnome gnome-tweaks</code>
+        <p>Habilite o serviço do GDM com o comando:</p>
+        <code>systemctl enable gdm</code>
+        <h2>//Instalando ambiente gráfico básico com o LxQT</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S lxqt oxygen-icons sddm</code>
+        <p>Habilite o serviço do SDDM com o comando:</p>
+        <code>systemctl enable sddm</code>
+        <h2>//Instalando ambiente gráfico básico com o XFCE</h2>
+        <p>Utilize o comando:</p>
+        <code>pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
+        <p>Habilite o serviço do LightDM com o comando:</p>
+        <code>systemctl enable lightdm</code>
+        <h2>//Instalando o YAY (opcional):</h2>
+        <p>Para facilitar a instalação e manutenção dos pacotes do aur utilizaremos o yay. Logue na sua conta de usuário (não na do root) e instale as dependências necessárias com o comando:</p>
+        <code>sudo pacman -S git base-devel</code>
+        <p>Clone o diretório do github com o comando:</p>
+        <code>git clone https://aur.archlinux.org/yay.git</code>
+        <p>Acesse o diretório do yay com o comando:</p>
+        <code>cd yay</code>
+        <p>Crie o pacote e instale o yay com o comando:</p>
+        <code>makepkg -si</code>
+        <p>Após o fim da instalação utilize o yay para instalar os pacotes necessários desejados com o comando:</p>
+        <code>yay -S <mark>nome do pacote</mark></code>
+        <h2>//Instalar Firefox com suporte a localização pt-br</h2>
+        <code>pacman -S firefox firefox-i18n-pt-br</code>
+        <h2>//Melhorar renderização de fontes</h2>
+        <!--
+        <h3>1 - Editar o <mark>/etc/fonts/local.conf</mark></h3>
+        <code>sudo nano /etc/fonts/local.conf</code>
+        <p>Adicione as linhas:</p>
+        <pre>
+            <code>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+&lt;fontconfig&gt;
+    &lt;match target="font"&gt;
+        &lt;edit name="antialias" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit&gt;
+        &lt;edit name="hinting" mode="assign"&gt;
+            &lt;bool&gt;true&lt;/bool&gt;
+        &lt;/edit mode="assign" name="rgba"&gt;
+            &lt;const&gt;rgb&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="hintstyle"&gt;
+            &lt;const&gt;hintslight&lt;/const&gt;
+        &lt;/edit&gt;
+        &lt;edit mode="assign" name="lcdfilter"&gt;
+            &lt;const&gt;lcddefault&lt;/const&gt;
+        &lt;/edit&gt;
+    &lt;/match&gt;
+&lt;/fontconfig&gt;
+            </code>
+        </pre>
+        <h3>2 - Editar o <mark>~/.Xresources</mark></h3>
+        <p><strong>IMPORTANTE:</strong>Este arquivo deve ser alterado na conta do seu usuário e não como <mark>root</mark>, lembre-se de trocar para a sua conta caso necessário.<br>Uma vez logado na sua conta de usuário edite o arquivo com o comando:</p>
+        <code>nano ~/.Xresources</code>
+        <p>Se as seguintes linhas ainda não estão presentes, adicione ao final do arquivo os seguintes valores:</p>
+        <code>
+            Xft.antialias: 1<br>
+            Xft.hinting: 1<br>
+            Xft.rgba: rgb<br>
+            Xft.hintstyle: hintslight<br>
+            Xft.lcdfilter: lcddefault
+        </code>
+        -->
+        <h3>Crie links simbólicos com algumas das predefinições disponíveis</h3>
+        <p>Utilize os comandos abaixo:</p>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/</code>
+        <code>sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/</code>
+        <h3>Habilite FreeType2</h3>
+        <p>Edite o arquivo <mark>freetype2.sh</mark> com o comando:</p>
+        <code>nano /etc/profile.d/freetype2.sh</code>
+        <p>Descomente a linha:</p>
+        <code>export FREETYPE_PROPERTIES="truetype:interpreter-version=NN"</code>
+        <p>Reconstrua o cache do fontconfig com o comando:</p>
+        <code>sudo fc-cache -fv</code>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 29/03/2023)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

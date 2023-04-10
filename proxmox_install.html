@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação do Proxmox</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - Proxmox"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda a instalar o Proxmox e entender o básico de virtualização"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="https://www.proxmox.com/templates/yoo_nano2/favicon.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+	<main id="main-area">
+        	<h1>Instalação do Proxmox</h1>
+        	<h2>Introdução</h2>
+            <p>Se você já teve que usar o VirtualBox para virtualizar alguma coisa deve ter notado que existe uma perda de desempenho bem grande, sem contar limitações com relação a arquitetura e por aí vai. Você já teve mais de um sistema no seu computador? Um deles era o Windows? Então você certamente já perdeu uma entrada de sistema pelo menos uma vez. E se pudessemos gerenciar diversos sistemas numa mesma máquina de maneira que cada sistema rode isoladamente em uma virtualização sem muita perda de desempenho? Para essas e muitas outras situações existe o <em>Proxmox</em>, o Proxmox é uma plataforma Open-Source de gerenciamento de virtualização de Tipo 1, nesse tipo de virtualização o hypervisor é apenas um intermediário para o funcionamento da virtualização, pois ele tem acesso direto ao hardware.</p>
+            <p>Por mais ou menos 1% de perda de desempenho você pode facilitar absurdamente o deploy de sistemas, com direito até mesmo a possibilidade de se rodar um macOS... É uma excelente oferta! Então, vamos começar?</p>
+            <p><strong>Obviamente você precisa de um sistema compatível com esse ambiente de virtualização e com as opções de virtualização de ambiente habilitadas na bios né duh (VT / AMD-V / SVM)!</strong></p>
+            <p><strong>Um conhecimento básico de linhas de comando de Linux é necessário para a manutenção do sistema!</strong></p>
+            <img class="responsiva" src="assets/images/proxmox1.jpg" alt="">
+            <p>Essa é a tela inicial da instalação, aqui basta selecionar <em>Install Proxmox VE</em></p>
+            <img class="responsiva" src="assets/images/proxmox2.jpg" alt="">
+            <p>Termos de uso... Leia tudo (aham, vai mesmo) e depois clique em <em>I agree</em></p>
+            <img class="responsiva" src="assets/images/proxmox3.jpg" alt="">
+            <p>Na tela de alvo de instalação do Proxmox Virtual Environment, selecione o disco que você deseja instalar o Proxmox (<strong>sim, eu não disse partição, eu disse disco, o proxmox vai utilizar um disco inteiro por padrão então toma cuidado</strong>), vá em <em>options</em> e depois mude o <em>Filesystem</em> para <em>XFS</em>. Depois disso <em>OK</em> e <em>Next</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox4.jpg" alt="">
+            <p>Selecione o país, fuso-horário e layout de teclado e depois clique em <em>Next</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox5.jpg" alt="">
+            <p>Insira uma senha segura (<strong>e que você lembre ou pelo menos anote</strong>) e depois clique em <em>Next</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox6.jpg" alt="">
+            <p>Selecione a interface <em>Ethernet</em> (mais conhecido como interface de cabo de rede) e atribua um IP local válido e fixo.</p>
+            <img class="responsiva" src="assets/images/proxmox7.jpg" alt="">
+            <p>Verifique o sumário de instalação e tenha a certeza que está tudo certo antes de prosseguir (recomendo deixar marcado a opção <em>Automatically reboot after successful installation</em>) e em seguida clique em <em>Install</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox8.jpg" alt="">
+            <p>Aguarde o fim da instalação...</p>
+            <img class="responsiva" src="assets/images/proxmox9.jpg" alt="">
+            <p>E se você fez tudo certo o sistema vai ser carregado... Numa linha de comando.</p>
+            <h2>Acessando o Proxmox</h2>
+            <p>Agora você precisa acessar esse ip (que é exibido na inicialização assim como está mostrado na imagem acima) através do navegador de outro computador que esteja na mesma rede para acessar a interface de configuração do Proxmox.</p>
+            <img class="responsiva" src="assets/images/proxmox10.jpg" alt="">
+            <p>Ao acessar vai ter um painel de login, basta inserir o User name (recomendo ativar a opção <em>Save User name</em>) <em>root</em> a senha que você usou durante a instalação.</p>
+            <h2>Entendendo o básico do Proxmox</h2>
+            <p>Selecione <em>Abrir imagem em uma nova aba</em> caso não conseguir ver no seu smartphone.</p>
+            <img class="responsiva2" src="assets/images/proxmox11.jpg" alt="">
+            <p>Selecionando <em>Datacenter</em> na guia à esquerda temos acesso as opções gerais de manutenção do banco (como Firewall, usuários, grupos, cluster, backup)...</p>
+            <img class="responsiva2" src="assets/images/proxmox12.jpg" alt="">
+            <p>E selecionando o <em>PVE</em> ativo temos as opções do ambiente virtual (acesso ao shell, iniciar ambiente, reiniciar ambiente, desligar.) </p>
+            <img class="responsiva" src="assets/images/proxmox13.jpg" alt="">
+            <p>E aqui temos acesso ao shell para acesso a base do sistema e aqui faremos a nossa primeira alteração.</p>
+            <h3>Removendo o Proxmox VE Enterprise Repository</h3>
+            <p>Por padrão o Proxmox vem com o <em>Enterprise Repository</em> habilitado, esse repositório é estável e recomendado mas requer uma inscrição que começa na casa dos 95 euros... E pra não ter problema ou a obrigação de pagar essa quantia vamos desabilitar esse repositório. Para isso edite o arquivo em:</p>
+            <code>/etc/apt/sources.list.d/pve-enterprise.list</code>
+            <p>Você vai ver uma linha de repositório parecida com a linha abaixo:</p>
+            <code>deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise</code>
+            <p>Comente essa linha usando o <em>#</em> para que ela fique assim:</p>
+            <code>#deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise</code>
+            <h3>Adicionando o Proxmox VE No-Subscription Repository</h3>
+            <p>Uma vez que o respositório Enterprise foi desabilitado podemos habilitar o repositório No-Subscription, para isso acesse o arquivo em:</p>
+            <code>/etc/apt/sources.list</code>
+            <p>Você provavelmente encontrará uma lista de repositórios parecida com essa:</p>
+            <code>deb http://ftp.debian.org/debian bullseye main contrib
+                <br>deb http://ftp.debian.org/debian bullseye-updates main contrib
+                <br>
+                <br># security updates
+                <br>deb http://security.debian.org/debian-security bullseye-security main contrib
+            </code>
+            <p>Adicione a linha:</p>
+            <code>deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription</code>
+            <p>Salve o arquivo, e atualize a lista de repositórios com:</p>
+            <code>apt update</code>
+            <h2>Criando uma VM no Proxmox</h2>
+            <h3>Upando a .ISO</h3>
+            <p>A primeira coisa para se criar uma VM de um sistema no Proxmox é ter uma <em>.ISO</em> de sistema válido upado, por padrão você vai encontrar 2 volumes: <em>local</em> e <em>local-lvm</em>. Para não ter que explicar todos os conceitos por trás do que é LVM eu vou resumir da seguinte forma: LVM é para coisas que precisem de escalabilidade (máquinas virtuais prontas, snapshots, backups) enquanto que o local é para coisas estáticas... Como os arquivos <em>.ISO</em>.</p>
+            <p>Em <em>Datacenter > PVE > Local > ISO Images</em> você vai encontrar a botão <em>Upload</em> na guia superior:</p>
+            <img class="responsiva" src="assets/images/proxmox14.jpg" alt="">
+            <p>Vai aparecer uma caixa de diálogo para você selecionar o arquivo <em>.ISO</em>, lembrando que esse <em>Select File</em> suporta endereços da internet também, então se você não tiver a <em>.ISO</em> na sua máquina e quiser upar basta colar o link aí e selecionar <em>Upload</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox15.jpg" alt="">
+            <h3>Configurando a VM</h3>
+            <p>Para começar a criação da VM selecione em <em>Datacenter > PVE</em> e no canto superior direito selecione a opção <em>Create VM</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox16.jpg" alt="">
+            <br>
+            <img class="responsiva" src="assets/images/proxmox17.jpg" alt="">
+            <p>As configurações das VM's tendem a ser específicas para o sistema que será instalado, então ao invés de demonstrar as configurações para um sistema específico vou mostrar as configurações gerais para os sistemas.</p>
+            <img class="responsiva" src="assets/images/proxmox18.jpg" alt="">
+            <p>Na guia geral você pode mudar o <em>ID</em> da máquina <em>VM ID</em>, em <em>Name</em> você pode setar o nome da máquina virtual, e na caixa de seleção <em>Start as boot</em> você pode fazer com que essa vm sempre seja iniciada automaticamente.</p>
+            <img class="responsiva" src="assets/images/proxmox19.jpg" alt="">
+            <p>Em <em>OS</em> você pode selecionar as configurações básicas do sistema, em <em>ISO Image</em> você pode selecionar a <em>.ISO</em> de instalação, em <em>Type</em> e <em>Version</em> você seleciona as configurações de tipo e versão do sistema da máquina virtual.</p>
+            <img class="responsiva" src="assets/images/proxmox20.jpg" alt="">
+            <p>Em <em>System</em> você pode selecionar as configurações internas do sistema, como por exemplo o tipo de controladora SCSI, o tipo de máquina, adaptador gráfico, se vai rodar em BIOS ou UEFI.</p>
+            <img class="responsiva" src="assets/images/proxmox21.jpg" alt="">
+            <p>Em <em>Hard Disk</em> você pode selecionar as opções de disco da VM, como por exemplo o tipo de interface, onde o disco vai ser armazenado, o tamanho do disco.</p>
+            <img class="responsiva" src="assets/images/proxmox22.jpg" alt="">
+            <p>Em <em>CPU</em> você pode selecionar sockets, quantidade de núcleos, tipo de arquitetura e instruções.</p>
+            <img class="responsiva" src="assets/images/proxmox23.jpg" alt="">
+            <p>Em <em>Memory</em> você pode selecionar a quantia de memória RAM e ativar ou desativar o compartilhamento de memória.</p>
+            <img class="responsiva" src="assets/images/proxmox24.jpg" alt="">
+            <p>Em <em>Network</em> você pode selecionar as configurações do adaptador de rede e até mesmo setar um endereço MAC.</p>
+            <img class="responsiva" src="assets/images/proxmox25.jpg" alt="">
+            <p>E em <em>Confirm</em> você verá um resumo das configurações da máquina e poderá retornar para alguma configuração ou finalizar a criação da VM.</p>
+            <h3>Iniciando a VM</h3>
+            <p>Se você configurou tudo certinho basta ir em <em>Datacenter > PVE > VM</em> e no canto superior direito selecionar <em>➤ Start</em>.</p>
+            <img class="responsiva" src="assets/images/proxmox26.jpg" alt="">
+            <br>
+            <img class="responsiva" src="assets/images/proxmox27.jpg" alt="">
+            <p>Se você quiser abrir a interface da máquina virtual na sua máquina real por noVNC basta selecionar o botão <em>>_ Console</em>.</p>
+            <img class="responsiva2" src="assets/images/proxmox28.jpg" alt="">
+        </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 30/08/2022)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="formatação, windows, linux, freebsd, bios, uefi, instalação, balena, etcher, ventoy, os">
+    <meta name="author" content="Cain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalação de Sistemas</title>
+    <!--Social Media Open Graph-->
+    <meta property="og:title" content="Instalação de Sistemas Operacionais - O Básico"/>
+    <meta property="og:url" content="https://cain-dev.github.io/default/osinstall"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:description" content="Aprenda o básico da instalação de sistemas operacionais"/>
+    <meta property="og:image" content="https://raw.githubusercontent.com/cain-dev/default/main/assets/images/ogimage.jpg"/>
+    <!--/Social Media Open Graph-->
+    <!--Links-->
+    <link rel="shortcut icon" href="assets/images/cainlogo.ico">
+    <link rel="stylesheet" type="text/css"href="os_style.css">   
+    <!--/Links-->
+</head>
+<body>
+    <header id="main-header">
+        <!--
+        <a href="index.html">
+            <img src="assets/images/slogo.png" width=64" height="64" alt="">
+        </a>-->
+        <p>cain-dev's page</p>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contact.html">Contato</a></li>
+        </ul> 
+    </header>
+    <main id="main-area">
+        <h1>Instalação de Sistemas Operacionais</h1>
+        <h2>Introdução</h2>
+        <p>Existia uma época que sistemas operacionais eram feitos para máquinas específicas e era necessário um conhecimento relativamente profundo de TI para garantir o sucesso da instalação... Hoje em dia até o Linux tem uma excelente compatibilidade com grande parte do hardware para usuário final e pode ser instalado em menos de 30 minutos sem quase nenhum conhecimento de informática.</p>
+        <p>Não é mais necessário pagar um técnico 50 reais para fazer uma simples instalação de sistema padrão (erroneamente conhecido pela turma como formatação), existem razões para pagar por uma instalação sim quando há limpeza, configuração e atualização de BIOS, verificação de HD e RAM... Mas sejamos sinceros, a grande maioria dos usuário sequer se preocupa com isso.</p>
+        <p>Nos dias de hoje é mais seguro você mesmo baixar e instalar o seu sistema (ao invés pagar 50 reais para ter um sistema modificado por algum indiano mal intencionado instalado por alguém sem formação em TI), e essa documentação te ensinará o básico do processo. Por hora a única coisa a se ficar atento é <strong>fazer o backup prévio dos arquivos do HD</strong> em que você quer instalar o sistema, <strong>backup do pendrive que vai ser usado</strong> e alterar o processo de instalação entre BIOS ou UEFI.</p>
+        <h2>Primeiro Passo: Baixar o Sistema</h2>
+        <p>O primeiro passo para se instalar um sistema é baixar a mídia de instalação do sistema para então passar para um pendrive e depois começar a instalação. Baixe uma das imagens abaixo:</p>
+        <ul>
+            <li><a href="https://www.microsoft.com/pt-br/software-download/windows10">Windows (site oficial)</a></li>
+            <li><a href="https://tb.rg-adguard.net/public.php">Windows (link direto pelo TechBench)</a></li>
+            <li><a href="https://linuxmint.com/download.php">Linux Mint</a></li>
+            <li><a href="https://manjaro.org/download/">Manjaro Linux</a></li>
+            <li><a href="https://archlinux.org/download/">Arch Linux</a></li>
+            <li><a href="https://www.freebsd.org/where/">FreeBSD</a></li>
+            <li><a href="https://www.openbsd.org/faq/faq4.html#Download">OpenBSD</a></li>
+            <li><a href="https://batocera.org/download">Batocera</a></li>
+            <li><a href="https://www.haiku-os.org/get-haiku/">Haiku</a></li>
+            <li><a href="https://www.proxmox.com/en/downloads/">Proxmox</a> (baixe a versão mais recente do <em>Proxmox VE ISO Installer</em> por <em>BitTorrent</em>)</li>
+            <li><a href="https://www.debian.org/download">Debian 64 bits (NetInst)</a></li>
+            <li><a href="https://cdimage.debian.org/debian-cd/current/i386/iso-dvd/">Debian 32 bits (DVD iso)</a></li>
+        </ul>
+        <h2>Passo Opcional: Verificar a Integridade do Arquivo</h2>
+        <p>Você pode conferir a integridade do arquivo baixado (comparando com o valor de hash informado pelo site) e a integridade do arquivo passado para o pendrive (comparando com o valor de hash do arquivo em disco) utilizando o <a class="link" href="http://getmd5checker.com/download">Md5Checker</a>.</p>
+        <p>Basta arrastar o arquivo de <mark>.ISO</mark> para a janela do <mark>Md5Checker</mark> e verificar se o código do Md5 do site que você baixou a <mark>.ISO</mark> (ou qualquer que seja o formato de arquivo de mídia de gravação) é idêntico ao código que você obtém através da análise do arquivo em disco, e se o código da análise do arquivo em disco é idêntico ao código obtido da análise do arquivo passado para o pen drive. Por questão de segurança é interessante verificar se o arquivo que está no pen drive é íntegro se comparado com o site ou pelo menos integro após a transferência para o pen drive.</p>
+        <img class="responsiva" src="assets/images/bato16.gif" alt="">
+        <h2>BIOS ou UEFI?</h2>
+        <img class="responsiva" src="assets/images/biosuefi.jpg" alt="BIOS vs UEFI">
+        <p>BIOS e UEFI são as interfaces para os computadores iniciarem o sistema operacional. A BIOS utiliza a tabela de partição do tipo Master Boot Record (MBR) enquanto UEFI utiliza GUID Partition Table (GPT), grosso modo a BIOS é um sistema mais antigo e simples enquanto o UEFI é mais novo e oferece opções mais avançadas.</p>
+        <p>Hoje em dia o UEFI já subsitui a BIOS nos computadores mais modernos, podendo ainda oferecer suporte a sistemas mais antigos que foram feitos para funcionar com BIOS por meio do Compatibility Support Module (ou CSM). Caso seu computador utilize UEFI sempre dê preferência a instalar os sistemas em UEFI sem CSM ativo.</p>
+        <p>Não há uma regra absoluta para dizer se o seu computador utiliza BIOS ou UEFI e portanto isso deve ser verificado caso a caso (computadores mais novos por via de regra trabalham com UEFI). Para verificar se o seu sistema é UEFI você pode:</p>
+        <ul>
+            <li>Verificar o suporte na página do produto no site do Fabricante da sua placa mãe.</li>
+            <li>Pelo próprio visual, a BIOS tende a ser mais simples e estática enquanto UEFI tende a ser mais gráfico.</li>
+            <li>Acessar o SETUP da sua placa mãe (geralmente pressionando F2 ou Delete durante a inicialização do sistema) e verificar se na guia BOOT existe opção de seleção de modo UEFI (se suporta a utilização de mouse você está em UEFI).</li>           
+        </ul>
+        <p><strong>Faça backup do conteúdo do pendrive antes de prosseguir!</strong></p>
+        <h2>Com Secure Boot ou sem Secure Boot? Eis a questão</h2>
+        <p><em>Secure Boot</em> é um recurso que quando ativo <em>só permite a inicialização de um sistema com assinaturas válidas</em>, é uma opção interessante em termos de segurança <strong>MAS</strong> limita o tipo de conteúdo que você pode inicializar na sua máquina. Como essa documentação é para iniciantes ela foi feita presumindo que você tenha <em>desativado o Secure Boot</em> no Setup da BIOS/UEFI e não tenha marcado a opção <em>Secure Boot Support</em> no Ventoy.</p>
+        <p>Se você quiser fazer uso do Secure Boot é importante que você:</p>
+        <ol>
+            <li><em>Habilite</em> essa opção no Setup da BIOS/UEFI;</li>
+            <li>Marque a opção <em>Secure Boot Support</em> no Ventoy;</li>
+            <li>Utilize uma <em>.ISO</em> de uma distribuição que dê suporte a Secure Boot</li>
+        </ol>
+        <p>Então caso você não esteja conseguindo inicializar o sistema verifique as condições citadas no parágrafo acima ou simplesmente desabilite o Secure Boot.</p>
+        <h2>Gravação do pendrive com o balenaEtcher (para um único sistema)</h2>
+        <p>Caso você queira apenas passar o sistema para o pendrive, instalar na máquina e tocar sua vida, baixe essa ferramenta:</p>
+        <a class="link" href="https://www.balena.io/etcher/">balenaEtcher</a>
+        <p>Selecione a versão para o seu sistema operacional e clique no botão de <mark>Download</mark>:</p>
+        <img class="responsiva" src="assets/images/etcher1.jpg" alt="">
+        <p>Selecione o arquivo de imagem do sistema (seja <mark>.iso</mark> ou <mark>.img</mark>) na opção <mark>Flash from file</mark>:</p>
+        <img class="responsiva" src="assets/images/etcher2.jpg" alt="">
+        <p>Vá para a seleção de dispositivos em <mark>Select target</mark>:</p>
+        <img class="responsiva" src="assets/images/etcher3.jpg" alt="">
+        <p>Selecione o seu pendrive em e depois clique em <mark>Select</mark>:</p>
+        <img class="responsiva" src="assets/images/etcher4.jpg" alt="">
+        <h2 id="ventoy">Gravação do Pendrive com o Ventoy (para multiplas imagens de sistema)</h2>
+        <p>Caso você queira fazer um pendrive com suporte a particionamento e mais de 1 sistema por pendrive utilize essa opção.</p>
+        <a class="link" href="https://www.ventoy.net/en/index.html">Ventoy</a>
+        <p>Selecione a guia <mark>Downloads</mark>:</p>
+        <img class="responsiva" src="assets/images/ventoy1.jpg" alt="">
+        <p>Selecione o executável para o seu sistema:</p>
+        <img class="responsiva" src="assets/images/ventoy2.jpg" alt="">
+        <p>Selecione o dispositivo:</p>
+        <img class="responsiva" src="assets/images/ventoy3.jpg" alt="">
+        <p>Selecione o tipo de tabela de partição, <mark>MBR para BIOS</mark> e <mark>GPT para UEFI</mark>:</p>
+        <img class="responsiva" src="assets/images/ventoy4.jpg" alt="">
+        <p>Selecione <mark>Install</mark>:</p>
+        <img class="responsiva" src="assets/images/ventoy5.jpg" alt="">
+        <p>Ao fim da gravação basta mover os arquivos de imagem de sistema para o pendrive:</p>
+        <img class="responsiva" src="assets/images/ventoy6.jpg" alt="">
+        <h2>Selecionando o Dispositivo de BOOT</h2>
+        <p>Durante a inicialização do computador aperte a tecla de acesso ao <mark>SETUP</mark>, geralmente <mark>F2</mark> ou <mark>Delete</mark> (essa informação costuma aparecer na tela quando você liga o computador):</p>
+        <img class="responsiva" src="assets/images/pressf2.jpg" alt="">
+        <p>Na guia <mark>BOOT</mark> você encontrará alguma opção como <mark>Select Boot Device</mark>, selecione o seu pendrive como dispositivo de inicialização, após isso vá na opção <mark>Save and Restart</mark> para reiniciar para a instalação.</p>
+        <img class="responsiva" src="assets/images/bootdevice.jpg" alt="">
+        <p>Se você fez tudo certinho seu computador vai reiniciar e já ir pro menu de instalação de sistema.</p>
+        <img class="responsiva" src="assets/images/bootscreen.jpg" alt="">
+        <p><strong>Fique atento!</strong></p>
+        <p>Algumas placas-mãe possuem uma seleção para <em>A ORDEM ENTRE TIPOS DE DISPOSITIVOS</em> (como no exemplo abaixo)... </p>
+        <ul>
+            <li><em>First Boot Device:</em> Hard Disk (Western Digital WD10EZEX) </li>
+            <li><em>Second Boot Device:</em> CD-ROM</li>
+            <li><em>Third Boot Device:</em> PXE</li>
+        </ul>
+        <p>E uma outra de <em>SELEÇÃO DE PRIORIDADE DENTRE TODOS OS TIPOS DE DISPOSITIVOS</em> de inicialização, por exemplo:</p>
+        <p><em>Hard Disk Boot Priotiry</em>:</p>
+        <ul>
+            <li>1 - HDD Western Digital WD10EZEX</li>
+            <li>2 - USB HDD Kingston Pen Drive</li>
+        </ul>
+        <p>Nesse caso você tem que especificar o tipo de dispositivo de inicialização (se é CDROM, PXE, HARD DISK. etc.) para só então selecionar o dispositivo específico daquele tipo como prioridade de boot.</p>
+        <p>Não entendeu? Explico: Você disse para o sistema para iniciar pelo Hard Disk, mas você ainda precisa selecionar QUAL Hard Disk será inicializado, que no exemplo acima NÃO VAI SER o pendrive que você preparou.</p>
+        <p>Então se você quer inicializar pelo pendrive além de setar o <em>First Boot Device</em> para <em>Hard Disk</em> você ainda precisa setar a prioridade do pendrive para a mais alta em <em>Hard Disk Boot Priority</em>, como no exemplo abaixo:</p>
+        <ul>
+            <li>1 - USB HDD Kingston Pen Drive</li>
+            <li>2 - HDD Western Digital WD10EZEX</li>
+        </ul>
+        <h2>Tá... Já passei o sistema para o pendrive... Mas como instalo?</h2>
+        <ul>
+            <li><a href="windows_install.html">Instalação do Windows</a></li>
+            <li><a href="linux_install.html">Instalação do Linux Mint</a></li>
+            <li><a href="arch_install.html">Instalação do Arch Linux</a></li>
+            <li><a href="freebsd_install.html">Instalação do FreeBSD</a></li>
+            <li><a href="openbsd_install.html">Instalação do OpenBSD</a></li>
+            <li><a href="batocera_install.html">Instalação do Batocera</a></li>
+            <li><a href="haiku_install.html">Instalação do Haiku</a></li>
+            <li><a href="proxmox_install.html">Instalação do Proxmox</a></li>
+            <li><a href="debian_install.html">Instalação do Debian</a></li>
+        </ul>
+        <h2>E depois de instalar o sistema? O que eu instalo?</h2>
+        <p>Em <a class="link" href="alternatives.html">Alternativas de Software</a> você encontrará uma seleção de alternativas de softwares essenciais para você ficar bem situado com o seu sistema.</p>
+    </main>
+    <footer id="main-footer">
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 03/09/2022)</p>
+        <a class="link" href="index.html">Retornar para a página principal</a>
+    </footer>
+</body>
+</html>
