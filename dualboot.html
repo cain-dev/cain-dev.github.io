@@ -73,6 +73,33 @@
         <p>Ao iniciar o computador você poderá escolher qual sistema quer iniciar pelo grub:</p>
         <img class="responsiva" src="assets/images/dualboot8.jpg" alt=""><br>
         <p>Ao iniciar um dos sistemas você pode perceber que a hora fica incorreta, para resolver isso inicie o Windows, baixe esse arquivo <a class="link" href="https://www.howtogeek.com/wp-content/uploads/2017/08/Make-Windows-Use-UTC-Time.zip">Aqui</a>, extraia e utilize o <mark>Make Windows Use UTC Time</mark> para fazer com que o Windows use UTC. Além disso recomendo abrir um terminal como administrador e utilizar o comando <mark>powercfg.exe /hibernate off</mark> para que o Windows não "trave" o estado da partição ao desligar, lembre-se também de desligar o <mark>Fast Boot</mark> na sua bios para diminuir as chances do Windows "sequestrar" o boot... Isso ajuda mas <strong>não resolve</strong> 100% dos problemas.</p>
+        <h3>O maldito "Sequestro de Boot" e como (tentar) resolvê-lo</h3>
+        <p>Então você acabou de instalar o seu sistema, selecionou no <i>Setup</i> da placa mãe para inicializar o Linux e... O Windows carrega. 🙄</p>
+        <p>Ok, você desliga o computador segurando <i>Shift</i>, liga direto para o <i>Setup</i>, deixa apenas o Linux como opção de inicialização e... O Windows que sobe novamente. 😡</p>
+        <p>Oh céus, por qual maldita razão isso acontece? Bom, isso pode acontecer pelos mais diversos motivos, mas um deles é que caso a instalação seja em UEFI (o que deveria seria o correto nos dias de hoje) existe uma espécie de interatividade em ordem de boot que não existia na <i>BIOS</i>, que é <mark>o sistema conseguir se colocar como prioridade no processo de <i>boot</i></mark>, que por algum motivo o Windows acaba sempre fazendo descaradamente.</p>
+        <p>Existem diversas maneiras de tentar intervir aqui, mas a que eu mais recomendo é através do uso da ferramenta <mark>efibootmgr</mark>, que vai estar disponível em qualquer mídia de instalação de sistemas Linux. O <i>efibootmgr</i> é um programa que vai lidar diretamente com as opções de entradas de <i>boot</i> na sua placa mãe, ou seja, podendo incluir novamente uma opção de inicialização, ou mudando a ordem direto pelo sistema, e até mesmo podendo excluir entradas de <i>boot</i> (opção bem nuclear essa, mas válida em alguns casos).</p>
+        <h4>Entrada direta para o Linux</h4>
+        <p>Então o Windows sumiu com sua entrada de <i>boot</i> do Hackintosh OU do FreeBSD OU do Linux, o que você pode fazer? Bom, você pode primeiramente recriar essa entrada direta para a sua placa mãe utilizando o comando abaixo:</p>
+        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --label "<mark>Título da Entrada</mark>" --loader /vmlinuz-linux 'root=<mark>UUID do dispositivo</mark> rw initrd=\initramfs-linux.img'</code>
+        <p>Lembre-se de substituir <mark>/vmlinuz-linux</mark> e <mark>\initramfs-linux.img</mark> por <mark>/vmlinuz-linux-lts</mark> e <mark>\initramfs-linux-lts.img</mark> caso você use o kernel LTS.</p>
+        <p>Lembre-se de adicionar resume=<mark>UUID do dispositivo</mark> logo após 'root=<mark>UUID do dispositivo</mark> caso você utilize hibernação para <i>swap</i>.</p>
+        <p>Lembre-se de adicionar <em>initrd=\amd-ucode.img</em> OU <em>initrd=\intel-ucode.img</em> antes de <em>initrd=\initramfs-linux.img</em> caso utilize microcode.</p>
+        <h4>Entrada para um Bootloader</h4>
+        <p>Caso você queira, por exemplo, fazer uma entrada para um loader diretamente (como é o caso do Opencore para os Hackintoshes ou do systemd-boot) você pode utilizar o comando abaixo:</p>
+        <p>Para o OpenCore:</p>
+        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --loader /EFI/OC/OpenCore.efi --label "OpenCore"</code>
+        <p>Para o systemd-boot:</p>
+        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --loader /EFI/BOOT/BOOTX64.EFI --label "systemd-boot"</code>
+        <h3>Verificando a ordem de boot:</h3>
+        <p>use o comando abaixo para ver as entradas:</p>
+        <code>efibootgmr</code>
+        <p>E, caso queira alterar a ordem delas, basta utilizar:</p>
+        <code>efibootmgr --bootorder <mark>número da entrada primária</mark>,<mark>número da entrada secundária</mark></code>
+        <h4><strong>Opção Nuclear</strong></h4>
+        <p>Então você criou uma entrada direta para o sistema, e mesmo assim não resolveu, você então criou uma entrada para o bootloader, e mesmo assim não resolveu, você então mudou a ordem das entradas de boot e meeeesmo assim não resolveu... E agora?</p>
+        <p>Bom, algumas implementações de UEFI são simplesmente ruins mesmo, e aí não interessa o quanto você tente configurar não vai funcionar, esta não é uma opção recomendada MAS em alguns casos que qualquer entrada só resulta num loop de tentativas de boot na Reparação do Windows o que você pode tentar é simplesmente mandar pro espaço a entrada do Windows com o comando abaixo:</p>
+        <code>efibootmgr --delete-bootnum --bootnum <mark>número da entrada do Windows</mark></code>
+        <p>E pronto! Desde que você tenha a entrada para um bootloader que pode inicializar o Windows pra você, você não terá mais problemas de sequestro de boot (pelo menos até a próxima atualização de sistema) e vai poder selecionar o seu Windows sem problemas.</p>
         <h3>E o que ninguém te fala sobre dual boot Windows + Linux?</h3>
         <p>Eu vou tentar resumir: <strong>Se você escolher fazer um dual boot com Windows, eu não posso de maneira alguma te garantir um mínimo de estabilidade do sistema.</strong> Do ponto de vista de um leigo que a profundidade de conhecimento de sistema é tão profundo quanto água de privada, a ideia de se ter 2 sistemas numa mesma máquina parece incrível, mas certamente não é de forma alguma o ambiente mais estável e seguro para se usar. O mito do dual boot nasceu de uma certa desvantagem de oferta de software que o Linux sofreu de muito tempo atrás, via de regra são pessoas que tem interesse na leveza e responsividade das plataformas Linux mas tem preguiça de achar alternativas de software, e para não ter que (deixar de lado a chupeta) enfrentarem a pesquisa e adaptação elas preguiçosamente vêem esse tipo de instalação como uma alternativa viável (claro que sem o devido conhecimento dos custos e dos riscos...).</p>
         <p>O Linux e os BSD's funcionam como um trabalhador bastante humilde e organizado: Eles pegam as ferramentas, eles usam, eles guardam e jamais presumem que são os únicos que podem fazer aquele serviço. O Windows já é um trabalhador folgado e presunçoso: Ele pega as ferramentas, ele usa e joga pelo chão e logo em seguida tranca a porta, impedindo que outros usem aquele espaço ou que tenham acesso as mesmas ferramentas.</p>
@@ -80,7 +107,7 @@
         <p></p>
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 19/12/2021)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 27/09/2023)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
