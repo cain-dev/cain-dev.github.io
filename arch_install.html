@@ -1017,7 +1017,7 @@
         <p>Descomente a linha deletando o <mark>#</mark> antes de <mark>Color</mark></p>
         <!-- Melhore o desempenho do sistema Linux com noatime -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
-        <h3>Melhore o desempenho do sistema Linux com noatime:</h3>
+        <h3>Melhore o desempenho do sistema de arquivos EXT4 com noatime:</h3>
         <p>Acesse o fstab com o nano com o comando:</p>
         <code>nano /etc/fstab</code>
         <p>Mude de:</p>
@@ -1025,13 +1025,24 @@
         <p>Para:</p>
         <code>UUID=XXXXXXXXXXXXXXXXXXXX  / ext4 <mark>noatime</mark>,errors=remount-ro 0 1</code>
         <p>E em seguida salve o arquivo</p>
+        <!-- Desabilite o Watchdog timer -->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
+        <h3>Melhore o desempenho desabilitando o Watchdog timer:</h3>
+        <p>Para desativar os timers de watchdog (tanto software quanto hardware), adicione o <mark>nowatchdog</mark> aos seus parâmetros de inicialização.</p>
+        <p>O parâmetro de inicialização nowatchdog pode não funcionar para o watchdog de hardware Intel TCO. Nesta circunstância, o módulo do kernel para o TCO pode ser desativado usando o parâmetro do kernel <mark>modprobe.blacklist=iTCO_wdt</mark>.</p>
+        <p>Se você estiver usando CPUs AMD Ryzen, verifique também <mark>sp5100-tco</mark> em seu <em>systemd/Journal</em>. Este é o watchdog de hardware dentro da série de chipsets AMD 700. Para desativá-lo crie um arquivo em <mark>/etc/modprobe.d/disable-sp5100-watchdog.conf</mark> contendo:</p>
+        <code>blacklist sp5100_tco</code>
+        <p><strong>OU</strong></p>
+        <p>use o parâmetro de kernel <mark>modprobe.blacklist=sp5100_tco</mark>.</p>
+        <p>Para verificar, reinicie o computador e verifique se o comando abaixo retorna o valor <mark>0</mark>:</p>
+        <code>cat /proc/sys/kernel/watchdog</code>
         <!-- Habilitar NTP -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h3>Habilitar NTP</h3>
         <code>sudo timedatectl set-ntp true</code>        
         <!-- Instalar drivers proprietários da Nvidia -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
-        <h2>Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia)</h2>
+        <h2>Instalar drivers proprietários da Nvidia (caso você possua placa de vídeo Nvidia ainda suportada)</h2>
         <p>Utilize a seguinte linha de comando para o kernel <mark>linux</mark>:</p>
         <code>sudo pacman -S nvidia</code>
         <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
