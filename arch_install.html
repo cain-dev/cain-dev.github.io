@@ -808,7 +808,9 @@
             <code>echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen</code>
             <p>O que esse comando vai fazer é simplesmente adicionar outra linha de locale ao final do arquivo e gerar o locale-gen através dela.</p>
         </details>
-        <p>Para fazer com que a mudança de layout de teclado seja persistente utilize o comando:</p>
+        <p>Para setar a configuração padrão de localização do sistema utilize o comando:</p>
+        <code>echo "LANG=pt_BR.UTF-8" >> /etc/locale.conf</code>
+        <p>Para fazer com que a mudança de layout de teclado seja persistente para o virtual console utilize o comando:</p>
         <code>echo "KEYMAP=br-abnt2" >> /etc/vconsole.conf</code>
         <!-- Configuração básica de rede -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -1029,9 +1031,19 @@
         <code>sudo pacman -S nvidia</code>
         <p>Ou utilize a seguinte linha de comando para o kernel <mark>linux-lts</mark>:</p>
         <code>sudo pacman -S nvidia-lts</code>
+        <p>É recomendável que isso seja feito durante o processo de instalação, mas se por algum motivo você opte por fazer a instalação futuramente, pode ser que o sistema selecione o driver <mark>nouveau</mark> automaticamente ainda que a sua placa seja suportada pelo driver proprietário.</p>
+        <p>Para verificar qual driver está em ativo utilize o comando:</p>
+        <code>lspci -nnk | grep -iA2 vga</code>
+        <p>Se na linha <em>Kernel driver in use:</em> estiver <em>nouveau</em>, crie o arquivo <mark>/etc/modprobe.d/blacklist-nouveau.conf</mark>, e adicione as linhas:</p>
+        <code>blacklist nouveau<br>options nouveau modeset=0</code>
+        <p>Após isso atualize o initramfs para o kernal padrão com:</p>
+        <code>mkinitcpio -p linux</code>
+        <p><strong>OU</strong> utilize o comando abaixo caso você utilize o kernel LTS:</p>
+        <code>mkinitcpio -p linux-lts</code>
+        <p>Após isso reinicie o computador e verifique novamente o driver em uso.</p>
         <!-- Instalando o YAY (opcional) -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
-        <h2>Instalando o YAY (opcional):</h2>
+        <h2>Instalando o YAY (opcional e não recomendado):</h2>
         <p>Para facilitar a instalação e manutenção dos pacotes do aur utilizaremos o yay. Logue na sua conta de usuário (não na do root) e instale as dependências necessárias com o comando:</p>
         <code>sudo pacman -S git base-devel</code>
         <p>Clone o diretório do github com o comando:</p>
