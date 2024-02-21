@@ -49,7 +49,21 @@
 		<p>Você pode ver a documentação de configuração do Kitty <a class="link" href="https://sw.kovidgoyal.net/kitty/overview/#configuring-kitty">aqui</a></p>
 		<p>Você pode ver a minha configuração do Kitty <a class="link" href="https://github.com/cain-dev/dotfiles/blob/main/kitty/kitty.conf">aqui</a></p>
 		<p>Caso você queira instalar um tema recomendo esse repositório <a class="link" href="https://github.com/dexpota/kitty-themes">aqui</a></p>
-		<h2>Instalação do Gerenciador de arquivos, Ranger</h2>
+        
+        <h2>Instalação e configuração do Shell, Zsh com Oh-My-Zsh</h2>
+        <p>Eu já migrei de shell para shell e recentemente tenho usado o <em>Zsh</em>, eu creio que ele é o que existe de ideal entre customização e facilidade de uso vs compatibilidade, instale com o comando e siga a configuração básica:</p>
+        <code>pacman -S zsh</code>
+        <p>Instale o framework com o Oh-My-Zsh com o comando abaixo:</p>
+        <code>sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</code>
+        <p>Existem 2 plugins que eu considero indispensáveis para a utilização de um terminal atualmente, o <em>autosuggestions</em> e o <em>syntax-highlighting</em>, instale eles com os comandos abaixo:</p>
+        <code>git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions<br>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting</code>
+        <p>Acesse o arquivo <em>~/.zshrc</em>, e na linha <em>plugins=(git)</em> adicione os plugins  <em>zsh-syntax-highlighting</em> e <em>zsh-autocomplete</em> para ficar como no exemplo abaixo:</p>
+        <code>plugins=(git zsh-syntax-highlighting zsh-autocomplete)</code>
+        <p>Recomendo também que configure as opções de locale internas do framework, encontre a linha <em>export LANG=en_US.UTF-8</em> e substitua por:</p>
+        <code>export LANG=pt_BR.UTF-8</code>
+        <p><strong>Lembre-se:</strong> Acesse o arquivo de configuração do <em>kitty</em> em <mark>~/.config/kitty/kitty.conf</mark> e sete <em>shell</em> para <em>zsh</em> como no exemplo abaixo:</p>
+        <code>shell zsh</code>
+        <h2>Instalação do Gerenciador de arquivos, Ranger</h2>
 		<code>sudo pacman -S ranger atool unzip unrar python-pillow poppler ffmpegthumbnailer</code>
 		<p>Você pode ver a documentação de guia de usuário do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki/Official-user-guide">aqui</a></p>
 		<p>Você pode ver a documentação de Wiki do Ranger <a class="link" href="https://github.com/ranger/ranger/wiki">aqui</a></p>
