@@ -205,6 +205,11 @@ EndSection</pre>
         </code>
         <p>Caso deseje aceleração de hardware instale também os pacotes conforme o comando abaixo:</p>
         <code>pkg install libva-intel-driver mesa-libs mesa-dri</code>
+        <!-- HABILITANDO SOM -->
+        <h3>Habilitando som</h3>
+        <p>Para habilitar o som basta carregar os devidos drivers, supondo que você precise do módulo para sistemas baseados em Intel adicione a linha abaixo em <em></em> </p>
+        <!-- <code>sound_load="YES"</code> -->
+        <code>snd_hda_load="YES"</code>
         <!-- AMBIENTES GRÁFICOS -->
         <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
         <!-- KDE -->
@@ -416,22 +421,27 @@ EndSection</pre>
         <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
         <code>echo "exec dbus-launch --exit-with-x11 ck-launch-session startlxqt" > ~/.xinitrc</code>
         <!-- FIM DA INSTALAÇÃO DE AMBIENTES GRÁFICOS -->
+        
         <!-- SLIM (DEPRECIADO)
         <p>Caso queira utilizar o Slim como display manager:</p>
         <code>pkg install slim</code>
         <code>slim_enable="YES"</code>
         <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
         -->
+
+        <h3>Corrigindo diretórios</h3>
+        <p>Algumas interfaces ao serem instaladas não criam automaticamente a estrutura para as pastas de usuário (Imagens, Músicas, Vídeos etc), para resolver isso instale o pacote <em>xdg-user-dirs</em> com o comando abaixo:</p>
+        <code>pkg install xdg-user-dirs</code>
+        <p>Logado como o seu usuário, use o comando abaixo para atualizar os diretórios:</p>
+        <code>xdg-user-dirs-update</code>
+        <!-- EDIÇÃO DO XINITRC -->
         <h3>Edição do arquivo .XINITRC</h3>
         <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
         <code>exit</code>
         <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
         <code>nano ~/.xinitrc</code>
         <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
-        <code>export LC_ALL=pt_BR.UTF-8</code>
-        <code>export LANGUAGE=pt_BR.UTF-8</code>
-        <code>export LANG=pt_BR.UTF-8</code>
-        <code>setxkbmap -model abnt2 -layout br</code>
+        <code>export LC_ALL=pt_BR.UTF-8<br>export MM_CHARSET=UTF-8<br>export LANG=pt_BR.UTF-8<br>export LANGUAGE=pt_BR.UTF-8<br>setxkbmap -model abnt2 -layout br</code>
         <h3>Ambiente gráfico devidamente instalado!</h3>
         <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
         <code>shutdown -r now</code>
@@ -454,10 +464,16 @@ EndSection</pre>
         <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
         -->
         <h3>/boot/loader.conf</h3>
+        <!-- OBSOLETO E DESNECESSÁRIO
         <h4>Para habilitar o novo virtual console:</h4>
         <code>kern.vty="vt"</code>
-        <h4>Para reduzir o tempo do prompt de autoboot para 5 segundos:</h4>
-        <code>autoboot_delay="5"</code>
+        -->
+        <h4>Para reduzir o tempo do prompt de autoboot para 3 segundos adicione a linha:</h4>
+        <code>autoboot_delay="3"</code>
+        <h4>Se você especificar a resolução máxima desejada para o console do framebuffer EFI adicione a linha:</h4>
+        <code>efi_max_resolution=1920x1080</code>
+        <h4>Para alterar o tamanho da fonte no framebuffer adicione a linha:</h4>
+        <code>screen.font="16x32"</code>
         <!--
         <h4>Mudar o ntpd para o openntpd:</h4>
         <code>pkg install openntpd</code>
@@ -472,6 +488,8 @@ EndSection</pre>
         <p>e logo abaixo insira a linha:</p>
         <code>openntpd_enable="YES"</code>
         -->
+
+        <!--
         <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
         <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
         <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
@@ -498,6 +516,7 @@ EndSection</pre>
         <code>export LANG=pt_BR.UTF-8</code>
         <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
         <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
+        -->
         <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
         <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
         <code>fsck -y</code>
