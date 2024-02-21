@@ -141,6 +141,12 @@
         <p>Significa que seu sistema já está devidamente atualizado.</p>
         <!-- FIM DA INSTALAÇÃO DO SISTEMA -->
         <h2>Configuração para Usuário Final</h2>
+        <!-- DOAS -->
+        <h3>Elevação de privilégio com o Doas</h3>
+        <p>Se você seguiu corretamente os passos até aqui o seu usuário faz parte do grupo <em>wheel</em>, para elevação de privilégio instale o <em>doas</em> com o comando:</p>
+        <code>pkg install doas</code>
+        <p>O doas precisa de uma simples configuração para elevação de privilégio, edite o arquivo <em>/usr/local/etc/doas.conf</em> e insira a linha:</p>
+        <code>permit persist keepenv :wheel</code>
         <h3>Instalação de Desktop Environment</h3>
         <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
         <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
@@ -218,6 +224,8 @@ EndSection</pre>
         <code>sysrc sddm_enable="YES"</code>
         <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
         <code>sysrc sddm_lang="pt_BR"</code>
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo "exec dbus-launch --exit-with-x11 ck-launch-session startplasma-x11" > ~/.xinitrc</code>
         <!-- Gnome -->
         <h4>Para instalação do Gnome</h4>
         <p>Para instalar o ambiente gráfico Gnome e suas aplicações use o comando:</p>
@@ -253,6 +261,8 @@ EndSection</pre>
         <code>sysrc dbus_enable="YES"</code>
         <p>Por padrão o Gnome utiliza um Display Manager próprio (GDM), para habilitar o GDM use o comando abaixo:</p>
         <code>sysrc gdm_enable="YES"</code>
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo "exec gnome-session" > ~/.xinitrc</code>
         <!-- XFCE -->
         <h4>Para instalação do XFCE</h4>
         <p>Para instalar o ambiente gráfico XFCE e suas aplicações use o comando:</p>
@@ -288,6 +298,8 @@ EndSection</pre>
         <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
         <p>E habilite o serviço com o comando abaixo:</p>
         <code>sysrc lightdm_enable="YES"</code>
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo '. /usr/local/etc/xdg/xfce4/xinitrc' > ~/.xinitrc</code>
         <!-- MATE -->
         <h4>Para instalação do MATE</h4>
         <p>Para instalar o ambiente gráfico MATE e suas aplicações use o comando:</p>
@@ -325,6 +337,8 @@ EndSection</pre>
         <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
         <p>E habilite o serviço com o comando abaixo:</p>
         <code>sysrc lightdm_enable="YES"</code>
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo "exec dbus-launch --exit-with-x11 ck-launch-session mate-session" > ~/.xinitrc</code>
         <!-- Cinnamon -->
         <h4>Para instalação do Cinnamon</h4>
         <p>Para instalar o ambiente gráfico Cinnamon e suas aplicações use o comando:</p>
@@ -360,6 +374,8 @@ EndSection</pre>
         <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
         <p>E habilite o serviço com o comando abaixo:</p>
         <code>sysrc lightdm_enable="YES"</code>
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo "exec dbus-launch --exit-with-x11 ck-launch-session cinnamon-session" > ~/.xinitrc</code>
         <!-- LXQT -->
         <h4>Para instalação do LXQT</h4>
         <p>Para instalar o ambiente gráfico LXQT e suas aplicações use o comando:</p>
@@ -397,9 +413,9 @@ EndSection</pre>
         <code>sysrc sddm_enable="YES"</code>
         <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
         <code>sysrc sddm_lang="pt_BR"</code>
-
+        <p>Caso queira iniciar a interface manualmente com o comando <em>startx</em> você pode adicionar o argumento como no exemplo abaixo no arquivo <em>.xinitrc</em>:</p>
+        <code>echo "exec dbus-launch --exit-with-x11 ck-launch-session startlxqt" > ~/.xinitrc</code>
         <!-- FIM DA INSTALAÇÃO DE AMBIENTES GRÁFICOS -->
-
         <!-- SLIM (DEPRECIADO)
         <p>Caso queira utilizar o Slim como display manager:</p>
         <code>pkg install slim</code>
