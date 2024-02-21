@@ -95,9 +95,9 @@
         <img class="responsiva" src="assets/images/bsd22.jpg" alt="">
         <p>Caso a hora esteja correta selecione <mark>Skip</mark>, caso contrário altere em <mark>Set Time</mark>:</p>
         <img class="responsiva" src="assets/images/bsd23.jpg" alt="">
-        <p>Selecione os serviços para serem iniciados no boot, recomendo deixar marcado <mark>sshd</mark> (se e somente se você deseja se conectar a essa máquina por SSH), <mark>moused</mark> caso queira utilizar o mouse no console, <mark>ntpd</mark> e <mark>ntpd_sync_on_start</mark>, <mark>powerd</mark> (especialmente em laptops) e <mark>dumpdev</mark>:</p>
+        <p>Selecione os serviços para serem iniciados no boot, recomendo deixar marcado <mark>sshd</mark> (se e somente se você deseja se conectar a essa máquina por SSH), <mark>moused</mark> caso queira utilizar o mouse no console, <mark>ntpd</mark> e <mark>ntpd_sync_on_start</mark>, <mark>powerd</mark> (especialmente em laptops) e <mark>dumpdev</mark> (útil quase que somente para desenvolvedores):</p>
         <img class="responsiva" src="assets/images/bsd24.jpg" alt="">
-        <p>Aqui são as opções de enrigecimento de segurança, recomendo marcar <mark>read_msgbuf</mark>, <mark>proc_debug</mark>, <mark>clear_tmp</mark>, <mark>disable_syslogd</mark>, <mark>secure_console</mark>, <mark>disable_ddtrace</mark>:</p>
+        <p>Aqui são as opções de enrigecimento de segurança, recomendo marcar todos ou pelo menos <mark>read_msgbuf</mark>, <mark>proc_debug</mark>, <mark>clear_tmp</mark>, <mark>disable_syslogd</mark>, <mark>secure_console</mark>, <mark>disable_ddtrace</mark>:</p>
         <img class="responsiva" src="assets/images/bsd25.jpg" alt="">
         <p>Selecione <mark>Yes</mark> para adicionar o seu usuário no sistema:</p>
         <img class="responsiva" src="assets/images/bsd26.jpg" alt="">
@@ -139,349 +139,357 @@
         <p>Se aparecer:</p>
         <code>Your packages are up to date</code>
         <p>Significa que seu sistema já está devidamente atualizado.</p>
-        <!--
-        <p>Caso tenha escolhido usar o <mark>ports</mark> use o comando abaixo  para fetch, extract e update do ports:</p>
-        <code>portsnap auto</code> -->
-        <p>Pronto! Seu sistema está devidamente instalado e atualizado... Mas ainda da pra melhorar.</p>
+        <!-- FIM DA INSTALAÇÃO DO SISTEMA -->
         <h2>Configuração para Usuário Final</h2>
-            <h3>Instalação de Desktop Environment</h3>
-                <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
-                <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
-            <h3>Instalação do Xorg</h3>
-                <p>A primeira coisa que precisamos para instalar um ambiente gráfico é o Xorg, para instala-lo utilize o comando:</p>
-                <code>pkg install xorg</code>
-                <code>Proceed with this action? <mark>y</mark></code> 
-            
-            <!-- AMBIENTES GRÁFICOS -->
-            
-            <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
-                <!-- KDE -->
-                <h4>Para instalação do KDE</h4>
-                <p>Para instalar o ambiente gráfico KDE Plasma e suas aplicações use o comando:</p>
-                <code>pkg install kde5</code>
-                <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
-                <code>pkg install plasma5-plasma</code>
-                <p>Lembrando que a instalação mínima não possui terminal nativo!</p>
-                <p>Como o KDE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Aumente o tamanho das mensagens utilize os comandos abaixo:</p>
-                <code>sysctl net.local.stream.recvspace=65536<br>sysctl net.local.stream.sendspace=65536</code>
-                <p>Para ser inicializado o KDE Plasma utiliza por padrão o SDDM, instale o SSDM com o comando abaixo:</p>
-                <code>pkg install sddm</code>
-                <p>E habilite o serviço com o comando abaixo:</p>
-                <code>sysrc sddm_enable="YES"</code>
-                <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
-                <code>sysrc sddm_lang="pt_BR"</code>
-                <!-- Gnome -->
-                <h4>Para instalação do Gnome</h4>
-                <p>Para instalar o ambiente gráfico Gnome e suas aplicações use o comando:</p>
-                <code>pkg install gnome</code>
-                <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
-                <code>pkg install gnome-lite</code>
-                <p>O Gnome requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
-                <code>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th># Device&ensp;<br></th>
-                            <th>Mountpoint&ensp;</th>
-                            <th>FStype&ensp;</th>
-                            <th>Options&ensp;</th>
-                            <th>Dump&ensp;</th>
-                            <th>Pass#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>proc</td>
-                            <td>/proc</td>
-                            <td>procfs</td>
-                            <td>rw</td>
-                            <td>0</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                        </table>
-                </code>
-                <p>Como o Gnome utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Por padrão o Gnome utiliza um Display Manager próprio (GDM), para habilitar o GDM use o comando abaixo:</p>
-                <code>sysrc gdm_enable="YES"</code>
-                <!-- XFCE -->
-                <h4>Para instalação do XFCE</h4>
-                <p>Para instalar o ambiente gráfico XFCE e suas aplicações use o comando:</p>
-                <code>pkg install xfce</code>
-                <p>O XFCE requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
-                <code>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th># Device&ensp;<br></th>
-                            <th>Mountpoint&ensp;</th>
-                            <th>FStype&ensp;</th>
-                            <th>Options&ensp;</th>
-                            <th>Dump&ensp;</th>
-                            <th>Pass#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>proc</td>
-                            <td>/proc</td>
-                            <td>procfs</td>
-                            <td>rw</td>
-                            <td>0</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                        </table>
-                </code>
-                <p>Como o XFCE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Para ser inicializado o XFCE por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
-                <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
-                <p>E habilite o serviço com o comando abaixo:</p>
-                <code>sysrc lightdm_enable="YES"</code>
-                <!-- MATE -->
-                <h4>Para instalação do MATE</h4>
-                <p>Para instalar o ambiente gráfico MATE e suas aplicações use o comando:</p>
-                <code>pkg install mate</code>
-                <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
-                <code>pkg install mate-base</code>
-                <p>O MATE requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
-                <code>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th># Device&ensp;<br></th>
-                            <th>Mountpoint&ensp;</th>
-                            <th>FStype&ensp;</th>
-                            <th>Options&ensp;</th>
-                            <th>Dump&ensp;</th>
-                            <th>Pass#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>proc</td>
-                            <td>/proc</td>
-                            <td>procfs</td>
-                            <td>rw</td>
-                            <td>0</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                        </table>
-                </code>
-                <p>Como o MATE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Para ser inicializado o MATE por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
-                <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
-                <p>E habilite o serviço com o comando abaixo:</p>
-                <code>sysrc lightdm_enable="YES"</code>
-                <!-- Cinnamon -->
-                <h4>Para instalação do Cinnamon</h4>
-                <p>Para instalar o ambiente gráfico Cinnamon e suas aplicações use o comando:</p>
-                <code>pkg install cinnamon</code>
-                <p>O Cinnamon requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
-                <code>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th># Device&ensp;<br></th>
-                            <th>Mountpoint&ensp;</th>
-                            <th>FStype&ensp;</th>
-                            <th>Options&ensp;</th>
-                            <th>Dump&ensp;</th>
-                            <th>Pass#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>proc</td>
-                            <td>/proc</td>
-                            <td>procfs</td>
-                            <td>rw</td>
-                            <td>0</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                        </table>
-                </code>
-                <p>Como o Cinnamon utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Para ser inicializado o Cinnamon por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
-                <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
-                <p>E habilite o serviço com o comando abaixo:</p>
-                <code>sysrc lightdm_enable="YES"</code>
-                <!-- LXQT -->
-                <h4>Para instalação do LXQT</h4>
-                <p>Para instalar o ambiente gráfico LXQT e suas aplicações use o comando:</p>
-                <code>pkg install lxqt</code>
-                <p>O LXQT requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
-                <code>
-                    <table>
-                        <thead>
-                          <tr>
-                            <th># Device&ensp;<br></th>
-                            <th>Mountpoint&ensp;</th>
-                            <th>FStype&ensp;</th>
-                            <th>Options&ensp;</th>
-                            <th>Dump&ensp;</th>
-                            <th>Pass#</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>proc</td>
-                            <td>/proc</td>
-                            <td>procfs</td>
-                            <td>rw</td>
-                            <td>0</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                        </table>
-                </code>
-                <p>Como o LXQT utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
-                <code>sysrc dbus_enable="YES"</code>
-                <p>Para ser inicializado o LXQT por padrão utiliza o SDDM, instale o SDDM com o comando abaixo:</p>
-                <code>pkg install sddm</code>
-                p>E habilite o serviço com o comando abaixo:</p>
-                <code>sysrc sddm_enable="YES"</code>
-                <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
-                <code>sysrc sddm_lang="pt_BR"</code>
+        <h3>Instalação de Desktop Environment</h3>
+        <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
+        <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
+        <!-- INSTALAÇÃO DO XORG -->
+        <h3>Instalação do Xorg</h3>
+        <p>A primeira coisa que precisamos para instalar um ambiente gráfico é o Xorg, para instala-lo utilize o comando:</p>
+        <code>pkg install xorg</code>
+        <code>Proceed with this action? <mark>y</mark></code> 
+        <!-- INSTALAÇÃO DOS DRIVERS -->
+        <h3>Instalação dos drivers de vídeo</h3>
+        <!-- NVIDIA -->
+        <h4>NVIDIA</h4>
+        <p>Caso você possua uma placa nvidia mais recente utilize o comando abaixo para instalar os drivers e aplicações necessárias:</p>
+        <code>pkg install nvidia-driver nvidia-settings nvidia-xconfig</code>
+        <p>Para setar o carregamento do driver utilize o comando:</p>
+        <code>sysrc kld_list+=nvidia-modeset</code>
+        <p>O Driver gráfico pode ser especificado no diretório <mark>/usr/local/etc/X11/xorg.conf.d/</mark>. Você pode criar o arquivo em <mark>/usr/local/etc/X11/xorg.conf.d/20-nvidia.conf</mark> seguindo o exemplo abaixo...</p>
+        <code>
+        <pre>
+Section "Device"
+    Identifier "Card0"
+    Driver     "nvidia"
+EndSection</pre>
+        </code>
+        <p><strong>OU</strong> utilizar este outro comando para que a configuração seja feita automaticamente:</p>
+        <code>nvidia-xconfig</code>
+        <!-- AMD -->
+        <h4>AMD</h4>
+        <p>Caso você possua uma placa ou vídeo integrado AMD utilize o comando abaixo para instalar os drivers e aplicações necessárias:</p>
+        <code>pkg install drm-kmod</code>
+        <p>Para setar o carregamento do driver para placas pós HD7000 ou Tahiti utilize o comando:</p>
+        <code>sysrc kld_list+=amdgpu</code>
+        <p>Para setar o carregamento do driver para placas pré HD7000 ou Tahiti utilize o comando:</p>
+        <code>sysrc kld_list+=radeonkms</code>
+        <p>O Driver gráfico pode ser especificado no diretório <mark>/usr/local/etc/X11/xorg.conf.d/</mark>. Você pode criar o arquivo em <mark>/usr/local/etc/X11/xorg.conf.d/20-nvidia.conf</mark> seguindo o exemplo abaixo:</p>
+        <code>
+        <pre>
+Section "Device"
+    Identifier "Card0"
+    Driver     "radeon"
+EndSection</pre>
+        </code>
+        <!-- Intel -->
+        <h4>Intel</h4>
+        <p>Caso você possua uma placa ou vídeo integrado Intel utilize o comando:</p>
+        <code>pkg install drm-kmod libva-intel-driver mesa-libs mesa-dri</code>
+        <p>Para setar o carregamento do driver utilize o comando:</p>
+        <code>sysrc kld_list+=i915kms</code>
+        <p>O Driver gráfico pode ser especificado no diretório <mark>/usr/local/etc/X11/xorg.conf.d/</mark>. Você pode criar o arquivo em <mark>/usr/local/etc/X11/xorg.conf.d/20-nvidia.conf</mark> seguindo o exemplo abaixo:</p>
+        <code>
+        <pre>
+Section "Device"
+    Identifier "Card0"
+    Driver     "intel"
+EndSection</pre>
+        </code>
+        <p>Caso deseje aceleração de hardware instale também os pacotes conforme o comando abaixo:</p>
+        <code>pkg install libva-intel-driver mesa-libs mesa-dri</code>
+        <!-- AMBIENTES GRÁFICOS -->
+        <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
+        <!-- KDE -->
+        <h4>Para instalação do KDE</h4>
+        <p>Para instalar o ambiente gráfico KDE Plasma e suas aplicações use o comando:</p>
+        <code>pkg install kde5</code>
+        <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
+        <code>pkg install plasma5-plasma</code>
+        <p>Lembrando que a instalação mínima não possui terminal nativo!</p>
+        <p>Como o KDE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Aumente o tamanho das mensagens utilize os comandos abaixo:</p>
+        <code>sysctl net.local.stream.recvspace=65536<br>sysctl net.local.stream.sendspace=65536</code>
+        <p>Para ser inicializado o KDE Plasma utiliza por padrão o SDDM, instale o SSDM com o comando abaixo:</p>
+        <code>pkg install sddm</code>
+        <p>E habilite o serviço com o comando abaixo:</p>
+        <code>sysrc sddm_enable="YES"</code>
+        <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
+        <code>sysrc sddm_lang="pt_BR"</code>
+        <!-- Gnome -->
+        <h4>Para instalação do Gnome</h4>
+        <p>Para instalar o ambiente gráfico Gnome e suas aplicações use o comando:</p>
+        <code>pkg install gnome</code>
+        <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
+        <code>pkg install gnome-lite</code>
+        <p>O Gnome requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
+        <code>
+        <table>
+            <thead>
+                <tr>
+                    <th># Device&ensp;<br></th>
+                    <th>Mountpoint&ensp;</th>
+                    <th>FStype&ensp;</th>
+                    <th>Options&ensp;</th>
+                    <th>Dump&ensp;</th>
+                    <th>Pass#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>proc</td>
+                    <td>/proc</td>
+                    <td>procfs</td>
+                    <td>rw</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+        </code>
+        <p>Como o Gnome utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Por padrão o Gnome utiliza um Display Manager próprio (GDM), para habilitar o GDM use o comando abaixo:</p>
+        <code>sysrc gdm_enable="YES"</code>
+        <!-- XFCE -->
+        <h4>Para instalação do XFCE</h4>
+        <p>Para instalar o ambiente gráfico XFCE e suas aplicações use o comando:</p>
+        <code>pkg install xfce</code>
+        <p>O XFCE requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
+        <code>
+            <table>
+                <thead>
+                    <tr>
+                        <th># Device&ensp;<br></th>
+                        <th>Mountpoint&ensp;</th>
+                        <th>FStype&ensp;</th>
+                        <th>Options&ensp;</th>
+                        <th>Dump&ensp;</th>
+                        <th>Pass#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>proc</td>
+                        <td>/proc</td>
+                        <td>procfs</td>
+                        <td>rw</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </code>
+        <p>Como o XFCE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Para ser inicializado o XFCE por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
+        <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
+        <p>E habilite o serviço com o comando abaixo:</p>
+        <code>sysrc lightdm_enable="YES"</code>
+        <!-- MATE -->
+        <h4>Para instalação do MATE</h4>
+        <p>Para instalar o ambiente gráfico MATE e suas aplicações use o comando:</p>
+        <code>pkg install mate</code>
+        <p>Se prefere uma instalação mínima utilize o comando abaixo:</p>
+        <code>pkg install mate-base</code>
+        <p>O MATE requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
+        <code>
+            <table>
+                <thead>
+                    <tr>
+                        <th># Device&ensp;<br></th>
+                        <th>Mountpoint&ensp;</th>
+                        <th>FStype&ensp;</th>
+                        <th>Options&ensp;</th>
+                        <th>Dump&ensp;</th>
+                        <th>Pass#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>proc</td>
+                        <td>/proc</td>
+                        <td>procfs</td>
+                        <td>rw</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>    
+        </code>
+        <p>Como o MATE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Para ser inicializado o MATE por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
+        <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
+        <p>E habilite o serviço com o comando abaixo:</p>
+        <code>sysrc lightdm_enable="YES"</code>
+        <!-- Cinnamon -->
+        <h4>Para instalação do Cinnamon</h4>
+        <p>Para instalar o ambiente gráfico Cinnamon e suas aplicações use o comando:</p>
+        <code>pkg install cinnamon</code>
+        <p>O Cinnamon requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
+        <code>
+            <table>
+                <thead>
+                    <tr>
+                        <th># Device&ensp;<br></th>
+                        <th>Mountpoint&ensp;</th>
+                        <th>FStype&ensp;</th>
+                        <th>Options&ensp;</th>
+                        <th>Dump&ensp;</th>
+                        <th>Pass#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>proc</td>
+                        <td>/proc</td>
+                        <td>procfs</td>
+                        <td>rw</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </code>
+        <p>Como o Cinnamon utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Para ser inicializado o Cinnamon por padrão utiliza o LightDM, instale o LightDM com o comando abaixo:</p>
+        <code>pkg install lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings</code>
+        <p>E habilite o serviço com o comando abaixo:</p>
+        <code>sysrc lightdm_enable="YES"</code>
+        <!-- LXQT -->
+        <h4>Para instalação do LXQT</h4>
+        <p>Para instalar o ambiente gráfico LXQT e suas aplicações use o comando:</p>
+        <code>pkg install lxqt</code>
+        <p>O LXQT requer que o <em>/proc</em> esteja montado, adicione a segunda linha seguindo o exemplo abaixo em <em>/etc/fstab</em> para montagem automática:</p>
+        <code>
+        <table>
+            <thead>
+                <tr>
+                    <th># Device&ensp;<br></th>
+                    <th>Mountpoint&ensp;</th>
+                    <th>FStype&ensp;</th>
+                    <th>Options&ensp;</th>
+                    <th>Dump&ensp;</th>
+                    <th>Pass#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>proc</td>
+                    <td>/proc</td>
+                    <td>procfs</td>
+                    <td>rw</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+        </code>
+        <p>Como o LXQT utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
+        <code>sysrc dbus_enable="YES"</code>
+        <p>Para ser inicializado o LXQT por padrão utiliza o SDDM, instale o SDDM com o comando abaixo:</p>
+        <code>pkg install sddm</code>
+        <p>E habilite o serviço com o comando abaixo:</p>
+        <code>sysrc sddm_enable="YES"</code>
+        <p>Sete as opções de localização do SDDM com o comando abaixo:</p>
+        <code>sysrc sddm_lang="pt_BR"</code>
 
-                <!-- FIM DA INSTALAÇÃO DE AMBIENTES GRÁFICOS -->
+        <!-- FIM DA INSTALAÇÃO DE AMBIENTES GRÁFICOS -->
 
-                <!--
-                <p>Esses ambientes (por via de regra) dependem do <mark>process file system</mark> montados, para isso vamos editar o <mark>/etc/fstab</mark>. Caso nunca tenha utilizado um editor de texto por terminal antes eu recomendo instalar o <mark>nano</mark> para editar o arquivo, instale-o com o comando:</p>
-                <code>pkg install nano</code>
-                <p>Edite o arquivo com o comando:</p>
-                <code>nano /etc/fstab</code>
-                <p>Adicione essa linha (seguindo a tabela e inserindo os espaços com <mark>Tab</mark>):</p>
-                <code>proc&emsp;/proc&emsp;procfs&emsp;rw&emsp;0&emsp;0</code>
-                <p>Para sair do nano o comando é <mark>Ctrl</mark> + <mark>x</mark>, quando utilizar esse comando caso não tenha salvado o arquivo ele vai perguntar se você deseja salvar antes de sair, obviamente escolha que <mark>sim</mark> e <mark>tecle Enter</mark> para confirmar o <mark>nome do arquivo</mark> (<strong>não edite o nome do arquivo!</strong>).</p>
-                
-            <h3>Edição do RCCONF</h3>        
-                <p>Por via de regra esses ambientes pedem algumas alterações no arquivo <mark>/etc/rc.conf</mark>.</p>
-                <p>para editar o arquivo com o nano execute o comando:</p>
-                <code>nano /etc/rc.conf</code>
-                <p>acrescente essas linhas ao final do arquivo:</p>
-                <code>dbus_enable="YES"</code>
-                <code>hald_enable="YES"</code>
-                <p>(não mais necessário)</p>
-                <p>Os ambientes gráficos precisam da adição de linhas específicas.</p>
-                <p> Caso escolha o KDE ative o SDDM:</p>
-                <code>sddm_enable="YES"</code>
-                <p>(apenas para chamar o gerenciador de exibição para o KDE)</p>
-                <p>Caso escolha o Gnome ative o GDM e os serviços do Gnome:</p>
-                <code>gdm_enable="YES"</code>
-                <p>(apenas para chamar o gerenciador de exibição Gnome)</p>
-                <code>gnome_enable="YES"</code>
-                <p>(para iniciar os serviços do gnome)</p>
-                <p>Caso escolha os demais Ambientes ative o Slim:</p>
-                <code>slim_enable="YES"</code>
-                <p>(apenas para chamar o gerenciador de exibição SLiM para os demais desktop environments)</p>
-                <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
-            -->
-
-            <h3>Edição do arquivo .XINITRC</h3>
-                <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
-                <code>exit</code>
-                <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
-                <code>nano ~/.xinitrc</code>
-                <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
-                <code>export LC_ALL=pt_BR.UTF-8</code>
-                <code>export LANGUAGE=pt_BR.UTF-8</code>
-                <code>export LANG=pt_BR.UTF-8</code>
-                <code>setxkbmap -model abnt2 -layout br</code>
-                <!--
-                <p>Caso tenha selecionado algum ambiente que precisa ser iniciado pelo <em>startx</em> adicione a linha correspondente:</p>
-                <code>exec startxfce4</code>
-                <p>para iniciar o XFCE pelo SLiM</p>
-                <code>exec mate-session</code>
-                <p>para iniciar o Mate pelo SLiM</p>
-                <code>exec startlxqt</code>
-                <p>para iniciar o LxQT pelo SLiM</p>
-                <code>exec cinnamon-session</code>
-                <p>para iniciar o Cinnamon pelo SLiM</p>
-                <p>Feche o arquivo com <mark>Ctrl</mark> + <mark>x</mark>, confirme salvar.</p>
-                -->
-            <h3>Ambiente gráfico devidamente instalado!</h3>
-                <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
-                <code>shutdown -r now</code>
-                <img class="responsiva" src="assets/images/mate.jpg" alt="">
-            <h3>Mas ainda é só o começo...</h3>
-                <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
-                <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
-            <h3>Caso queira continuar...</h3>
-                <p>Aqui vão algumas alterações recomendadas:</p>
-            <h3>/etc/rc.conf</h3>
-                <!--
-                <h4>Para desabilitar completamente o Sendmail:</h4>
-                    <code>sendmail_enable="NO"</code> 
-                    <p>(ao invés do depreciado <mark>sendmail_enable="NONE"</mark>)</p>
-                    <code>sendmail_submit_enable="NO"</code>
-                    <code>sendmail_outbound_enable="NO"</code>
-                    <code>sendmail_msp_queue_enable="NO"</code>
-                <h4>Para habilitar a sincronização de horário no boot:</h4>
-                <code>ntpd_sync_on_start="YES"</code>
-                <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
-                -->
-            <h3>/boot/loader.conf</h3>
-                <h4>Para habilitar o novo virtual console:</h4>
-                    <code>kern.vty="vt"</code>
-                <h4>Para reduzir o tempo do prompt de autoboot para 5 segundos:</h4>
-                    <code>autoboot_delay="5"</code>
-                <!--
-                <h4>Mudar o ntpd para o openntpd:</h4>
-                    <code>pkg install openntpd</code>
-                    <p>edite o <mark>ntpd.conf</mark>:</p>
-                    <code>nano /usr/local/etc/ntpd.conf</code>
-                    <p>edite para o seguinte conteúdo:</p>
-                    <code>servers pool.ntp.br</code>
-                    <p>No <mark>rc.conf</mark>, edite a linha:</p>
-                    <code>ntpd_enable="YES"</code>
-                    <p>para:</p>
-                    <code>ntpd_enable="NO"</code>
-                    <p>e logo abaixo insira a linha:</p>
-                    <code>openntpd_enable="YES"</code>
-                -->
-            <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
-                <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
-                <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
-                <p>Ao alterar o locale usando a codificação de caracteres UTF-8, o sistema pode entender e exibir cada um dos 1112064 caracteres no conjunto de caracteres Unicode, ao invés de apenas US ASCII como é o padrão com LANG=C.</p>
-                <p>Edite o banco de dados da classe de login em <mark>/etc/login.conf</mark> para adicionar um conjunto de caracteres e localidade padrão. Os shells de login herdarão as variáveis ​​de ambiente definidas aqui na classe padrão ou em uma classe mais restrita, se corresponder a uma.</p>
-                <p>altere de:</p>
-                <code>:charset=UTF-8:\</code>
-                <code>:lang=en_US.UTF-8:</code>
-                <p>para:</p>
-                <code>:charset=UTF-8:\</code>
-                <code>:lang=pt_BR.UTF-8:</code>
-                <p>Após fazer as alterações reconstrua o banco de dados de login com</p>
-                <code>cap_mkdb /etc/login.conf</code>
-                <p>Você pode ter que especificar a nova localidade em outro lugar (como <mark>/etc/profile</mark>) para usos de shell sem login, como GDM e outros gerenciadores de login.</p>
-                <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
-                <code>LANG=pt_BR.UTF-8;   export LANG</code>
-                <code>CHARSET=UTF-8;  export CHARSET</code>
-                <p>Para verificar a localização execute no seu próximo login o comando:</p>
-                <code>locale</code>
-                <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
-                <p>isso retira a necessidade das linhas...</p>
-                <code>export LC_ALL=pt_BR.UTF-8</code>
-                <code>export LANGUAGE=pt_BR.UTF-8</code>
-                <code>export LANG=pt_BR.UTF-8</code>
-                <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
-                <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
-            <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
-                <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
-                <code>fsck -y</code>
-                <code>mount -u /</code>
-                <code>mount -a -t ufs</code>
-                <p>Se e somente se você utiliza swap:</p>
-                <code>swapon -a</code>
-                <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
+        <!-- SLIM (DEPRECIADO)
+        <p>Caso queira utilizar o Slim como display manager:</p>
+        <code>pkg install slim</code>
+        <code>slim_enable="YES"</code>
+        <p>Caso queira mudar o tema do slim insira a pasta do tema em <mark>/usr/local/share/slim/themes/</mark> e altere a opção <mark>current theme</mark> no arquivo <mark>/usr/local/etc/slim.conf</mark>.</p>
+        -->
+        <h3>Edição do arquivo .XINITRC</h3>
+        <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
+        <code>exit</code>
+        <p>e logue na sua conta de usuário comum. Assim que tiver na sua conta pessoal, utilize o <mark>nano</mark> para configurar o arquivo <mark>.xinitrc</mark> com o comando:</p>
+        <code>nano ~/.xinitrc</code>
+        <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
+        <code>export LC_ALL=pt_BR.UTF-8</code>
+        <code>export LANGUAGE=pt_BR.UTF-8</code>
+        <code>export LANG=pt_BR.UTF-8</code>
+        <code>setxkbmap -model abnt2 -layout br</code>
+        <h3>Ambiente gráfico devidamente instalado!</h3>
+        <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
+        <code>shutdown -r now</code>
+        <img class="responsiva" src="assets/images/mate.jpg" alt="">
+        <h3>Mas ainda é só o começo...</h3>
+        <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
+        <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
+        <h3>Caso queira continuar...</h3>
+        <p>Aqui vão algumas alterações recomendadas:</p>
+        <h3>/etc/rc.conf</h3>
+        <!-- OBSOLETO E DESNECESSÁRIO
+        <h4>Para desabilitar completamente o Sendmail:</h4>
+        <code>sendmail_enable="NO"</code> 
+        <p>(ao invés do depreciado <mark>sendmail_enable="NONE"</mark>)</p>
+        <code>sendmail_submit_enable="NO"</code>
+        <code>sendmail_outbound_enable="NO"</code>
+        <code>sendmail_msp_queue_enable="NO"</code>
+        <h4>Para habilitar a sincronização de horário no boot:</h4>
+        <code>ntpd_sync_on_start="YES"</code>
+        <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
+        -->
+        <h3>/boot/loader.conf</h3>
+        <h4>Para habilitar o novo virtual console:</h4>
+        <code>kern.vty="vt"</code>
+        <h4>Para reduzir o tempo do prompt de autoboot para 5 segundos:</h4>
+        <code>autoboot_delay="5"</code>
+        <!--
+        <h4>Mudar o ntpd para o openntpd:</h4>
+        <code>pkg install openntpd</code>
+        <p>edite o <mark>ntpd.conf</mark>:</p>
+        <code>nano /usr/local/etc/ntpd.conf</code>
+        <p>edite para o seguinte conteúdo:</p>
+        <code>servers pool.ntp.br</code>
+        <p>No <mark>rc.conf</mark>, edite a linha:</p>
+        <code>ntpd_enable="YES"</code>
+        <p>para:</p>
+        <code>ntpd_enable="NO"</code>
+        <p>e logo abaixo insira a linha:</p>
+        <code>openntpd_enable="YES"</code>
+        -->
+        <h3>Configuração padrão de localização e entrada para todos os usuários</h3>
+        <p>o <mark>LANG=xx.YY.ZZZZ</mark> muda as variáveis de ambiente para o código de linguagem <mark>xx</mark>, o código de país <mark>YY</mark> e codificação de caracteres <mark>ZZZZ</mark>.</p>
+        <p>O idioma e o código do país afetam o idioma padrão das aplicações, formatação de números, formatação de data e hora, agrupamento de <i>strings</i>, configurações de moeda e entre outras coisas.</p>
+        <p>Ao alterar o locale usando a codificação de caracteres UTF-8, o sistema pode entender e exibir cada um dos 1112064 caracteres no conjunto de caracteres Unicode, ao invés de apenas US ASCII como é o padrão com LANG=C.</p>
+        <p>Edite o banco de dados da classe de login em <mark>/etc/login.conf</mark> para adicionar um conjunto de caracteres e localidade padrão. Os shells de login herdarão as variáveis ​​de ambiente definidas aqui na classe padrão ou em uma classe mais restrita, se corresponder a uma.</p>
+        <p>altere de:</p>
+        <code>:charset=UTF-8:\</code>
+        <code>:lang=en_US.UTF-8:</code>
+        <p>para:</p>
+        <code>:charset=UTF-8:\</code>
+        <code>:lang=pt_BR.UTF-8:</code>
+        <p>Após fazer as alterações reconstrua o banco de dados de login com</p>
+        <code>cap_mkdb /etc/login.conf</code>
+        <p>Você pode ter que especificar a nova localidade em outro lugar (como <mark>/etc/profile</mark>) para usos de shell sem login, como GDM e outros gerenciadores de login.</p>
+        <p>em </mark>/etc/profile</mark> adicione as linhas:</p>
+        <code>LANG=pt_BR.UTF-8;   export LANG</code>
+        <code>CHARSET=UTF-8;  export CHARSET</code>
+        <p>Para verificar a localização execute no seu próximo login o comando:</p>
+        <code>locale</code>
+        <p>Se o seu <mark>LC_ALL=</mark> não conter nenhuma especificação não se preocupe, <mark>LC_ALL</mark> só deve ser definido se você deseja (forçosamente) anular qualquer e todas as outras configurações <mark>LC_*</mark>.</p>
+        <p>isso retira a necessidade das linhas...</p>
+        <code>export LC_ALL=pt_BR.UTF-8</code>
+        <code>export LANGUAGE=pt_BR.UTF-8</code>
+        <code>export LANG=pt_BR.UTF-8</code>
+        <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
+        <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
+        <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
+        <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
+        <code>fsck -y</code>
+        <code>mount -u /</code>
+        <code>mount -a -t ufs</code>
+        <p>Se e somente se você utiliza swap:</p>
+        <code>swapon -a</code>
+        <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 21/02/2024)</p>
