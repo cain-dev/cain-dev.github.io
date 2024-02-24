@@ -129,6 +129,8 @@
         <p>Assim que o sistema iniciar logue na conta de administrador: (login: <mark>root</mark> - senha: <mark>senha que você digitou para acesso administrativo</mark>)</p>
         <img class="responsiva" src="assets/images/bsd35.jpg" alt="">
         <p>Assim que logado na conta de root vamos começar a preparar o sistema...</p>
+        <p><strong>Opcional:</strong> Caso você tenha problemas para utilizar o terminal devido ao tamanho da fonte, utilize o comando abaixo para selecionar uma outra fonte:</p>
+        <code>vidfont</code>
         <img class="responsiva" src="assets/images/bsd36.jpg" alt="">
         <p>Para atualizar os patches de segurança do sistema use os comandos:</p>
         <code>freebsd-update fetch</code>
@@ -140,6 +142,10 @@
         <code>Your packages are up to date</code>
         <p>Significa que seu sistema já está devidamente atualizado.</p>
         <!-- FIM DA INSTALAÇÃO DO SISTEMA -->
+        <p><strong>Lembre-se!</strong> Você pode utilizar o comando abaixo para remover pacotes específicos:</p>
+        <code>pkg remove <em>nomedopacote</em></code>
+        <p>E pode usar o comando abaixo para remover pacotes órfãos:</p>
+        <code>pkg autoremove</code>
         <h2>Configuração para Usuário Final</h2>
         <!-- DOAS -->
         <h3>Elevação de privilégio com o Doas</h3>
@@ -464,6 +470,11 @@ EndSection</pre>
         <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
         -->
         <h3>/boot/loader.conf</h3>
+        <h4>Carregando sensor de temperatura do processador</h4>
+        <p>Para carregar o módulo automaticamente durante o boot para processadores <em>Intel</em> adicione a linha:</p>
+        <code>coretemp_load="YES"</code>
+        <p>Caso você tenha um processador <em>AMD</em> adicione a linha:</p>
+        <code>amdtemp_load="YES"</code>
         <!-- OBSOLETO E DESNECESSÁRIO
         <h4>Para habilitar o novo virtual console:</h4>
         <code>kern.vty="vt"</code>
@@ -472,7 +483,10 @@ EndSection</pre>
         <code>autoboot_delay="3"</code>
         <h4>Se você especificar a resolução máxima desejada para o console do framebuffer EFI adicione a linha:</h4>
         <code>efi_max_resolution=1920x1080</code>
-        <h4>Para alterar o tamanho da fonte no framebuffer adicione a linha:</h4>
+        <p>Observação: Podem ser usados os valores <mark>480p</mark>, <mark>720p</mark>, <mark>1080p</mark>, <mark>2160p</mark>, <mark>4k</mark>, <mark>5k</mark> ou um valor customizado de <em>largura<mark>x</mark>altura</em>.</p>
+        <h4>Para alterar o tamanho da fonte no menu UEFI</h4>
+        <p><strong>Opcional:</strong> Caso você tenha problemas para utilizar o menu do boot UEFI devido ao tamanho da fonte você pode configurar de forma persistente um outro tamanho adicionando um dos códigos abaixo de baixo:</p>
+        <code>screen.font="8x16"</code>
         <code>screen.font="16x32"</code>
         <!--
         <h4>Mudar o ntpd para o openntpd:</h4>
@@ -525,9 +539,56 @@ EndSection</pre>
         <p>Se e somente se você utiliza swap:</p>
         <code>swapon -a</code>
         <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
+        <h3>Compilação de pacotes com o poudriere</h3>
+        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é como usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
+        <p><strong>Lembrando que misturar pacotes baixados e compilados, ou mesmo alterar as configurações na raiz do sistema real pode facilmente <i>borkar</i> o seu sistema!</strong></p>
+        <p>Primeiramente instale o <em>git</em> para gerenciar a árvore de <em>ports</em>:</p>
+        <code>pkg install git</code>
+        <p>Depois, baixe a árvore de ports para o diretório <mark>/usr/ports</mark>:</p>
+        <code>git clone https://git.freebsd.org/ports.git /usr/ports</code>
+        <p>Para instalar o poudriere acesse o seu diretório com o comando:</p>
+        <code>cd /usr/ports/ports-mgmt/poudriere</code>
+        <p>E instale ele com o comando abaixo, prompts de instalação vão aparecer, recomendo que permaneça com a configuração padrão:</p>
+        <code>make install clean</code>
+        <p><strong>OU</strong></p>
+        <p>Caso queira instalar sem compilação basta usar p comando:</p>
+        <code>pkg install poudriere</code>
+        <p>Acesse o arquivo de configuração do poudriere com o comando abaixo e faça algumas modificações básicas:</p>
+        <code>nano /usr/local/etc/poudriere.conf</code>
+        <p>Se você <strong>NÃO ESTÁ</strong> utilizando <em>ZFS</em>, decomente a linha <mark>NO_ZFS=YES</mark>.</p>
+        <p>Se você configurou <em>TMPFS</em>, habilite-o na linha <mark>USE_TMPFS=yes</mark>.</p>
+        <p>Se você configurou <em>CCACHE</em>, habilite-o informando o seu diretório como neste exemplo: <mark>CCACHE_DIR=/var/cache/ccache</mark>.</p>
+        <p>Se você deseja definir o número máximo de jobs em paralelo para <em>1</em>, altere a linha <mark>PARALLEL_JOBS=1</mark>.</p>
+        <p>Mude a linha <mark>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</mark> para <mark>FREEBSD_HOST=ftp://ftp.freebsd.org</mark>.</p>
+        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para isso use o comando:</p>
+        <code>poudriere ports -c</code>
+        <p>A criação de uma jail é necessária para que o poudriere compile os programas em bloco, para isso use os comandos:</p>
+        <code>mkdir /usr/local/poudriere</code>
+        <p>*Caso o diretório não exista.</p>
+        <code>poudriere jail -c -j "FreeBSD_14_0_x64" -v 14.0-RELEASE -a amd64</code>
+        <p>O comando acima cria uma jail com o nome <em>FreeBSD_14_0_x64</em>, baseada na versão <em>14.0-RELEASE</em> e para a arquitetura <em>amd64</em>, altere conforme a sua necessidade.</p>
+        <p>Agora vamos criar um arquivo de configuração para essa jail, para isso utilize os comandos abaixo:</p>
+        <code>cd /usr/local/etc/poudriere.d</code>
+        <code>nano FreeBSD_14_0_x64-make.conf</code>
+        <p>E adicione a linha:</p>
+        <code>WITH_PKGNG=YES</code>
+        <p>Poudriere configurado, jail configurada, agora é necessário listar os pacotes desejados para serem compilados, edite o arquivo da lista com:</p>
+        <code>nano /usr/local/etc/poudriere-list</code>
+        <p>Caso você não saiba como estipular o port desejado, é bem simples, vamos supor que você deseje compilar o <em>gnome-terminal</em>, você pode procurar onde está o pacote com o comando:</p>
+        <code>whereis gnome-terminal</code>
+        <p>...Ele retorna o diretório:</p>
+        <code>...x11/gnome-terminal</code>
+        <p>Então basta inserir <mark>x11/gnome-terminal</mark>  no arquivo <mark>/usr/local/etc/poudriere-list</mark>.</p>
+        <p>Você pode editar as opções de compilação do pacote com o comando:</p>
+        <code>poudriere options  -c x11/gnome-terminal</code>
+        <p>E caso deseje ver as opções de compilação de qualquer pacote use:</p>
+        <code>pkg info <em>nomedopacote</em></code>
+        <p>Uma vez que a configuração esteja completa, você pode <i>buildar</i> a lista de pacotes com o comando:</p>
+        <code>poudriere bulk -j FreeBSD_14_0_x64 -f /usr/local/etc/poudriere-list</code>
+        <p>Onde <em>FreeBSD_14_0_x64</em> é o nome da jail e <em>/usr/local/etc/poudriere-list</em> é o arquivo da lista de pacotes.</p>
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 21/02/2024)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
