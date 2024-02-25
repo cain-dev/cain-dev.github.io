@@ -448,6 +448,18 @@ EndSection</pre>
         <code>nano ~/.xinitrc</code>
         <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
         <code>export LC_ALL=pt_BR.UTF-8<br>export MM_CHARSET=UTF-8<br>export LANG=pt_BR.UTF-8<br>export LANGUAGE=pt_BR.UTF-8<br>setxkbmap -model abnt2 -layout br</code>
+        <h3>Silent Boot</h3>
+        <p>Diferente do Linux que para conseguir um boot silencioso basta um argumento para o kernel, no FreeBSD não há uma opção isolada.</p>
+        <p>Para substituir as mensagens de inicialização do bootloader pelo logo do FreeBSD adicione a linha abaixo em <mark>/boot/loader.conf</mark>:</p>
+        <code>boot_mute="YES</code>
+        <p>Para desativar o menu do bootloader do FreeBSD adicione a alinha abaixo em <mark>/boot/loader.conf</mark>:</p>
+        <code>beastie_disable="YES"</code>
+        <p>Silenciando script de inicialização redirecionando as saídas para <em>/dev/null</em>:</p>
+        <code>sed -i ” ‘s/run_rc_script ${_rc_elem} ${_boot}/run_rc_script ${_rc_elem} ${_boot} > \/dev\/null/g’ /etc/rc</code>
+        <p>Para silenciar as mensagens de inicialização de serviços adicione a linha abaixo em <mark>/etc/rc.conf</mark>:</p>
+        <code>rc_startmsgs="NO"</code>
+        <p>Para fazer com que o <em>DHCPD</em> opere em segundo plano adicione a linha abaixo no <mark>/etc/rc.conf</mark>:</p>
+        <code>background_dhclient="YES"</code>
         <h3>Ambiente gráfico devidamente instalado!</h3>
         <p>Se você fez tudo certo basta utilizar o comando abaixo para reiniciar a máquina e já iniciar no seu gerenciador de exibição, e poder logar e utilizar o seu FreeBSD com ambiente gráfico.</p>
         <code>shutdown -r now</code>
@@ -455,9 +467,43 @@ EndSection</pre>
         <h3>Mas ainda é só o começo...</h3>
         <p>Existem diversas alterações que ainda podem ser feitas no sistema para melhorar a sua experiência, da instalação dos drivers de vídeo (<mark>drm-kmod</mark>) até a otimizações nos arquivos <mark>/etc/profile</mark>, <mark>/etc/login.conf</mark>, <mark>/etc/fstab</mark>, <mark>/boot/loader.conf</mark>, <mark>/etc/sysctl.conf</mark>, <mark>/etc/rc.conf</mark>.</p>
         <p>Aos poucos postarei mais informações e otimizações, porém, com uma interface gráfica, com conhecimento do <mark>pkg install</mark> para instalar os aplicativos e sabendo alterar os arquivos do sistema por meio do <mark>nano</mark> você já tem mais do que o suficiente para começar bem no FreeBSD 😉</p>
-        <h3>Caso queira continuar...</h3>
-        <p>Aqui vão algumas alterações recomendadas:</p>
-        <h3>/etc/rc.conf</h3>
+        <h2>Caso queira continuar...</h2>
+        <!-- IMPRESSÃO NO FREEBSD -->
+        <h3>Impressão no FreeBSD</h3>
+        <p>De começo aqui vai um alerta: Impressão no FreeBSD é perfeita DESDE QUE você consiga encontrar o driver correto para a sua impressora, do contŕario as coisas tendem a ser bastante problemáticas (Sim! Ainda que seja impressão por rede!).</p>
+        <p>Supondo que você deu sorte de ter uma impressora com suporte não é tão complicado assim, basta ter o <em>CUPS</em> instalado e habilitado, o <em>LPD</em> e adicionar a impressoa nas configurações do CUPS. Instale o cups com o comando:</p>
+        <code>pkg install cups</code>
+        <p>Agora precisamos configurar o servidor de impressão do CUPS, acesse o diretório <mark>/etc/devfs.rules</mark>:</p>
+        <code>nano /etc/devfs.rules</code>
+        <p>E adicione as linhas abaixo:</p>
+<code><pre>
+[system=10]
+add path 'unlpt*' mode 0660 group cups
+add path 'ulpt*' mode 0660 group cups
+add path 'lpt*' mode 0660 group cups
+add path 'usb/X.Y.Z' mode 0660 group cups
+</pre></code>
+        <p>Agora precisamos habilitar alguns serviços na inicialização editando o <mark>/etc/rc.conf</mark> com o comando abaixo:</p>
+        <code>nano /etc/rc.conf</code>
+        <p>E adicione as linhas:</p>
+        <code>cupsd_enable="YES"<br>devfs_system_ruleset="system"<br>lpd_enable="YES"</code>
+        <p>Os serviços serão iniciados durante o boot, você também pode iniciá-los manualmente com os comandos de serviço como <em>service lpd start</em>, <em>service cupsd start</em> e <em>service devfs restart</em> mas <strong>o recomendado é que você reinicie o seu sistema</strong> e então verifique se os serviços subiram corretamente com o comando:</p>
+        <!--
+        <code>service lpd start<br>service cupsd start<br>service devfs restart</code>
+        -->
+        <code>service lpd status<br>service cupsd status</code>
+        <p>Se os serviços subiram sem nenhum problema você pode acessar a página local do CUPS com qualquer navegador acessando o endereço, mas antes precisamos ter o driver da impressora em mãos, para isso você tem 2 alternativas:</p>
+        <p>Instalar o pacote <em>gutenprint</em> válido para diversos modelos de impressoras:</p>
+        <code>pkg install gutenprint</code>
+        <p><strong>OU</strong></p>
+        <p>Baixar o arquivo <em>PPD</em> no site do fabricante da sua impressora ou buscá-lo no <em>OpenPrinting</em> no link:</p>
+        <code>https://www.openprinting.org/download/PPD/</code>
+        <p>Uma vez que você tem o driver necessário, basta seguir para o link do CUPS em:</p>
+        <code>http://localhost:631/</code>
+        <p>Na página do CUPS basta acessar a guia <mark>Administração</mark>, insira o usuário e senha do administrador.</p>
+        <p>Você pode selecionar <em>Encontrar novas impressoras</em> (para impressoras na sua rede local) ou <em>Adicionar impressora</em>, e por fim selecionar o modelo e driver da sua impressora.</p>
+        <h2>Aqui vão algumas alterações recomendadas:</h2>
+        <h3>No arquivo /etc/rc.conf</h3>
         <!-- OBSOLETO E DESNECESSÁRIO
         <h4>Para desabilitar completamente o Sendmail:</h4>
         <code>sendmail_enable="NO"</code> 
@@ -469,7 +515,7 @@ EndSection</pre>
         <code>ntpd_sync_on_start="YES"</code>
         <p>(adicione após <mark>ntpd_enable="YES"</mark>)</p>
         -->
-        <h3>/boot/loader.conf</h3>
+        <h3>No arquivo /boot/loader.conf</h3>
         <h4>Carregando sensor de temperatura do processador</h4>
         <p>Para carregar o módulo automaticamente durante o boot para processadores <em>Intel</em> adicione a linha:</p>
         <code>coretemp_load="YES"</code>
@@ -485,9 +531,10 @@ EndSection</pre>
         <code>efi_max_resolution=1920x1080</code>
         <p>Observação: Podem ser usados os valores <mark>480p</mark>, <mark>720p</mark>, <mark>1080p</mark>, <mark>2160p</mark>, <mark>4k</mark>, <mark>5k</mark> ou um valor customizado de <em>largura<mark>x</mark>altura</em>.</p>
         <h4>Para alterar o tamanho da fonte no menu UEFI</h4>
-        <p><strong>Opcional:</strong> Caso você tenha problemas para utilizar o menu do boot UEFI devido ao tamanho da fonte você pode configurar de forma persistente um outro tamanho adicionando um dos códigos abaixo de baixo:</p>
-        <code>screen.font="8x16"</code>
-        <code>screen.font="16x32"</code>
+        <p><strong>Opcional:</strong> Caso você tenha problemas para utilizar o menu do bootloader UEFI devido ao tamanho da fonte você pode configurar de forma persistente determinando o tamanho com o códigos abaixo de baixo:</p>
+        <code>screen.font="14x28"</code>
+        <p>Caso queira ver as fontes disponíveis basta usar o comando:</p>
+        <code>ls -1 /boot/fonts</code>
         <!--
         <h4>Mudar o ntpd para o openntpd:</h4>
         <code>pkg install openntpd</code>
@@ -531,7 +578,7 @@ EndSection</pre>
         <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
         <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
         -->
-        <h3>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h3>
+        <h2>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h2>
         <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
         <code>fsck -y</code>
         <code>mount -u /</code>
@@ -540,7 +587,7 @@ EndSection</pre>
         <code>swapon -a</code>
         <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
         <h3>Compilação de pacotes com o poudriere</h3>
-        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é como usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
+        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é que usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
         <p><strong>Lembrando que misturar pacotes baixados e compilados, ou mesmo alterar as configurações na raiz do sistema real pode facilmente <i>borkar</i> o seu sistema!</strong></p>
         <p>Primeiramente instale o <em>git</em> para gerenciar a árvore de <em>ports</em>:</p>
         <code>pkg install git</code>
@@ -551,7 +598,7 @@ EndSection</pre>
         <p>E instale ele com o comando abaixo, prompts de instalação vão aparecer, recomendo que permaneça com a configuração padrão:</p>
         <code>make install clean</code>
         <p><strong>OU</strong></p>
-        <p>Caso queira instalar sem compilação basta usar p comando:</p>
+        <p>Caso queira instalar sem compilação basta usar o comando:</p>
         <code>pkg install poudriere</code>
         <p>Acesse o arquivo de configuração do poudriere com o comando abaixo e faça algumas modificações básicas:</p>
         <code>nano /usr/local/etc/poudriere.conf</code>
@@ -560,8 +607,8 @@ EndSection</pre>
         <p>Se você configurou <em>CCACHE</em>, habilite-o informando o seu diretório como neste exemplo: <mark>CCACHE_DIR=/var/cache/ccache</mark>.</p>
         <p>Se você deseja definir o número máximo de jobs em paralelo para <em>1</em>, altere a linha <mark>PARALLEL_JOBS=1</mark>.</p>
         <p>Mude a linha <mark>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</mark> para <mark>FREEBSD_HOST=ftp://ftp.freebsd.org</mark>.</p>
-        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para isso use o comando:</p>
-        <code>poudriere ports -c</code>
+        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para criar uma árvore de ports com o nome <mark>default</mark> use o comando:</p>
+        <code>poudriere ports -c -p default</code>
         <p>A criação de uma jail é necessária para que o poudriere compile os programas em bloco, para isso use os comandos:</p>
         <code>mkdir /usr/local/poudriere</code>
         <p>*Caso o diretório não exista.</p>
@@ -573,19 +620,36 @@ EndSection</pre>
         <p>E adicione a linha:</p>
         <code>WITH_PKGNG=YES</code>
         <p>Poudriere configurado, jail configurada, agora é necessário listar os pacotes desejados para serem compilados, edite o arquivo da lista com:</p>
+        <!-- 
         <code>nano /usr/local/etc/poudriere-list</code>
+        -->
+        <code>nano /usr/local/etc/poudriere.d/packages-default</code>
         <p>Caso você não saiba como estipular o port desejado, é bem simples, vamos supor que você deseje compilar o <em>gnome-terminal</em>, você pode procurar onde está o pacote com o comando:</p>
         <code>whereis gnome-terminal</code>
         <p>...Ele retorna o diretório:</p>
         <code>...x11/gnome-terminal</code>
-        <p>Então basta inserir <mark>x11/gnome-terminal</mark>  no arquivo <mark>/usr/local/etc/poudriere-list</mark>.</p>
-        <p>Você pode editar as opções de compilação do pacote com o comando:</p>
+        <p>Então basta inserir <mark>x11/gnome-terminal</mark>  no arquivo <mark>/usr/local/etc/poudriere.d/packages-default</mark>.</p>
+        <p>Você pode editar recursivamente as opções de compilação do pacote <mrk>x11/gnome-terminal</mrk> com o comando:</p>
         <code>poudriere options  -c x11/gnome-terminal</code>
+        <p>E caso queira editar apenas as opções específicas do pacote <mrk>x11/gnome-terminal</mrk> pode fazer com o comando:</p>
+        <code>poudriere options x11/gnome-terminal</code>
         <p>E caso deseje ver as opções de compilação de qualquer pacote use:</p>
         <code>pkg info <em>nomedopacote</em></code>
-        <p>Uma vez que a configuração esteja completa, você pode <i>buildar</i> a lista de pacotes com o comando:</p>
+        <p>Uma vez que a configuração esteja completa, você pode criar o repositório com o comando:</p>
         <code>poudriere bulk -j FreeBSD_14_0_x64 -f /usr/local/etc/poudriere-list</code>
         <p>Onde <em>FreeBSD_14_0_x64</em> é o nome da jail e <em>/usr/local/etc/poudriere-list</em> é o arquivo da lista de pacotes.</p>
+        <p>Como o poudriere é o responsável pela compilação dos pacotes e o <em>pkg</em> é o responsável  pela instalação, temos que fazer um apontamento para o diretório local do poudriere. Para isso precisamos criar o arquivo <mark>Local.conf</mark> no diretório <mark>/usr/local/etc/pkg/repos/</mark>.</p>
+        <code>nano /usr/local/etc/pkg/repos/Local.conf</code>
+        <p>E adicione as linhas:</p>
+<code><pre>
+Poudriere: {
+    url: "file:///usr/local/poudriere/data/packages/FreeBSD_14_0_x64-default"
+}
+                
+FreeBSD: {
+    enabled: no
+}
+</pre></code>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
