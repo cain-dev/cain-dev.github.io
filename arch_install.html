@@ -1125,6 +1125,27 @@
         <code>export FREETYPE_PROPERTIES="truetype:interpreter-version=NN"</code>
         <p>Reconstrua o cache do fontconfig com o comando:</p>
         <code>sudo fc-cache -fv</code>
+        <h3>Habilitando o Bluetooth</h3>
+        <p>Por padrão o Arch não vem com a <em>stack</em> de bluetooth, mas é bem fácil resolver isso, apenas instale a <em>stack</em> e habilite o serviço:</p>
+        <code>pacman -S bluez bluez-utils</code>
+        <code>systemctl enable bluetooth.service<br>systemctl start bluetooth.service</code>
+        <p>Existem diversos <i>front-ends</i> para facilitar a utilização do bluetooth, se você utiliza o Gnome pode instalar o pacote:</p>
+        <code>pacman -S gnome-bluetooth-3.0</code>
+        <p>Caso utilize KDE pode instalar o pacote:</p>
+        <code>pacman -S bluedevil</code>
+        <p>Caso utilize Cinnamon pode instalar o pacote:</p>
+        <code>pacman -S blueberry</code>
+        <p>E caso queira um pacote agnóstico pode instalar o pacote:</p>
+        <code>pacman -S blueman</code>
+        <h4>Adendo: Controle de PS3</h4>
+        <p>Nas últimas versões do bluez, o valor <mark>ClassicBondedOnly</mark> foi mudad de <mark>false</mark> para <mark>true</mark> por razões de insegurança, mas isso infelizmente impossibilita o pareamento do controle de PS3, então para conectar um controle de PS3 acesse o arquivo <mark>/etc/bluetooth/input.conf</mark>...</p>
+        <code>nano /etc/bluetooth/input.conf</code>
+        <p>...E altere novamente para <mark>false</mark> como no exemplo abaixo:</p>
+<code><pre>
+[General]
+ClassicBondedOnly=false
+</pre></code>
+
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 05/10/2023)</p>
