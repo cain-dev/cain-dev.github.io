@@ -448,6 +448,13 @@ EndSection</pre>
         <code>nano ~/.xinitrc</code>
         <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
         <code>export LC_ALL=pt_BR.UTF-8<br>export MM_CHARSET=UTF-8<br>export LANG=pt_BR.UTF-8<br>export LANGUAGE=pt_BR.UTF-8<br>setxkbmap -model abnt2 -layout br</code>
+        <!-- NAVEGADOR E SUÍTE OFFICE -->
+        <h3>Navegador e Suíte office</h3>
+        <p>Se você vai usar o FreeBSD como sistema Desktop, navegador e suíte office são essenciais! Para instalar o Firefox e o LibreOffice (com suporte a Português do Brasil) basta usar o comando:</p>
+        <code>pkg install firefox-esr libreoffice pt_BR-libreoffice</code>
+        <p>Para alterar o idioma da interface no LibreOffice vá em Ferramentas -> Opções -> Configurações de idioma -> Idiomas. Selecione “Português (Brasil)” na caixa de lista “Interface do usuário” e clique em OK. Reinicie o LibreOffice para que as alterações tenham efeito</p>
+        <p>Para alterar o idioma da interface do Firefox acesse o menu e selecione Configurações -> Geral -> Idioma -> Definir alternativa e caso Português (BR) não esteja na lista clique em "Selecione um idioma para adicionar", escolha Português (BR), coloque ele como o primeiro da lista e reinicie o Firefox para que as alterações tenham efeito.</p>
+        <!-- SILENT BOOT -->
         <h3>Silent Boot</h3>
         <p>Diferente do Linux que para conseguir um boot silencioso basta um argumento para o kernel, no FreeBSD não há uma opção isolada.</p>
         <p>Para substituir as mensagens de inicialização do bootloader pelo logo do FreeBSD adicione a linha abaixo em <mark>/boot/loader.conf</mark>:</p>
@@ -586,13 +593,19 @@ add path 'usb/X.Y.Z' mode 0660 group cups
         <p>Se e somente se você utiliza swap:</p>
         <code>swapon -a</code>
         <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
+        <!-- CONFIGURANDO COMPILAÇÃO COM O POUDRIERE -->
         <h3>Compilação de pacotes com o poudriere</h3>
-        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é que usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
+        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é que alguns usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
         <p><strong>Lembrando que misturar pacotes baixados e compilados, ou mesmo alterar as configurações na raiz do sistema real pode facilmente <i>borkar</i> o seu sistema!</strong></p>
+        <!-- INSTALANDO GIT -->
+        <h4>Instalando o git e criando diretório local</h4>
         <p>Primeiramente instale o <em>git</em> para gerenciar a árvore de <em>ports</em>:</p>
         <code>pkg install git</code>
+        <!-- BAIXANDO A ÁRVORE DE PORTS PARA /usr/ports -->
         <p>Depois, baixe a árvore de ports para o diretório <mark>/usr/ports</mark>:</p>
         <code>git clone https://git.freebsd.org/ports.git /usr/ports</code>
+        <!-- INSTALANDO POUDRIERE -->
+        <h4>Instalando o poudriere</h4>
         <p>Para instalar o poudriere acesse o seu diretório com o comando:</p>
         <code>cd /usr/ports/ports-mgmt/poudriere</code>
         <p>E instale ele com o comando abaixo, prompts de instalação vão aparecer, recomendo que permaneça com a configuração padrão:</p>
@@ -600,41 +613,91 @@ add path 'usb/X.Y.Z' mode 0660 group cups
         <p><strong>OU</strong></p>
         <p>Caso queira instalar sem compilação basta usar o comando:</p>
         <code>pkg install poudriere</code>
+        <!-- INSTALANDO NGINX-->
+        <h4>Instalando Nginx</h4>
+        <p><strong>SE E SOMENTE SE</strong> você deseja utilizar o serviço de web server do poudriere (opcional mas altamente recomendado), instale o <em>Nginx</em> compilando do seu diretório com os comandos:</p>
+        <code>cd cd /usr/ports/www/nginx<br>make install clean</code>
+        <p><strong>OU</strong> instale através do binário com o comando:</p>
+        <code>pkg install nginx</code>
+        <!-- CONFIGURANDO CERTIFICADO -->
+        <h4>Configurando certificado</h4>
+        <p><strong>SE E SOMENTE SE</strong> você deseja utilizar o serviço de web server do poudriere e assinar os pacotes, é necessário gerar os diretórios com o comando:</p>
+        <code>mkdir -p /usr/local/etc/ssl/{keys,certs}</code>
+        <p>Dê as devidas permissões com o comando:</p>
+        <code>sudo chmod 0600 /usr/local/etc/ssl/keys</code>
+        <p>Gere a chave com o comando:</p>
+        <code>sudo openssl genrsa -out /usr/local/etc/ssl/keys/poudriere.key 4096</code>
+        <p>E por fim gere o certificado com o comando:</p>
+        <code>sudo openssl rsa -in /usr/local/etc/ssl/keys/poudriere.key -pubout -out /usr/local/etc/ssl/certs/poudriere.cert</code>
+        <!-- ALTERANDO ARQUIVO DE CONFIGURAÇÃO DO POUDRIERE-->
+        <h4>Alterando o arquivo de configuração do poudriere</h4>
         <p>Acesse o arquivo de configuração do poudriere com o comando abaixo e faça algumas modificações básicas:</p>
         <code>nano /usr/local/etc/poudriere.conf</code>
-        <p>Se você <strong>NÃO ESTÁ</strong> utilizando <em>ZFS</em>, decomente a linha <mark>NO_ZFS=YES</mark>.</p>
-        <p>Se você configurou <em>TMPFS</em>, habilite-o na linha <mark>USE_TMPFS=yes</mark>.</p>
-        <p>Se você configurou <em>CCACHE</em>, habilite-o informando o seu diretório como neste exemplo: <mark>CCACHE_DIR=/var/cache/ccache</mark>.</p>
-        <p>Se você deseja definir o número máximo de jobs em paralelo para <em>1</em>, altere a linha <mark>PARALLEL_JOBS=1</mark>.</p>
-        <p>Mude a linha <mark>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</mark> para <mark>FREEBSD_HOST=ftp://ftp.freebsd.org</mark>.</p>
-        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para criar uma árvore de ports com o nome <mark>default</mark> use o comando:</p>
-        <code>poudriere ports -c -p default</code>
+        <p>Se você <strong>NÃO ESTÁ</strong> utilizando <em>ZFS</em>, descomente a linha:</p>
+        <code>NO_ZFS=YES</code>
+        <p>Se você <strong>ESTÁ</strong> utilizando <em>ZFS</em> aponte o <em>nome da pool</em> e a raiz para ser usado pelo poudriere como no exemplo abaixo:</p>
+        <code>ZPOOL=<em>nomedapool</em><br>ZROOTFS=/poudriere</code>
+        <p>Se você configurou <em>TMPFS</em>, habilite-o na linha:</p>
+        <code>USE_TMPFS=yes</code>
+        <p>Se você configurou <em>CCACHE</em>, habilite-o informando o seu diretório como no exemplo abaixo:</p>
+        <code>CCACHE_DIR=/var/cache/ccache</code>
+        <p>Se você gerou o certificado habilite e informe o repositório na linha:</p>
+        <code>PKG_REPO_SIGNING_KEY=/usr/local/etc/ssl/keys/poudriere.key</code>
+        <p>Se você deseja definir o número máximo de jobs em paralelo para <em>1</em>, altere a linha:</p>
+        <code>PARALLEL_JOBS=1</code>
+        <p>Mude a linha:</p>
+        <code>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</code>
+        <p>Para:</p>
+        <code>FREEBSD_HOST=ftp://ftp.freebsd.org</code>
+        <p>Sete o ip e porta para acessar o serviço do poudriere na linha:</p>
+        <code>URL_BASE=http://server_domain_or_IP/</code>
+        <!-- CRIANDO COLEÇÃO INTERNA DO POUDRIERE-->
+        <h4>Criando árvore interna do poudriere</h4>
+        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para isso use o comando:</p>
+        <code>poudriere ports -c</code>
+        <!--
+        <code>poudriere ports -c -p HEAD</code>
+        -->
+        <!-- CRIAÇÃO DA JAIL -->
+        <h4>Criação da Jail</h4>
         <p>A criação de uma jail é necessária para que o poudriere compile os programas em bloco, para isso use os comandos:</p>
         <code>mkdir /usr/local/poudriere</code>
         <p>*Caso o diretório não exista.</p>
         <code>poudriere jail -c -j "FreeBSD_14_0_x64" -v 14.0-RELEASE -a amd64</code>
         <p>O comando acima cria uma jail com o nome <em>FreeBSD_14_0_x64</em>, baseada na versão <em>14.0-RELEASE</em> e para a arquitetura <em>amd64</em>, altere conforme a sua necessidade.</p>
+        <!-- CRIANDO ARQUIVO DE CONFIGURAÇÃO DA JAIL -->
+        <h4>Configuração da jail</h4>
         <p>Agora vamos criar um arquivo de configuração para essa jail, para isso utilize os comandos abaixo:</p>
         <code>cd /usr/local/etc/poudriere.d</code>
         <code>nano FreeBSD_14_0_x64-make.conf</code>
         <p>E adicione a linha:</p>
         <code>WITH_PKGNG=YES</code>
-        <p>Poudriere configurado, jail configurada, agora é necessário listar os pacotes desejados para serem compilados, edite o arquivo da lista com:</p>
-        <!-- 
+        <p>Neste mesmo arquivo você pode setar flags de compilação para a jail, como por exemplo, vamos supor que você não deseje documentações (DOCS) e exemplos (EXAMPLES) mas deseje suporte nativo (NLS), basta adicionar ao arquivo as linhas:</p>
+        <code>OPTIONS_SET+= NLS<br>OPTIONS_UNSET+= DOCS EXAMPLES</code>
+        <!-- CRIANDO LISTA DE PACOTES -->
+        <h4>Lista de pacotes</h4>
+        <p>Poudriere configurado, jail configurada, agora é necessário listar os pacotes desejados para serem compilados, edite o arquivo da lista com:</p> 
         <code>nano /usr/local/etc/poudriere-list</code>
-        -->
+        <!--
         <code>nano /usr/local/etc/poudriere.d/packages-default</code>
+        -->
         <p>Caso você não saiba como estipular o port desejado, é bem simples, vamos supor que você deseje compilar o <em>gnome-terminal</em>, você pode procurar onde está o pacote com o comando:</p>
         <code>whereis gnome-terminal</code>
         <p>...Ele retorna o diretório:</p>
         <code>...x11/gnome-terminal</code>
-        <p>Então basta inserir <mark>x11/gnome-terminal</mark>  no arquivo <mark>/usr/local/etc/poudriere.d/packages-default</mark>.</p>
-        <p>Você pode editar recursivamente as opções de compilação do pacote <mrk>x11/gnome-terminal</mrk> com o comando:</p>
-        <code>poudriere options  -c x11/gnome-terminal</code>
-        <p>E caso queira editar apenas as opções específicas do pacote <mrk>x11/gnome-terminal</mrk> pode fazer com o comando:</p>
-        <code>poudriere options x11/gnome-terminal</code>
+        <p>Então basta inserir <mark>x11/gnome-terminal</mark> no arquivo <mark>/usr/local/etc/poudriere-list</mark>.</p>
+        <!-- EDITANDO CONFIGURAÇÕES PARA COMPILAÇÃO DOS PACOTES -->
+        <h4>Editando as configurações de compilação de pacotes</h4>
+        <p>Você pode editar as opções de compilação dos pacotes com diversos comandos, como por exemplo:</p>
+        <code>poudriere options -c x11/gnome-terminal</code>
+        <p>Toma a escolha de configuração por padrão, sempre vai mostrar os diálogos para os ports e suas dependências.</p>
+        <code>poudriere options -C x11/gnome-terminal</code>
+        <p>Toma a de configuração condicional, que só mostra caixas de diálogo com relação a novas opções fornecidas.</p>
+        <code>poudriere options -cn x11/gnome-terminal</code>
+        <p>Toma a escolha de configuração por padrão porém não recursivamente, interessante caso queira forçar o diálogo de configuração porém para um port específico.</p>
         <p>E caso deseje ver as opções de compilação de qualquer pacote use:</p>
         <code>pkg info <em>nomedopacote</em></code>
+        <!-- COMPILAÇÃO DO BLOCO -->
         <p>Uma vez que a configuração esteja completa, você pode criar o repositório com o comando:</p>
         <code>poudriere bulk -j FreeBSD_14_0_x64 -f /usr/local/etc/poudriere-list</code>
         <p>Onde <em>FreeBSD_14_0_x64</em> é o nome da jail e <em>/usr/local/etc/poudriere-list</em> é o arquivo da lista de pacotes.</p>
@@ -650,6 +713,17 @@ FreeBSD: {
     enabled: no
 }
 </pre></code>
+        <!-- HABILITAR NGINX -->
+        <p>Edite o arquivo <mark>/etc/rc.conf</mark>:</p>
+        <code>nano /etc/rc.conf</code>
+        <p>E adicione a linha abaixo para iniciar o Nginx com o sistema:</p>
+        <code>nginx_enable="YES"</code>
+        <!-- CONFIGURAR NGINX -->
+        <p>Agora precisamos editar o arquivo de configuração do Nginx, mas primeiro faça um backup com o comando:</p>
+        <code>cp /usr/local/etc/nginx/nginx.conf /usr/local/etc/nginx/nginx.conf.bkp</code>
+        <p>Edite com o comando:</p>
+        <code>nano /usr/local/etc/nginx/nginx.conf</code>
+        <p>Nesse arquivo remova tudo que está em <mark>server {}</mark> </p>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
