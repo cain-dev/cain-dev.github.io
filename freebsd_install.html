@@ -723,7 +723,38 @@ FreeBSD: {
         <code>cp /usr/local/etc/nginx/nginx.conf /usr/local/etc/nginx/nginx.conf.bkp</code>
         <p>Edite com o comando:</p>
         <code>nano /usr/local/etc/nginx/nginx.conf</code>
-        <p>Nesse arquivo remova tudo que está em <mark>server {}</mark> </p>
+        <p>Nesse arquivo vamos alterar alguns valores que estão em <mark>http{ server {}}</mark>, o primeiro valor a ser alterado é a localização da raiz, para isso comente a linha:</p>
+        <code>root /usr/local/www/nginx;</code>
+        <p>E acrescente a linha:</p>
+        <code>root /usr/local/share/poudriere/html;</code>
+        <p>De modo que fique como no exemplo abaixo:</p>
+<code><pre>
+    location / {
+        #root /usr/local/www/nginx;
+        root root /usr/local/share/poudriere/html;
+        autoindex on;
+    }
+</pre></code>
+        <p>Agora precisamos adicionar 2 blocos para localização abaixo desse primeiro, para os logs adicione:</p>
+<code><pre>
+    location /data {
+        alias /usr/local/poudriere/data/logs/bulk;
+        autoindex on;
+    }
+</pre></code>
+        <p>E para os logs adicione:</p>
+<code><pre>
+    location /packages {
+        root /usr/local/poudriere/data;
+        autoindex on;
+    }
+</pre></code>
+    <p>Para que seja possível visualizar os logs ao invés de baixá-los precisamos editar o arquivo mime.types:</p>
+    <code>nano /usr/local/etc/nginx/mime.types</code>
+    <p>Na linha <mark>text/plain</mark> adicione o tipo <mark>log</mark> para que fique como no exemplo abaixo:</p>
+    <code>text/plain    txt log;</code>
+
+        
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
