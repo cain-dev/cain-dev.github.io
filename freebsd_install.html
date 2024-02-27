@@ -585,6 +585,7 @@ add path 'usb/X.Y.Z' mode 0660 group cups
         <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
         <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
         -->
+        <!-- RECUPERAÇÃO DO BOOT -->
         <h2>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h2>
         <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
         <code>fsck -y</code>
@@ -593,168 +594,237 @@ add path 'usb/X.Y.Z' mode 0660 group cups
         <p>Se e somente se você utiliza swap:</p>
         <code>swapon -a</code>
         <p>Pronto! agora você pode acessar e corrigir os erros nos arquivos de sistema e continuar de onde parou 😉</p>
-        <!-- CONFIGURANDO COMPILAÇÃO COM O POUDRIERE -->
-        <h3>Compilação de pacotes com o poudriere</h3>
-        <p>Como eu disse no começo da página, o FreeBSD as vezes tem configurações um tanto incovenientes e não muito sãs para usuários desktop, por esse e outros motivos é que alguns usuários de FreeBSD utilizarem helpers para ter uma compilação mais limpa e específica.</p>
-        <p><strong>Lembrando que misturar pacotes baixados e compilados, ou mesmo alterar as configurações na raiz do sistema real pode facilmente <i>borkar</i> o seu sistema!</strong></p>
-        <!-- INSTALANDO GIT -->
-        <h4>Instalando o git e criando diretório local</h4>
-        <p>Primeiramente instale o <em>git</em> para gerenciar a árvore de <em>ports</em>:</p>
-        <code>pkg install git</code>
-        <!-- BAIXANDO A ÁRVORE DE PORTS PARA /usr/ports -->
-        <p>Depois, baixe a árvore de ports para o diretório <mark>/usr/ports</mark>:</p>
-        <code>git clone https://git.freebsd.org/ports.git /usr/ports</code>
-        <!-- INSTALANDO POUDRIERE -->
-        <h4>Instalando o poudriere</h4>
-        <p>Para instalar o poudriere acesse o seu diretório com o comando:</p>
-        <code>cd /usr/ports/ports-mgmt/poudriere</code>
-        <p>E instale ele com o comando abaixo, prompts de instalação vão aparecer, recomendo que permaneça com a configuração padrão:</p>
-        <code>make install clean</code>
-        <p><strong>OU</strong></p>
-        <p>Caso queira instalar sem compilação basta usar o comando:</p>
-        <code>pkg install poudriere</code>
-        <!-- INSTALANDO NGINX-->
-        <h4>Instalando Nginx</h4>
-        <p><strong>SE E SOMENTE SE</strong> você deseja utilizar o serviço de web server do poudriere (opcional mas altamente recomendado), instale o <em>Nginx</em> compilando do seu diretório com os comandos:</p>
-        <code>cd cd /usr/ports/www/nginx<br>make install clean</code>
-        <p><strong>OU</strong> instale através do binário com o comando:</p>
-        <code>pkg install nginx</code>
-        <!-- CONFIGURANDO CERTIFICADO -->
-        <h4>Configurando certificado</h4>
-        <p><strong>SE E SOMENTE SE</strong> você deseja utilizar o serviço de web server do poudriere e assinar os pacotes, é necessário gerar os diretórios com o comando:</p>
+        <!-- INTRODUÇÃO COMPILAÇÃO DE PACOTES -->
+        <h2>Compilação de pacotes com o <i>Poudriere</i> e <i>Synth</i></h2>
+        <p>Como disse no começo da página, a configuração dos pacotes do FreeBSD pode não ser muito amigável para usuários finais esse é um dos motivos que levam os usuários do FreeBSD a utilizar <i>helpers</i> para compilação dos pacotes em bloco. Existem diversas formas de fazer isso mas nessa documentação trataremos de duas ferramentas: <em>Poudriere</em> e <em>Synth</em>.</p>
+        <p>Ambos são extremamente configuráveis, porém eles tem objetivos diferentes e usam tecnolgias diferentes, grosso modo, o Poudriere é mais voltado para ambiente <i>business class</i> enquanto o Synth tem uma experiência mais simplificada para o usuário final, via de regra o Synth é mais rápido enquanto o Poudriere tem muito menos dependências.</p>
+        <!-- TMPFS -->
+        <h3>TMPFS (passo opcional)</h3>
+        <p>O driver TMPFS basicamente gera um sistemas de arquivo in-memory que pode acelerar de sobremaneira o processo de compilação, para carregar o driver durante a inicialização você deve adicionar a linha abaixo em <mark>/boot/loader.conf</mark>:</p>
+        <code>tmpfs_load="YES"</code>
+        <p>Uma vez que o driver está configurado para ser carregado, é necessário editar o arquivo <mark>/etc/fstab</mark> e adicionar a linha abaixo conforme o diagrama:</p>
+        <code>
+            <table>
+                <thead>
+                    <tr>
+                        <th># Device&ensp;<br></th>
+                        <th>Mountpoint&ensp;</th>
+                        <th>FStype&ensp;</th>
+                        <th>Options&ensp;</th>
+                        <th>Dump&ensp;</th>
+                        <th>Pass#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>tmpfs</td>
+                        <td>/tmp</td>
+                        <td>tmpfs</td>
+                        <td>rw<!--,mode=777--></td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </code>
+        <p>Você pode carregar o driver manualmente e remontar o <mark>/tmp</mark> mas <em>o recomendado é que você reinicie a máquina para que as alterações tenham efeito</em>.</p>
+        <!--
+        <code>umount /tmp</code>
+        <code>mount /tmp</code>
+        -->
+        <!-- INSTALAÇÃO CCACHE -->
+        <h3>CCache (passo opcional)</h3>
+        <p>O cache de compilação pode aumentar a velocidade de compilação dos pacotes, é uma tecnolgia interessante que ambos helpers podem utilizar, caso queira instalar o Ccache via pkg use o comando:</p>
+        <code>pkg install ccache</code>
+        <p><strong>Ou</strong>...</p>
+        <p>Caso queira compilar o pacote, pode fazer isso com o comando abaixo:</p>
+        <code>cd /usr/ports/devel/ccache<br>make install clean</code>
+        <p>Agora precisamos criar uma pasta para o Ccache, por conveniência vamos criar em <mark>/var/cache/ccache</mark>, para criar esse diretório use o comando:</p>
+        <code>mkdir /var/cache/ccache</code>
+        <p>Agora precisamos configurar o ccache para trabalhar com esse diretório, para isso utilize o comando:</p>
+        <code>ccache --set-config=cache_dir=/var/cache/ccache</code>
+        <p>Dependendo de quanto espaço em disco você é provável que deseje setar o tamanho máximo do cache, vamos supor que eu deseje setar este valor para <em>20GB</em> (o valor máximo padrão do Ccache é de 5GB), nesse caso basta utilizar o comando:</p>
+        <code>ccache --max-size=<em>20G</em></code>
+        <!-- GERANDO CERTIFICADO E CHAVE -->
+        <h3>Criando certificado e chave SSL</h3>
+        <p>Existem diversas formas de gerar chaves e certificados, nessa documentação faremos de uma forma simples apenas para gerar o certificado da página de informações e assinar os pacotes. Primeiramente criaremos os diretórios necessários, para isso utilize o comando:</p>
         <code>mkdir -p /usr/local/etc/ssl/{keys,certs}</code>
-        <p>Dê as devidas permissões com o comando:</p>
-        <code>sudo chmod 0600 /usr/local/etc/ssl/keys</code>
-        <p>Gere a chave com o comando:</p>
+        <p>Agora podemos setar as devidas permissões para que nenhum outro usuário possa interagir com esse diretório:</p>
+        <code>chmod 0600 /usr/local/etc/ssl/keys</code>
+        <p>Vamos gerar uma chave de <em>4096</em> bit no diretório <em>/usr/local/etc/ssl/keys</em>:</p>
         <code>sudo openssl genrsa -out /usr/local/etc/ssl/keys/poudriere.key 4096</code>
-        <p>E por fim gere o certificado com o comando:</p>
+        <p>E dessa chave geramos um certificado com:</p>
         <code>sudo openssl rsa -in /usr/local/etc/ssl/keys/poudriere.key -pubout -out /usr/local/etc/ssl/certs/poudriere.cert</code>
-        <!-- ALTERANDO ARQUIVO DE CONFIGURAÇÃO DO POUDRIERE-->
-        <h4>Alterando o arquivo de configuração do poudriere</h4>
-        <p>Acesse o arquivo de configuração do poudriere com o comando abaixo e faça algumas modificações básicas:</p>
+        <!-- INSTALAÇÃO POUDRIERE -->
+        <h3>Instalação do Poudriere</h3>
+        <p>Se você escolheu utilizar o Poudriere ao invés do Synth, instale via pkg com o comando:</p>
+        <code>pkg install poudriere</code>
+        <p><strong>Ou</strong>...</p>
+        <p>Caso queira compilar o pacote, pode fazer isso com o comando abaixo:</p>
+        <code>cd /usr/ports/ports-mgmt/poudriere<br>make install clean</code>
+        <h3>Editando o arquivo de configurações do Poudriere</h3>
+        <p>O arquivo de configurações do Poudriere pode ser encontrado em <mark>/usr/local/etc/poudriere.conf</mark>, você pode editá-lo com o seu editor de texto preferido, no meu caso utilizarei o nano como no comando abaixo:</p>
         <code>nano /usr/local/etc/poudriere.conf</code>
-        <p>Se você <strong>NÃO ESTÁ</strong> utilizando <em>ZFS</em>, descomente a linha:</p>
-        <code>NO_ZFS=YES</code>
-        <p>Se você <strong>ESTÁ</strong> utilizando <em>ZFS</em> aponte o <em>nome da pool</em> e a raiz para ser usado pelo poudriere como no exemplo abaixo:</p>
-        <code>ZPOOL=<em>nomedapool</em><br>ZROOTFS=/poudriere</code>
-        <p>Se você configurou <em>TMPFS</em>, habilite-o na linha:</p>
-        <code>USE_TMPFS=yes</code>
-        <p>Se você configurou <em>CCACHE</em>, habilite-o informando o seu diretório como no exemplo abaixo:</p>
-        <code>CCACHE_DIR=/var/cache/ccache</code>
-        <p>Se você gerou o certificado habilite e informe o repositório na linha:</p>
-        <code>PKG_REPO_SIGNING_KEY=/usr/local/etc/ssl/keys/poudriere.key</code>
-        <p>Se você deseja definir o número máximo de jobs em paralelo para <em>1</em>, altere a linha:</p>
-        <code>PARALLEL_JOBS=1</code>
-        <p>Mude a linha:</p>
-        <code>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</code>
-        <p>Para:</p>
-        <code>FREEBSD_HOST=ftp://ftp.freebsd.org</code>
-        <p>Sete o ip e porta para acessar o serviço do poudriere na linha:</p>
-        <code>URL_BASE=http://server_domain_or_IP/</code>
-        <!-- CRIANDO COLEÇÃO INTERNA DO POUDRIERE-->
-        <h4>Criando árvore interna do poudriere</h4>
-        <p>Uma vez que o poudriere já está configurado é interessante que o poudriere tenha sua própria coleção de ports, para isso use o comando:</p>
-        <code>poudriere ports -c</code>
-        <!--
-        <code>poudriere ports -c -p HEAD</code>
-        -->
-        <!-- CRIAÇÃO DA JAIL -->
-        <h4>Criação da Jail</h4>
-        <p>A criação de uma jail é necessária para que o poudriere compile os programas em bloco, para isso use os comandos:</p>
-        <code>mkdir /usr/local/poudriere</code>
-        <p>*Caso o diretório não exista.</p>
-        <code>poudriere jail -c -j "FreeBSD_14_0_x64" -v 14.0-RELEASE -a amd64</code>
-        <p>O comando acima cria uma jail com o nome <em>FreeBSD_14_0_x64</em>, baseada na versão <em>14.0-RELEASE</em> e para a arquitetura <em>amd64</em>, altere conforme a sua necessidade.</p>
-        <!-- CRIANDO ARQUIVO DE CONFIGURAÇÃO DA JAIL -->
-        <h4>Configuração da jail</h4>
-        <p>Agora vamos criar um arquivo de configuração para essa jail, para isso utilize os comandos abaixo:</p>
-        <code>cd /usr/local/etc/poudriere.d</code>
-        <code>nano FreeBSD_14_0_x64-make.conf</code>
-        <p>E adicione a linha:</p>
-        <code>WITH_PKGNG=YES</code>
-        <p>Neste mesmo arquivo você pode setar flags de compilação para a jail, como por exemplo, vamos supor que você não deseje documentações (DOCS) e exemplos (EXAMPLES) mas deseje suporte nativo (NLS), basta adicionar ao arquivo as linhas:</p>
-        <code>OPTIONS_SET+= NLS<br>OPTIONS_UNSET+= DOCS EXAMPLES</code>
-        <!-- CRIANDO LISTA DE PACOTES -->
-        <h4>Lista de pacotes</h4>
-        <p>Poudriere configurado, jail configurada, agora é necessário listar os pacotes desejados para serem compilados, edite o arquivo da lista com:</p> 
-        <code>nano /usr/local/etc/poudriere-list</code>
-        <!--
-        <code>nano /usr/local/etc/poudriere.d/packages-default</code>
-        -->
-        <p>Caso você não saiba como estipular o port desejado, é bem simples, vamos supor que você deseje compilar o <em>gnome-terminal</em>, você pode procurar onde está o pacote com o comando:</p>
+        <p>As configurações padrão do Poudriere são bem sãs, porém algumas coisas são interessantes de se alterar, por exemplo:</p>
+        <ul>
+            <li><p>Se você utilizar UFS ao invés de ZFS, habilite a linha:</p><code>NO_ZFS=yes</code></li>
+            <li><p>Se você utilizar ZFS ao invés de UFS, desabilite a linha:</p><code>#NO_ZFS=yes</code><p>E especifique as opções de pool e diretório como no exemplo a seguir:<br></p><code>ZPOOL=<em>nomedapool</em><br>ZROOTFS=/poudriere</code></li>
+            <li><p>Por padrão o arquivo de configuração aponta para um link inválido, altera a linha:</p><code>FREEBSD_HOST=_PROTO_://_CHANGE_THIS_</code><p>Para:</p><code>FREEBSD_HOST=ftp://ftp.freebsd.org</code></li>
+            <li><p>Caso você utilize ZFS habilite o argumento abaixo para que o diretório de dados na raiz da pasta do poudriere esta setado corretamente por desencargo de consciência:</p><code>POUDRIERE_DATA=${BASEFS}/data</code></li>
+            <li><p>Verifique a linha em que o poudriere vai armazenar jails e ports:</p><code>BASEFS=/usr/local/poudriere</code><p>você pode redirecionar para outro lugar (não recomendado) e caso o diretório não existe crie o diretório com o comando: <code>mkdir /usr/local/poudriere</code> </p></li>
+            <li><p>Se você desejar fazer uso do <em>TMPFS</em> habilite a linha:</p><code>USE_TMPFS=yes</code><p>Caso contrário desabilite essa linha.</p></li>
+            <li><p>Se você deseja que o poudriere para reconstrua os pacotes quando as opções para ele forem alteradas habilite a linha:</p><code>CHECK_CHANGED_OPTIONS=verbose</code></li>
+            <li><p>Se você deseja reconstruir pacotes quando as dependências foram alteradas desde a última compilação habilite a linha:</p><code>CHECK_CHANGED_DEPS=yes</code></li>
+            <li><p>Se você deseja assinar os pacotes, habilite e informe o caminho da chave na linha:</p><code>PKG_REPO_SIGNING_KEY=<em>/usr/local/etc/ssl/keys/poudriere.key</em></code></li>
+            <li><p>Se você desejar fazer uso do <em>Ccache</em> determine o diretório na linha:</p><code>CCACHE_DIR=<em>/var/cache/ccache</em></code><p>E logo a seguir insira a linha:</p><code>WITH_CCACHE_BUILD=yes</code></li>
+            <li><p>Por padrão o Poudriere utiliza hw.ncpu para determinar o número de jobs em paralelo, se você deseja setar um valor específico altere a linha como no exemplo abaixo:</p><code>PARALLEL_JOBS=1</code></li>
+            <li><p>Se você deseja desativar o suporte a Linux habilite a linha:</p><code>NOLINUX=yes</code></li>
+            <li><p>Você pode definir a string com o nome de domínio ou endereço IP onde seu servidor pode ser acessado:</p><code>URL_BASE=http://server_domain_or_IP/</code></li>
+        </ul>
+        <h3>Criar ambiente de compilação</h3>
+        <h4>Criando Jail</h4>
+        <p>Como foi dito acima o poudriere utiliza um ambiente baseado em <em>jails</em> para <i>"buildar"</i> seus pacotes, então antes de mais nada precisamos criar a jail. No meu caso vou criar uma jail com o nome <em>FreeBSD_14-0_x64</em>, baseado na versão <em>14.0-RELEASE</em> do FreeBSD e baseado na arquitetura <em>amd64</em>, então nesse caso o comando seria:</p>
+        <code>poudriere jail -c -j <em>FreeBSD_14-0_x64</em> -v <em>14.0-RELEASE</em> -a <em>amd64</em></code>
+        <p>O processo pode demorar um pouco, se em algum momento você desejar listar as jails criadas utilize o comando:</p>
+        <code>poudriere jail -l</code>
+        <h4>Criando árvore de ports</h4>
+        <p>O poudriere precisa de uma árvore de ports para trabalhar, inclusive pode até mesmo trabalhar com diversas árvores, por hora vamos criar uma árvore com o nome <em>MAIN</em>:</p>
+        <code>poudriere ports -c -p MAIN</code>
+        <p>Caso deseje listar as árvores criadas utilize o comando:</p>
+        <code>poudriere ports -l</code>
+        <h4>Criando lista de ports</h4>
+        <p>Agora que temos a jail e árvore de ports, falta definir uma lista de ports que desejamos compilar, crie essa lista em:</p>
+        <code>/usr/local/etc/poudriere.d/ports-list</code>
+        <p>Caso queira saber o identificador do pacote desejado você pode utilizar o comando <em>whereis "nomedopacote"</em> como no exemplo abaixo:</p>
         <code>whereis gnome-terminal</code>
-        <p>...Ele retorna o diretório:</p>
-        <code>...x11/gnome-terminal</code>
-        <p>Então basta inserir <mark>x11/gnome-terminal</mark> no arquivo <mark>/usr/local/etc/poudriere-list</mark>.</p>
-        <!-- EDITANDO CONFIGURAÇÕES PARA COMPILAÇÃO DOS PACOTES -->
-        <h4>Editando as configurações de compilação de pacotes</h4>
-        <p>Você pode editar as opções de compilação dos pacotes com diversos comandos, como por exemplo:</p>
-        <code>poudriere options -c x11/gnome-terminal</code>
-        <p>Toma a escolha de configuração por padrão, sempre vai mostrar os diálogos para os ports e suas dependências.</p>
-        <code>poudriere options -C x11/gnome-terminal</code>
-        <p>Toma a de configuração condicional, que só mostra caixas de diálogo com relação a novas opções fornecidas.</p>
-        <code>poudriere options -cn x11/gnome-terminal</code>
-        <p>Toma a escolha de configuração por padrão porém não recursivamente, interessante caso queira forçar o diálogo de configuração porém para um port específico.</p>
-        <p>E caso deseje ver as opções de compilação de qualquer pacote use:</p>
-        <code>pkg info <em>nomedopacote</em></code>
-        <!-- COMPILAÇÃO DO BLOCO -->
-        <p>Uma vez que a configuração esteja completa, você pode criar o repositório com o comando:</p>
-        <code>poudriere bulk -j FreeBSD_14_0_x64 -f /usr/local/etc/poudriere-list</code>
-        <p>Onde <em>FreeBSD_14_0_x64</em> é o nome da jail e <em>/usr/local/etc/poudriere-list</em> é o arquivo da lista de pacotes.</p>
-        <p>Como o poudriere é o responsável pela compilação dos pacotes e o <em>pkg</em> é o responsável  pela instalação, temos que fazer um apontamento para o diretório local do poudriere. Para isso precisamos criar o arquivo <mark>Local.conf</mark> no diretório <mark>/usr/local/etc/pkg/repos/</mark>.</p>
-        <code>nano /usr/local/etc/pkg/repos/Local.conf</code>
-        <p>E adicione as linhas:</p>
+        <p>...E o resultado obtido será:</p>
+        <code>/usr/ports/x11/gnome-terminal</code>
+        <p>Então basta inserir a linha <em>x11/gnome-terminal</em> na lista para que ele seja compilado como no exemplo abaixo:</p>
+        <code>x11/cinnamon<br>x11/gnome-terminal<br>www/firefox</code>
+        <p>Se você deseja listar as opções de compilação de um pacote presente no sistema para ter alguma referência você pode utilizar o comando <em>pkg info "nomedopacote"</em> como no exemplo abaixo:</p>
+        <code>pkg info gnome-terminal</code>
+        <p>Que retornará:</p>
+        <code>Options        :<br>NAUTILUS       : on<br>SEARCHPROVIDER : on</code>
+        <h4>Configurando make.conf</h4>
+        <p>Agora que você já sabe identificar os pacotes podemos criar um arquivo de configuração específico para colocar opções de compilação dessa jail, acesse o diretório com o comando:</p>
+        <code>cd /usr/local/etc/poudriere.d</code>
+        <p>*Se o diretório não existir você pode criá-lo com o comando:</p>
+        <code>mkdir /usr/local/etc/poudriere.d</code>
+        <p>Uma vez nesse diretório, basta criar um arquivo <em>nome da jail-make.conf</em>:</p>
+        <code>nano FreeBSD_14-0_x64-make.conf</code>
+        <p>Caso você queira que <em>PKG</em> seja utilizado <strong>(não recomendado)</strong> no processo você pode inserir a linha:</p>
+        <code>WITH_PKGNG=YES</code>
+        <p>Caso você queira setar para que todos os pacotes nessa jail sejam preparados com suporte a <em>NLS</em> você pode usar o argumento <em>OPTIONS_SET+=</em> como no exemplo abaixo:</p>
+        <code>OPTIONS_SET+= NLS</code>
+        <p>Caso você queira setar para que todos os pacotes nessa jail sejam preparados sem suporte a <em>DOCS</em> você pode usar o argumento <em>OPTIONS_UNSET+=</em> como no exemplo abaixo:</p>
+        <code>OPTIONS_UNSET+= DOCS</code>
+        <p>O sistema de ports suporta múltiplas opções de fornecimento ou mesmo versionamento para determinado software ou biblioteca (como por exemplo multiplas versões de Python ou múltiplos fornecedores para SSL), vamos supor que desejamos setar a biblioteca <em>LibreSSL</em> como padrão para <em>SSL</em>, podemos fazer isso com o argumento:</p>
+        <code>DEFAULT_VERSIONS+=ssl=libressl</code>
+        <p>Você também pode setar configurações específicas de compilação para pacotes, vamos supor que você deseje remover o suporte a <em>ALSA</em> e <em>JACK</em> no pacote  <em>www/firefox</em>, basta alterar para que a sintaxe fique como no exemplo abaixo:</p>
+        <code>www_firefox_UNSET+= ALSA JACK</code>
+        <h4>Configurando o ambiente de compilação por diálogo</h4>
+        <p>Se você quiser editar as opções sem ter de editar manualmente o arquivo de configuração, você pode utilizar o comando <em>poudriere options</em>, eu recomendo fortemente a leitura do <a class="link" href="https://man.freebsd.org/cgi/man.cgi?query=poudriere-options&apropos=0&sektion=8&manpath=freebsd-ports&format=html">manual do poudriere</a> mas aqui vão alguns exemplos mais essenciais:</p>
+        <ul>
+            <li><p><em>-c</em> Configura o ambiente do pacote tomando a escolha de configuração por padrão, sempre vai mostrar os diálogos para os ports e suas dependências.</p><code>poudriere options -c <em>"nome do pacote"</em></code></li>
+            <li><p><em>-C</em> Configura o ambiente do pacote tomando a escolha de configuração de forma condicional, que só mostra caixas de diálogo com relação a novas opções fornecidas.</p><code>poudriere options -C <em>"nome do pacote"</em></code></li>
+            <li><p><em>-n</em> Executa o comando de forma não recursiva, útil caso você queira forçar o diálogo de configuração (<em>-c</em>) porém para um port específico sem ter que alterar todas as suas dependências</p><code>poudriere options -cn <em>"nome do pacote"</em></code></li>
+            <li><p><em>-j</em> Define as opções para uma jail específica. Vamos supor que deseja configurar as opções de um único pacote, de forma não recursiva na jail <em>FreeBSD_14-0_x64</em>:</p><code>poudriere options -j <em>FreeBSD_14-0_x64</em> -cn <em>"nome do pacote"</em></code></li>
+            <li><p><em>-p</em> Roda a configuração dentro da árvore de ports citada. Vamos supor que deseja configurar as opções de um único pacote, de forma não recursiva na jail <em>FreeBSD_14-0_x64</em> para a árvore <em>MAIN</em>:</p><code>poudriere options -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -cn <em>"nome do pacote"</em></code><p><strong>ALERTA:</strong> Se você já tem opções configuradas para a árvore padrão elas não mais serão usadas caso utilize essa opção!</p></li>
+            <li><p><em>-r</em> Informa ao Poudriere para remover opções especificadas pelo usuário em um pacote de determinada jail. Vamos supor que você deseja retornar a configuração padrão na jail <em>FreeBSD_14-0_x64</em> o pacote <em>gnome-terminal</em> :</p><code>poudriere options -r -j <em>FreeBSD_14-0_x64</em> <em>x11/gnome-terminal</em></code></li>
+        </ul>
+        <h4>Compilando pacotes</h4>
+        <p>Para finalmente compilar os pacotes basta utilizar o comando <em>poudriere bulk -j "nome da jail" -p "nome da árvore de ports" -f "arquivo da lista de pacotes"</em> como no exemplo abaixo:</p>
+        <code>poudriere bulk -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -f /usr/local/etc/poudriere.d/ports-list</code>
+        <p>Se em algum momento do processo de compilação quiser obter informações sobre o progresso pelo terminal basta utilizar <em>CTRL+t</em>.</p>
+        <h4>Configurar o pkg para usar o repositório construído localmente pelo Poudriere</h4>
+        <p>Uma vez que os pacotes estão compilados, eles podem ser utilizados através do comando <em>pkg install</em>, para que o pkg visualize os pacotes gerados pelo poudriere precisamos criar um arquivo de repositório no diretório <mark>/usr/local/etc/pkg/repos</mark>, então antes de mais nada crie os diretórios com o comando:</p>
+        <code>mkdir -p /usr/local/etc/pkg/repos</code>
+        <p>Em seguida acesse e edite o arquivo <mark>/usr/local/etc/pkg/repos/poudriere.conf</mark>, utilizando de exemplo o <em>nano</em> edite com:</p>
+        <code>nano /usr/local/etc/pkg/repos/poudriere.conf</code>
+        <p>Existem diversas configurações que podem ser feitas aqui, a primeira e mais importante é logicamente direcionar o pkg para onde estão os pacotes, para isso adicione a linha <em>poudriere:{url: "localização do diretório+nome da jail+nome da árvore de pacotes"}</em> como no exemplo abaixo:</p>
 <code><pre>
-Poudriere: {
-    url: "file:///usr/local/poudriere/data/packages/FreeBSD_14_0_x64-default"
+poudriere: {
+    url: "file:///usr/local/poudriere/data/packages/FreeBSD_14-0_x64-MAIN",
 }
-                
+</pre></code>
+        <p>Podemos adicionar uma linha para definir que este é um servidor mirror de pacotes com a linha <mark>mirror_type: "srv"</mark> e que ele deve estar habilitado com a linha <mark>enabled: yes</mark>, sendo assim o arquivo ficaria:</p>
+<code><pre>
+poudriere: {
+    url: "file:///usr/local/poudriere/data/packages/FreeBSD_14-0_x64-MAIN",
+    mirror_type: "srv",
+    enabled: yes
+}
+</pre></code>
+        <p>Caso você deseje utilizar este reposítório para seletos pacotes e em conjunto com o repositório oficial (não recomendado), você pode adicionar uma configuração que priorize esse repositório com a linha <em>priority: 100</em> como no exemplo abaixo:</p>
+<code><pre>
+poudriere: {
+    url: "file:///usr/local/poudriere/data/packages/FreeBSD_14-0_x64-MAIN",
+    mirror_type: "srv",
+    enabled: yes,
+    priority: 100
+}
+</pre></code>
+        <p>Caso você tenha gerado o certificado e configurado a assinatura de pacotes você pode adicionar os argumentos da linha abaixo para o tipo de assinatura verificada e o caminho para a chave pública para verificar a assinatura dos pacotes:</p>
+<code><pre>
+poudriere: {
+...
+signature_type: "pubkey",
+pubkey: "/usr/local/etc/ssl/certs/poudriere.cert",
+...
+}
+</pre></code>
+
+        <p>Caso você deseje desabilitar o repositório padrão você pode criar um arquivo de configuração em <mark>/usr/local/etc/pkg/repos/freebsd.conf</mark> contendo o argumento <em>enabled: no</em> como no exemplo abaixo:</p>
+<code><pre>
 FreeBSD: {
     enabled: no
 }
 </pre></code>
-        <!-- HABILITAR NGINX -->
-        <p>Edite o arquivo <mark>/etc/rc.conf</mark>:</p>
-        <code>nano /etc/rc.conf</code>
-        <p>E adicione a linha abaixo para iniciar o Nginx com o sistema:</p>
-        <code>nginx_enable="YES"</code>
-        <!-- CONFIGURAR NGINX -->
-        <p>Agora precisamos editar o arquivo de configuração do Nginx, mas primeiro faça um backup com o comando:</p>
-        <code>cp /usr/local/etc/nginx/nginx.conf /usr/local/etc/nginx/nginx.conf.bkp</code>
-        <p>Edite com o comando:</p>
-        <code>nano /usr/local/etc/nginx/nginx.conf</code>
-        <p>Nesse arquivo vamos alterar alguns valores que estão em <mark>http{ server {}}</mark>, o primeiro valor a ser alterado é a localização da raiz, para isso comente a linha:</p>
-        <code>root /usr/local/www/nginx;</code>
-        <p>E acrescente a linha:</p>
-        <code>root /usr/local/share/poudriere/html;</code>
-        <p>De modo que fique como no exemplo abaixo:</p>
+        <p>Uma vez que a sua configuração de repositórios está finalizada, atualize a lista de pacotes com o comando:</p>
+        <code>pkg update</code>
+        <p>Você pode usar um script simples para alternar qual repositório está habilitado:</p>
 <code><pre>
-    location / {
-        #root /usr/local/www/nginx;
-        root root /usr/local/share/poudriere/html;
-        autoindex on;
-    }
-</pre></code>
-        <p>Agora precisamos adicionar 2 blocos para localização abaixo desse primeiro, para os logs adicione:</p>
-<code><pre>
-    location /data {
-        alias /usr/local/poudriere/data/logs/bulk;
-        autoindex on;
-    }
-</pre></code>
-        <p>E para os logs adicione:</p>
-<code><pre>
-    location /packages {
-        root /usr/local/poudriere/data;
-        autoindex on;
-    }
-</pre></code>
-    <p>Para que seja possível visualizar os logs ao invés de baixá-los precisamos editar o arquivo mime.types:</p>
-    <code>nano /usr/local/etc/nginx/mime.types</code>
-    <p>Na linha <mark>text/plain</mark> adicione o tipo <mark>log</mark> para que fique como no exemplo abaixo:</p>
-    <code>text/plain    txt log;</code>
+#!/usr/local/bin/bash
 
-        
+# Caminho dos arquivos de configuração
+POUDRIERE_REPO="/usr/local/etc/pkg/repos/poudriere.conf"
+FREEBSD_REPO="/usr/local/etc/pkg/repos/freebsd.conf"
+    
+# Verifica se o repositório do Poudriere está habilitado
+if grep -q 'enabled: yes' $POUDRIERE_CONF; then
+    # Se estiver habilitado, desabilita o Poudriere e habilita o FreeBSD
+    sed -i '' 's/enabled: yes/enabled: no/g' $POUDRIERE_REPO
+    sed -i '' 's/enabled: no/enabled: yes/g' $FREEBSD_REPO
+else
+    # Se estiver desabilitado, habilita o Poudriere e desabilita o FreeBSD
+    sed -i '' 's/enabled: no/enabled: yes/g' $POUDRIERE_REPO
+    sed -i '' 's/enabled: yes/enabled: no/g' $FREEBSD_REPO
+fi    
+</pre></code>
+        <h4>Manutenção básica das jails e árvores</h4>
+        <p>Aqui vão alguns comandos para você usar de referência para utilizar na sua manutenção do sistema:</p>
+        <ul>
+            <li><p>Caso você queira deletar uma jail e todas as suas pastas de dados você pode utilizar o comando <mark>poudriere jails -d -C all -j "nome da jail"</mark>:</p><code>poudriere jails -d -C all -j <em>FreeBSD_14-0_x64</em></code></li>
+            <li><p>Caso você queira atualizar uma jail você pode utilizar o comando <mark>poudriere jail -u -j "nome da jail"</mark>:</p><code>poudriere jail -u -j <em>FreeBSD_14-0_x64</em></code></li>
+            <li><p>Caso você queira atualizar uma árvore de ports pode utilizar o comando <mark>poudriere ports -u -p "nome da árvore de ports"</mark>:</p><code>poudriere ports -u -p <em>MAIN</em></code></li>
+            <li><p>Caso você queira deletar sem questionamentos todos os distfiles relacionados a uma árvore utilize o comando <mark>poudriere distclean -a -p "nome da árvore" -y</mark>:</p><code>poudriere distclean -a -p <em>MAIN</em> -y</code></li>
+            <li><p>Caso você queira limpar sem questionamentos todos os logfiles relacionados a uma jail utilize o comando <mark>poudriere logclean -a -j "nome da jail" -y</mark> :</p><code>poudriere logclean -a -j <em>FreeBSD_14-0_x64</em> -y</code></li>
+            <li><p>Caso você queira limpar sem questionamentos todos os logfiles relacionados a uma árvore de ports utilize o comando <mark>poudriere logclean -a -p "nome da árvore" -y</mark> :</p><code>poudriere logclean -a -p <em>MAIN</em> -y</code></li>
+            <li><p>Caso você deseje remover todos os pacotes associados a uma jail você pode utilzar o comando <mark>poudriere pkgclean -a -j "nome da jail"</mark>:</p><code>poudriere pkgclean -a -j <em>FreeBSD_14-0_x64</em></code></li>
+            <li><p>Caso você deseje deletar os pacotes compilados porém não mais necessários (cleanup) utilize o comando <mark>poudriere pkgclean -j "nome da jail" -p "nome da árvore" -f "caminho do arquivo de lista de ports"</mark> :</p><code>poudriere pkgclean -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -f <em>/usr/local/etc/poudriere.d/ports-list</em></code></li>
+        </ul>
+        <h3>Configurar página de rede</h3>
+        <h4>Utilizando o Nginx</h4>
+        <p>Instale o <em>Nginx</em> compilando do seu diretório com os comandos:</p>
+        <code>cd cd /usr/ports/www/nginx<br>make install clean</code>
+        <p><strong>OU</strong> instale através do binário com o comando:</p>
+        <code>pkg install nginx</code>
+        <p>Agora copie o arquivo de exemplo do Poudreire para o Nginx para o diretório do Nginx no seu computador:</p>
+        <code>curl -fsSL https://raw.githubusercontent.com/freebsd/poudriere/master/src/share/examples/poudriere/nginx.conf.sample > /usr/local/etc/nginx/nginx.conf</code>
+        <p>Para iniciar o serviço do nginx ao iniciar o computador acrescente a linha abaixo em <mark>/etc/rc.conf</mark>:</p>
+        <code>nginx_enable="YES"</code>
+        <p>Caso queira iniciar o serviço imediatamente utilize o comando:</p>
+        <code>doas service nginx onestart</code>
     </main>
     <footer id="main-footer">
         <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
