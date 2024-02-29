@@ -153,6 +153,8 @@
         <code>pkg install doas</code>
         <p>O doas precisa de uma simples configuração para elevação de privilégio, edite o arquivo <em>/usr/local/etc/doas.conf</em> e insira a linha:</p>
         <code>permit persist keepenv :wheel</code>
+        <p>Caso você queira a elevaçao de privilégios sem inserção de senha (não recomendado) utilize a linha:</p>
+        <code>permit nopass keepenv :wheel</code>
         <h3>Instalação de Desktop Environment</h3>
         <p>Se você está lendo isso as chances são que você não vai utilizar o FreeBSD como sistema de servidor. O FreeBSD pode ser utilizado normalmente como um sistema para usuário final, entretanto, Desktop Environments (ambientes gráficos) geralmente não são tão polidos e atualizados no FreeBSD tanto quanto são no universo Linux. Se você utilizar os fóruns vai ver que grande parte dos usuários prefere utilizar apenas um gerenciador de janelas (window manager) e não um ambiente completo (como o Cinnamon, por exemplo). Os recém chegados do Linux provavelmente instalam algum port de XFCE, MATE ou KDE, mas saiba que alguns ambientes aqui <strong>podem</strong> (não quer dizer que vão) ser problemáticos (ou simplesmente depreciados).</p>
         <p>Isso não significa que você não pode ter uma excelente experiência utilizando o FreeBSD como <i>daily driver</i>, mas como esses ambientes recebem relativamente menos suporte e tem um público menor por aqui você não pode se der ao luxo de achar que pode simplesmente instalar um ambiente gráfico e dar por encerrado o seu dia. O FreeBSD separa muito bem o espaço de sistema e espaço de usuário e, independente do ambiente que você utilize você ainda terá que acessar uma camada mais íntima do sistema.</p>
@@ -454,6 +456,41 @@ EndSection</pre>
         <code>pkg install firefox-esr libreoffice pt_BR-libreoffice</code>
         <p>Para alterar o idioma da interface no LibreOffice vá em Ferramentas -> Opções -> Configurações de idioma -> Idiomas. Selecione “Português (Brasil)” na caixa de lista “Interface do usuário” e clique em OK. Reinicie o LibreOffice para que as alterações tenham efeito</p>
         <p>Para alterar o idioma da interface do Firefox acesse o menu e selecione Configurações -> Geral -> Idioma -> Definir alternativa e caso Português (BR) não esteja na lista clique em "Selecione um idioma para adicionar", escolha Português (BR), coloque ele como o primeiro da lista e reinicie o Firefox para que as alterações tenham efeito.</p>
+        <!-- SWAPFILE -->
+        <h3>Criação de swapfile</h3>
+        <p>O FreeBSD utiliza a memória swap de uma forma bem diferente do Linux, e essa diferença vai desde volume utilizado até eficiência e políticas de uso de memória virtual, de qualquer forma a memória swap é sim interessante de se ter. Se você fez a instalação sem reservar espaço para a swap você pode assim como no Linux criar um swapfile, a primeira coisa que precisa ser feita é a criação do arquivo de swap em si utilizando o <em>dd</em>, supondo que iremos criar no diretório <em>/</em> um arquivo com o nome <em>swapfile</em> de 8GB em blocos de <em>1MB</em> a contagem informada será <em>8192</em>, mas fique a vontade para as configurações conforme o necessário para o seu caso.</p>
+        <code>doas dd if=/dev/zero of=<em>/swapfile</em> bs=1M count=<em>8192</em> status=progress</code>
+        <p>Uma vez que o arquivo esteja criado precisamos setar as permissões corretas, para isso utilize o comando <em>chmod</em>:</p>
+        <code>chmod 0600 /swapfile</code>
+        <p>Agora precisamos referenciar o swapfile em <em>/etc/fstab</em>, para isso insira a linha:</p>
+        <code>
+            <table>
+                <thead>
+                    <tr>
+                        <th># Device&ensp;<br></th>
+                        <th>Mountpoint&ensp;</th>
+                        <th>FStype&ensp;</th>
+                        <th>Options&ensp;</th>
+                        <th>Dump&ensp;</th>
+                        <th>Pass#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>md99</td>
+                        <td>none</td>
+                        <td>swap</td>
+                        <td>sw,file=/swapfile,late</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </code>
+        <p>Para adicionar dispositivos de swap que estão declarados no <em>/etc/fstab</em> ao sistema utilize o comando:</p>
+        <code>swapon -aq</code>
+        <p>Caso queira verificar o estado da swap utilize o comando:</p>
+        <code>swapinfo</code>
         <!-- SILENT BOOT -->
         <h3>Silent Boot</h3>
         <p>Diferente do Linux que para conseguir um boot silencioso basta um argumento para o kernel, no FreeBSD não há uma opção isolada.</p>
@@ -681,6 +718,7 @@ add path 'usb/X.Y.Z' mode 0660 group cups
             <li><p>Se você deseja desativar o suporte a Linux habilite a linha:</p><code>NOLINUX=yes</code></li>
             <li><p>Você pode definir a string com o nome de domínio ou endereço IP onde seu servidor pode ser acessado:</p><code>URL_BASE=http://server_domain_or_IP/</code></li>
         </ul>
+        <!-- CRIAR AMBIENTE DE COMPILAÇÃO -->
         <h3>Criar ambiente de compilação</h3>
         <h4>Criando Jail</h4>
         <p>Como foi dito acima o poudriere utiliza um ambiente baseado em <em>jails</em> para <i>"buildar"</i> seus pacotes, então antes de mais nada precisamos criar a jail. No meu caso vou criar uma jail com o nome <em>FreeBSD_14-0_x64</em>, baseado na versão <em>14.0-RELEASE</em> do FreeBSD e baseado na arquitetura <em>amd64</em>, então nesse caso o comando seria:</p>
@@ -732,10 +770,12 @@ add path 'usb/X.Y.Z' mode 0660 group cups
             <li><p><em>-p</em> Roda a configuração dentro da árvore de ports citada. Vamos supor que deseja configurar as opções de um único pacote, de forma não recursiva na jail <em>FreeBSD_14-0_x64</em> para a árvore <em>MAIN</em>:</p><code>poudriere options -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -cn <em>"nome do pacote"</em></code><p><strong>ALERTA:</strong> Se você já tem opções configuradas para a árvore padrão elas não mais serão usadas caso utilize essa opção!</p></li>
             <li><p><em>-r</em> Informa ao Poudriere para remover opções especificadas pelo usuário em um pacote de determinada jail. Vamos supor que você deseja retornar a configuração padrão na jail <em>FreeBSD_14-0_x64</em> o pacote <em>gnome-terminal</em> :</p><code>poudriere options -r -j <em>FreeBSD_14-0_x64</em> <em>x11/gnome-terminal</em></code></li>
         </ul>
+        <!-- COMPILANDO PACOTES -->
         <h4>Compilando pacotes</h4>
         <p>Para finalmente compilar os pacotes basta utilizar o comando <em>poudriere bulk -j "nome da jail" -p "nome da árvore de ports" -f "arquivo da lista de pacotes"</em> como no exemplo abaixo:</p>
         <code>poudriere bulk -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -f /usr/local/etc/poudriere.d/ports-list</code>
         <p>Se em algum momento do processo de compilação quiser obter informações sobre o progresso pelo terminal basta utilizar <em>CTRL+t</em>.</p>
+        <!-- CONFIGURANDO REPOSITÓRIO -->
         <h4>Configurar o pkg para usar o repositório construído localmente pelo Poudriere</h4>
         <p>Uma vez que os pacotes estão compilados, eles podem ser utilizados através do comando <em>pkg install</em>, para que o pkg visualize os pacotes gerados pelo poudriere precisamos criar um arquivo de repositório no diretório <mark>/usr/local/etc/pkg/repos</mark>, então antes de mais nada crie os diretórios com o comando:</p>
         <code>mkdir -p /usr/local/etc/pkg/repos</code>
@@ -801,6 +841,7 @@ else
     sed -i '' 's/enabled: yes/enabled: no/g' $FREEBSD_REPO
 fi    
 </pre></code>
+        <!-- MANUTENÇÃO JAILS E PORTS -->
         <h4>Manutenção básica das jails e árvores</h4>
         <p>Aqui vão alguns comandos para você usar de referência para utilizar na sua manutenção do sistema:</p>
         <ul>
@@ -813,7 +854,9 @@ fi
             <li><p>Caso você deseje remover todos os pacotes associados a uma jail você pode utilzar o comando <mark>poudriere pkgclean -a -j "nome da jail"</mark>:</p><code>poudriere pkgclean -a -j <em>FreeBSD_14-0_x64</em></code></li>
             <li><p>Caso você deseje deletar os pacotes compilados porém não mais necessários (cleanup) utilize o comando <mark>poudriere pkgclean -j "nome da jail" -p "nome da árvore" -f "caminho do arquivo de lista de ports"</mark> :</p><code>poudriere pkgclean -j <em>FreeBSD_14-0_x64</em> -p <em>MAIN</em> -f <em>/usr/local/etc/poudriere.d/ports-list</em></code></li>
         </ul>
+        <!-- CONFIGURAR PÁGINA DE REDE -->
         <h3>Configurar página de rede</h3>
+        <!-- NGINX -->
         <h4>Utilizando o Nginx</h4>
         <p>Instale o <em>Nginx</em> compilando do seu diretório com os comandos:</p>
         <code>cd cd /usr/ports/www/nginx<br>make install clean</code>
@@ -825,9 +868,26 @@ fi
         <code>nginx_enable="YES"</code>
         <p>Caso queira iniciar o serviço imediatamente utilize o comando:</p>
         <code>doas service nginx onestart</code>
+        <!-- FINAL POUDRIERE -->
+        <!-- INSTALAÇÃO SYNTH -->
+        <h3>Instalação do Synth</h3>
+        <p>Se você escolheu utilizar o Synth ao invés do Poudriere, instale via pkg com o comando:</p>
+        <code>pkg install synth</code>
+        <p><strong>Ou</strong>...</p>
+        <p>Caso queira compilar o pacote, pode fazer isso com o comando abaixo:</p>
+        <code>cd /usr/ports/ports-mgmt/synth<br>make install clean</code>
+        <!-- WEBSERVER SYNTH -->
+        <p>O primeiro passo é instalar serviço OpenBSDHTTPD</p>
+        <code>pkg install obhttpd</code>
+        <p><strong>Ou</strong>...</p>
+        <p>Caso queira compilar o pacote, pode fazer isso com o comando abaixo:</p>
+        <code>cd /usr/ports/www/obhttpd<br>make install clean</code>
+        <p>Habilite o serviço do OpenBSDHTTPD na inicialização a linha abaixo no arquivo <mark></mark> </p>
+        <code>obhttpd_enable="YES"</code>
+
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 24/02/2024)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 28/02/2024)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
