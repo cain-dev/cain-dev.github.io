@@ -442,6 +442,42 @@ EndSection</pre>
         <code>pkg install xdg-user-dirs</code>
         <p>Logado como o seu usuário, use o comando abaixo para atualizar os diretórios:</p>
         <code>xdg-user-dirs-update</code>
+        <h3>Corrigindo Som</h3>
+        <p>Ao utilizar ambientes gráficos completos no FreeBSD é bem provavel que ocasionalmente você enfrente alguma espécide de problema com relação a desligamento de dispositivos, perda de sincronia e por aí vai. Para resolver esses problemas o interessante é que você entenda um pouco das alternativas "por baixo do capô" para resolver o seu problema de uma vez por todas.</p>
+        <h4>Problema número 1: Erro na escolha de dispositivo padrão</h4>
+        <p>Para verificar os dispositivos de áudio execute o comando:</p>
+        <code>cat /dev/sndstat</code>
+        <p>Vai retornar uma lista mais ou menos assim:</p>
+<code><pre>
+    Installed devices:
+    pcm0: NVIDIA (0x0000) (HDMI/DP 8ch) (play) default
+    pcm1: NVIDIA (0x0000) (HDMI/DP 8ch) (play)
+    pcm2: Realtek ALC887 (Rear Analog) (play/rec)
+    pcm3: Realtek ALC887 (Front Analog) (play/rec)
+    No devices installed from userspace.    
+</pre></code>
+        <p>Perceba que o dispositivo indicado como padrão é o <em>pcm0</em>, vamos supor que o desejado seja a saída traseira do <em>pcm2</em>, para setar o dispositivo padrão utilize o comando sysctl <mark>hw.snd.default_unit=</mark><em>"número da unidade"</em> como no código abaixo:</p>
+        <code>sysctl hw.snd.default_unit=2</code>
+        <h4>Problema número 2: Retorno do microfone</h4>
+        <p>Então você instalou o sistema e está se ouvindo? Este é um problema bastante comum porém bem fácil de resolver, geralmente o canal <em>mix</em> está fica ativo por padrão, existe um utilitário chamado <em>mixer</em> (que original... 🙄) para resolver esse tipo de coisa no FreeBSD, utilize o comando:</p>
+        <code>mixer</code>
+        <p>E você vai ter um retorno mais ou menos assim:</p>
+<pre><code>
+    pcm2:mixer: Realtek ALC887 (Rear Analog) on hdaa1  (play/rec) (default)
+    vol       = 1.00:1.00     pbk
+    pcm       = 1.00:1.00     pbk
+    speaker   = 1.00:1.00     rec
+    line      = 1.00:1.00     rec
+    mic       = 1.00:1.00     rec src
+    mix       = 1.00:1.00     rec
+    rec       = 1.00:1.00     pbk
+    igain     = 1.00:1.00     pbk
+    ogain     = 1.00:1.00     pbk
+</code></pre>
+        <p>No caso acima é possível verificar que o canal <em>mix</em> está no máximo (<em>1.00:1.00</em>), para alterar qualquer canal basta utilizar o comando <mark>mixer</mark> <em>conexão</em> <mark>.volume=</mark><em>"valor do volume"</em>, se for pra setar o <em>mix</em> para <em>0</em> basta utilizar o comando:</p>
+        <code>mixer mix.volume=0</code>
+        <h4>Adendo: Opções gráficas</h4>
+        <p>Caso você não queira utilizar o terminal para fazer essas alterações sempre que possível você pode usar aplicações como <em>audio/dsbmixer</em> (baseado em QT) ou <em>audio/gtk-mixer</em> (baseado em GTK).</p>
         <!-- EDIÇÃO DO XINITRC -->
         <h3>Edição do arquivo .XINITRC</h3>
         <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
@@ -884,10 +920,9 @@ fi
         <code>cd /usr/ports/www/obhttpd<br>make install clean</code>
         <p>Habilite o serviço do OpenBSDHTTPD na inicialização a linha abaixo no arquivo <mark></mark> </p>
         <code>obhttpd_enable="YES"</code>
-
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 28/02/2024)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 02/03/2024)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
