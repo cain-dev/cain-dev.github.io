@@ -105,7 +105,8 @@
         <code>Full name: <mark>apenas tecle Enter</mark></code>
         <code>Uid (Leave empty for default): <mark>apenas tecle Enter</mark></code>
         <code>Login group [seuusuário]: <mark>apenas tecle Enter</mark></code>
-        <code>Login group is . Invite  into other groups? []: wheel <mark>para acesso administrativo ou você pode simplesmente adicionar o grupo</mark> video <mark> se não quiser ceder acesso administrativo a essa conta mas quiser fazer uso de interface gráfica</mark></code>
+        <p>para acesso administrativo para esse usuário adicione-o ao grupo <em>wheel</em><br>para iniciar diretamente a sessão gráfica adicione-o ao grupo <em>video</em><br>para permitir montagem de partições e outras funções de configuração adicione-o ao grupo <em>operator</em></p>
+        <code>Login group is . Invite  into other groups? []: <em>wheel</em> <em>video</em> <em>operator</em></code>
         <code>Login class [default]: <mark>apenas tecle Enter</mark></code>
         <code>Shell (sh csh tcsh nologin) [sh]: <mark>apenas tecle Enter</mark></code>
         <code>Home Directory [/home/seuusuário]: <mark>apenas tecle Enter</mark></code>
@@ -213,11 +214,52 @@ EndSection</pre>
         </code>
         <p>Caso deseje aceleração de hardware instale também os pacotes conforme o comando abaixo:</p>
         <code>pkg install libva-intel-driver mesa-libs mesa-dri</code>
+        <!-- CONFIGURANDO O XORG -->
+        <h3>Configurando o Xorg</h3>
+        <h4>Teclado em ABNT2</h4>
+        <p>No diretório <mark>/usr/local/etc/X11/xorg.conf.d/00-keyboard.conf</mark> insira:</p>
+<code><pre>
+    Section "InputClass"
+        Identifier "Keyboard1"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "br"
+        Option "XkbModel" "abnt2"
+    EndSection</pre></code>
         <!-- HABILITANDO SOM -->
         <h3>Habilitando som</h3>
         <p>Para habilitar o som basta carregar os devidos drivers, supondo que você precise do módulo para sistemas baseados em Intel adicione a linha abaixo em <mark>/etc/rc.conf</mark>:</p>
         <!-- <code>sound_load="YES"</code> -->
         <code>snd_hda_load="YES"</code>
+        <!-- SETANDO LOCALE -->
+        <h3>LOCALE</h3>
+        <p>Ok, esta é uma parte simples de fazer mas que quase sempre vai dar problemas, eu já pesquisei por dias para entender exatamente o que ocorre mas verdadeiramente ainda não consigo compreender então vamos por partes.</p>
+        <p>O resumo da opera é que o FreeBSD trabalha com <em>login classes</em>, então você cria uma classe de login, deixa as limitações e opções de ambiente na classe e o usuário que faz parte daquela classe herda essas informações automaticamente, e isso é extremamente útil e interessante e... As vezes simplesmente não funciona! É... É isso.</p>
+        <p>De qualquer forma o procedimento é sempre o mesmo:</p>
+        <ul>
+            <li>Logar na conta de administrador sem manter ambiente (não utilize elevação de privilégios com o DOAS para fazer isso)</li>
+            <li>Editar o arquivo <mark>/etc/login.conf</mark></li>
+            <li>Criar o banco de dados com <mark>cap_mkdb /etc/login.conf</mark> </li>
+        </ul>
+        <p>É isso... Mas pode acontecer de simplesmente não funcionar (que saudade do locale-gen 😭) então vamos lá:</p>
+        <p>(Se já não tiver logado) logue como root sem preservar ambiente com o comando:</p>
+        <code>su -</code>
+        <p>Insira a senha e edite o arquivo <mark>/etc/login.conf</mark>:</p>
+        <code>nano /etc/login.conf</code>
+        <p>Nesse arquivo no final da sessão <em>default:\</em> você vai encontrar uma linha como a de baixo:</p>
+        <code>:charset=UTF-8:\<br>:lang=C.UTF-8:</code>
+        <p>Edite para que fique como no exemplo abaixo:</p>
+        <code>:charset=UTF-8:\<br>:lang=pt_BR.UTF-8:</code>
+        <p><Strong>BONUS:</Strong> Caso queira remover aquela mensagem chata de login basta setar o argumento <mark>:welcome=/var/run/motd:\</mark> para <mark>:welcome=/dev/null:\</mark>.</p>
+        <p>Agora gere o banco com o comando:</p>
+        <code>cap_mkdb /etc/login.conf</code>
+        <p>É isso, reinicie o computador, logue novamente na sua conta de usuário comum (não root) e execute o comando abaixo para verificar o locale:</p>
+        <code>locale</code>
+        <p>Verifique se retorna:</p>
+        <code>LANG=pt_BR.UTF-8<br>LC_CTYPE="pt_BR.UTF-8"<br>LC_COLLATE="pt_BR.UTF-8"<br>LC_TIME="pt_BR.UTF-8"<br>LC_NUMERIC="pt_BR.UTF-8"<br>LC_MONETARY="pt_BR.UTF-8"<br>LC_MESSAGES="pt_BR.UTF-8"<br>LC_ALL=</code>
+        <p>Se retornar está tudo certo, senão você vai ter que fazer o procedimento para o seu usuário.</p>
+        <p>Logue na sua conta de usuário, edite o arquivo <em>.login_conf</em>, altere como no exemplo acima e execute:</p>
+        <code>cap_mkdb .login_conf</code>
+        <p>Reinicie o computador, relogue na sua conta e verifique o locale.</p>
         <!-- AMBIENTES GRÁFICOS -->
         <h3>Instalação dos pacotes de Ambiente Gráfico</h3>
         <!-- KDE -->
@@ -229,7 +271,7 @@ EndSection</pre>
         <p>Lembrando que a instalação mínima não possui terminal nativo!</p>
         <p>Como o KDE utiliza o D-BUS, ative o serviço com o comando abaixo:</p>
         <code>sysrc dbus_enable="YES"</code>
-        <p>Aumente o tamanho das mensagens utilize os comandos abaixo:</p>
+        <p>Se e somente se você vai permanecer no KDE aumente o tamanho dos <i>buffers</i> adicionando as linhas abaixo em <mark>/etc/sysctl.conf</mark>:</p>
         <code>sysctl net.local.stream.recvspace=65536<br>sysctl net.local.stream.sendspace=65536</code>
         <p>Para ser inicializado o KDE Plasma utiliza por padrão o SDDM, instale o SSDM com o comando abaixo:</p>
         <code>pkg install sddm</code>
@@ -478,7 +520,8 @@ EndSection</pre>
         <code>mixer mix.volume=0</code>
         <h4>Adendo: Opções gráficas</h4>
         <p>Caso você não queira utilizar o terminal para fazer essas alterações sempre que possível você pode usar aplicações como <em>audio/dsbmixer</em> (baseado em QT) ou <em>audio/gtk-mixer</em> (baseado em GTK).</p>
-        <!-- EDIÇÃO DO XINITRC -->
+        
+        <!-- EDIÇÃO DO XINITRC (OBSOLETO) 
         <h3>Edição do arquivo .XINITRC</h3>
         <p>Caso ainda esteja logado como root, deslogue utilizando o comando:</p>
         <code>exit</code>
@@ -486,6 +529,8 @@ EndSection</pre>
         <code>nano ~/.xinitrc</code>
         <p>Acrescente as linhas abaixo para setar as opções de localização do usuário:</p>
         <code>export LC_ALL=pt_BR.UTF-8<br>export MM_CHARSET=UTF-8<br>export LANG=pt_BR.UTF-8<br>export LANGUAGE=pt_BR.UTF-8<br>setxkbmap -model abnt2 -layout br</code>
+        -->
+
         <!-- NAVEGADOR E SUÍTE OFFICE -->
         <h3>Navegador e Suíte office</h3>
         <p>Se você vai usar o FreeBSD como sistema Desktop, navegador e suíte office são essenciais! Para instalar o Firefox e o LibreOffice (com suporte a Português do Brasil) basta usar o comando:</p>
