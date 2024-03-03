@@ -883,7 +883,7 @@
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Passo 13 - Instalação de inicializador</h2>
         <p>Assim como foi dito na introdução, este guia trata da instalação tanto para BIOS quanto para UEFI, escolha uma das opções abaixo para prosseguir:</p>
-        <h3>Opção A - systemd-boot (UEFI)</h3>
+        <h3>Opção A - systemd-boot (UEFI multiboot)</h3>
         <p>Para instalar inicializador systemd-boot utilize o comando abaixo:</p>
         <code>bootctl --path=/boot install</code>
         <p>Uma vez que o bootloader foi instalado vamos definir o arquivo <em>arch.conf</em> como o arquivo de inicialização padrão do bootloader com o comando:</p>
@@ -911,11 +911,24 @@
                 <li><p>Caso você utilize kernel Linux LTS lembre-se de modificar a linha <mark>/vmlinuz-linux</mark> para <mark>/vmlinuz-linux-lts</mark> e <mark>initramfs-linux.img</mark> para <mark>initramfs-linux-lts.img</mark></p></li>
                 <li><p>Caso você utilize processadores Intel ao invés de AMD você deve substituir o <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark>;</p></li>
             </ul>
-        <h3>Opção B - GRUB2 (BIOS)</h3>
+        <h3>Opção B - GRUB2 (BIOS multiboot)</h3>
         <p>A instalação do GRUB é extremamente simples, basta usar o comando <em>grub-install</em> e selecionar a unidade (e não a partição) em que você deseja instalar como no comando abaixo:</p>
         <code>grub-install --target=i386-pc /dev/<mark>storageA</mark></code>
         <p>Uma vez que o GRUB está instalado, use a ferramenta <em>grub-mkconfig</em> para gerar o <em>/boot/grub/grub.cfg</em>:</p>
         <code>grub-mkconfig -o /boot/grub/grub.cfg</code>
+        <h3>Opção C (minha preferida) - EFISTUB (UEFI singleboot)</h3>
+        <p>Se o seu computador suporta UEFI e você utiliza apenas um sistema, você pode deixar todo o trabalho de carregar o Linux para sua placa-mãe, esta é a opção que eu mais gosto de utilizar pois deixa o boot muito rápido e com bem menos chance de dar problemas, já que os argumentos de boot tendem a nunca mudar. Basta usar o <em>EFIBOOTMGR</em> como no exemplo abaixo para criar a entrada de boot na sua placa mãe:</p>
+        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --label "Arch Linux" --loader /<mark>vmlinuz-linux</mark>  --unicode 'root=UUID=<mark>UUID</mark> rw initrd=\<mark>initramfs-linux.img</mark> <mark>quiet</mark> <mark>nowatchdog</mark>' --verbose</code>
+        <ul>
+            <li><p>O dispositivo <em>StorageA</em> é o dispositivo onde está instalado a partição <em>ESP</em>.</p></li>
+            <li><p>A partição <em>P1</em> é aquela onde está instalado a partição <em>ESP</em>.</p></li>
+            <li><p><em>UUID</em> é onde deve ser inserido o número de UUID da partição <em>/ (raiz)</em> do sistema.</p></li>
+            <li><p><strong>Cuidado!</strong> Se você utiliza kernel LTS lembre-se de substituir os argumentos acima para <em>vmlinuz-linux-lts</em> e <em>initramfs-linux-lts.img</em>.</p></li>
+            <li><p><strong>Cuidado!</strong> Os argumentos <em>quiet</em> e <em>nowatchdog</em> são parâmetros de kernel, é bem raro mas pode haver sistemas que não suportem parâmetros por EFISTUB.</p></li>
+        </ul>
+        <code>UUID=$(blkid -s UUID -o value <mark>/dev/storageAP2</mark>)</code>
+        <code>root=$UUID</code>
+        <code>root=<mark>$(blkid -s UUID -o value /dev/storageAP2)</mark></code>
         <!-- Passo 14 Finalizando a instalação -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Passo 14 - Finalizando a instalação</h2>
@@ -1148,7 +1161,7 @@ ClassicBondedOnly=false
 
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 05/10/2023)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 03/03/2024)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
