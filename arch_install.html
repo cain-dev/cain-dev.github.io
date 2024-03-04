@@ -918,17 +918,20 @@
         <code>grub-mkconfig -o /boot/grub/grub.cfg</code>
         <h3>Opção C (minha preferida) - EFISTUB (UEFI singleboot)</h3>
         <p>Se o seu computador suporta UEFI e você utiliza apenas um sistema, você pode deixar todo o trabalho de carregar o Linux para sua placa-mãe, esta é a opção que eu mais gosto de utilizar pois deixa o boot muito rápido e com bem menos chance de dar problemas, já que os argumentos de boot tendem a nunca mudar. Basta usar o <em>EFIBOOTMGR</em> como no exemplo abaixo para criar a entrada de boot na sua placa mãe:</p>
-        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --label "Arch Linux" --loader /<mark>vmlinuz-linux</mark>  --unicode 'root=UUID=<mark>UUID</mark> rw initrd=\<mark>initramfs-linux.img</mark> <mark>quiet</mark> <mark>nowatchdog</mark>' --verbose</code>
+        <code>efibootmgr --create --disk /dev/<mark>storageA</mark> --part <mark>P1</mark> --label "Arch Linux" --loader /<mark>vmlinuz-linux</mark>  --unicode 'root=UUID=<mark>UUID</mark> rw initrd=\<mark>amd-ucode.img</mark> initrd=\<mark>initramfs-linux.img</mark> <mark>quiet</mark> <mark>nowatchdog</mark>' --verbose</code>
         <ul>
             <li><p>O dispositivo <em>StorageA</em> é o dispositivo onde está instalado a partição <em>ESP</em>.</p></li>
             <li><p>A partição <em>P1</em> é aquela onde está instalado a partição <em>ESP</em>.</p></li>
             <li><p><em>UUID</em> é onde deve ser inserido o número de UUID da partição <em>/ (raiz)</em> do sistema.</p></li>
+            <li><p><strong>Cuidado!</strong> Se você utiliza microcode Intel lembre-se de substituir <mark>amd-ucode.img</mark> por <mark>intel-ucode.img</mark></p></li>
             <li><p><strong>Cuidado!</strong> Se você utiliza kernel LTS lembre-se de substituir os argumentos acima para <em>vmlinuz-linux-lts</em> e <em>initramfs-linux-lts.img</em>.</p></li>
             <li><p><strong>Cuidado!</strong> Os argumentos <em>quiet</em> e <em>nowatchdog</em> são parâmetros de kernel, é bem raro mas pode haver sistemas que não suportem parâmetros por EFISTUB.</p></li>
         </ul>
+        <!--
         <code>UUID=$(blkid -s UUID -o value <mark>/dev/storageAP2</mark>)</code>
         <code>root=$UUID</code>
         <code>root=<mark>$(blkid -s UUID -o value /dev/storageAP2)</mark></code>
+        -->
         <!-- Passo 14 Finalizando a instalação -->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h2>Passo 14 - Finalizando a instalação</h2>
@@ -972,7 +975,7 @@
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////-->
         <h3>Cinnamon</h3>
         <p>Utilize o comando:</p>
-        <code>pacman -S xorg cinnamon cinnamon-translations lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings gnome-terminal nemo nemo-fileroller nemo-preview nemo-python ffmpegthumbnailer pipewire-pulse</code>
+        <code>pacman -S xorg cinnamon cinnamon-translations lightdm lightdm-slick-greeter gnome-terminal nemo nemo-fileroller nemo-preview nemo-python ffmpegthumbnailer pipewire-pulse</code>
         <p><strong>Observação!</strong> Inclua esses pacotes caso também deseje essas funções:</p>
         <ul>
             <li><em>gnome-calculator</em> (Se e somente se você utilizará uma calculadora)</li>
@@ -981,6 +984,9 @@
         </ul>
         <p>Habilite o serviço do LightDM com o comando:</p>
         <code>systemctl enable lightdm</code>
+        <p>Edite o arquivo <mark>/etc/lightdm/lightdm.conf</mark> e configure conforme o exemplo abaixo:</p>
+        <code>[Seat:*]<br>...<br>greeter-session=<em>lightdm-slick-greeter</em><br>...</code>
+        <p>Por fim edite o arquivo do <em>Slick</em> que está em <mark>/etc/lightdm/slick-greeter.conf</mark>, segundo <a class="link" href="https://github.com/linuxmint/slick-greeter">este link</a>.</p>
         <p>Ao instalar o Cinnamon ele não gera os diretórios padrão de usuário (Downloads, Músicas, Imagens, etc.), para corrigir isso precisamos instalar o <mark>XDG User Directories</mark> com o comando:</p>
         <code>sudo pacman -S xdg-user-dirs</code>
         <p>Para atualizar a lista de diretórios utilize o comando:</p>
