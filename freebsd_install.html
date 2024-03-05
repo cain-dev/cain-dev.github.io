@@ -703,6 +703,16 @@ add path 'usb/X.Y.Z' mode 0660 group cups
         <p>serem adicionadas em todo o <mark>~/.xinitrc</mark> de um novo usuário criado no sistema.</p>
         <p>Se você criar um padrão de configuração para ser herdado por todos os usuários você pode criar um arquivo <mark>.xinitrc</mark> em <mark>/usr/share/skel</mark> e quando criar o usuário o sistema copiará esse mesmo arquivo de configuração para o <mark>/home</mark> do usuário</p>
         -->
+        <!-- PACKET FILTER -->
+        <h2>PF Firewall</h2>
+        <p>O FreeBSD tem alguns serviços que podem ser usados para melhorar a segurança, entre eles o maravilho <em>PF Firewall</em>, este não é exatamente a mesma tecnologia do OpenBSD mas é quase tão boa quanto. Antes de mais nada precisamos criar um conjunto de regras no diretório <mark>/etc/pf.conf</mark>. Tanto a documentação do FreeBSD quanto a DigitalOcean tem boas documentações iniciais para isso, mas eu vou dar um exemplo (bem quebrado) de ruleset misturando ambas... Pois eu sou desses 😉.</p>
+        <code># Declaração de macros<br># ssh_ip = "{ 192.168.1.100 }"<br>tcp_out = "{ 22, 53, 80, 443 }"<br>udp_out = "{ 53, 68, 123 }"<br># Ruleset<br>set skip on lo0    # ignorar loopback<br>block all          # bloquear por padrão<br>pass out proto tcp to port $tcp_out    # permitir saída SSH, DNS, HTTP<br>pass out proto udp to port $udp_out    # permitir saída DNS, NTP, HTTPS<br>pass out inet proto icmp icmp-type { echoreq }    # permitir requisição de ECHO<br># Habilitar SSH<br># pass in quick proto tcp from $ssh_ip to port 22 flags S/SA keep state<br></code>
+        <p>Pelo amor de tudo que há de sagrado não vá utilizar isso em linha de produção! Isso é apenas um (péssimo) exemplo!</p>
+        <p>Agora precisamos ativar o firewall, acesse <mark>/etc/rc.conf</mark> e adicione as linhas:</p>
+        <code>pf_enable="YES"<br>pflog_enable="YES"</code>
+        <p>Com ambos serviços habilitados no boot, reinicie a máquina e carregue o arquivo de regras com o comando abaixo:</p>
+        <code>pfctl -f /etc/pf.conf</code>
+        <p>Se não apareceu nenhum erro então já está funcional. Eu recomendo fortemente que você procure regras para o seu caso específico pois nesse ruleset basicamente não há muito suporte ou segurança, isso é apenas um exemplo de argumentos para que você possa iniciar a sua configuração.</p>
         <!-- RECUPERAÇÃO DO BOOT -->
         <h2>Coloquei alguma configuração errada e agora o pc não inicia mais... O que fazer?</h2>
         <p>Selecione o opção <mark>single user</mark> durante o boot, logue como root e para poder editar os arquivos utilize os comandos:</p>
@@ -965,9 +975,14 @@ fi
         <code>cd /usr/ports/www/obhttpd<br>make install clean</code>
         <p>Habilite o serviço do OpenBSDHTTPD na inicialização a linha abaixo no arquivo <mark></mark> </p>
         <code>obhttpd_enable="YES"</code>
+        <!-- SYSTEMD DUALBOOT -->
+        <h3>Dualboot com Linux (SystemD boot)</h3>
+        <p>Na versão anterior dessa documentação eu tinha dito que ainda não era interessante a instalação utilizando UEFI... Agora não só é funcional como é o recomendado! Para fazer o dualboot basta selecionar o dispositivo de instalação, criar uma partição <em>UFS</em> em um disco que já tenha partição <em>ESP</em> e inserir a seguinte configuração nas <em>entries</em> do <em>systemd boot</em>:</p>
+        <code>title FreeBSD<br>efi <em>/EFI/freebsd/loader.efi</em></code>
+        <p>* Se o seu loader está em outra localização, basta alterar o caminho que vai dar tudo certo 😉</p>
     </main>
     <footer id="main-footer">
-        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 02/03/2024)</p>
+        <p>Está página ainda está em construção 🚧<br>(Atualizada pela última vez em 03/03/2024)</p>
         <a class="link" href="index.html">Retornar para a página principal</a>
     </footer>
 </body>
