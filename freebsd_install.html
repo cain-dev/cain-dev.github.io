@@ -484,6 +484,28 @@ EndSection</pre>
         <code>pkg install xdg-user-dirs</code>
         <p>Logado como o seu usuário, use o comando abaixo para atualizar os diretórios:</p>
         <code>xdg-user-dirs-update</code>
+        <h3>Configurando montagem automática de sistemas de arquivo</h3>
+        <p>O FreeBSD preserva ferrenhamente os seus trejeitos do velho Unix, ainda se comporta como um sistema voltado para o ambiente de servidores... Enão se você quiser utilizá-lo para desktop é necessário configurar um script para montagem de dispositivos pois ele não vai fazer isso automaticamente para você.</p>
+        <p>O primeiro passo é instalar o suporte aos sistemas de arquivo desejados e o programa <em>automount</em>, para isso você pode instalar os pacotes:</p>
+        <ul>
+            <li><p><mark>fusefs-exfat</mark> Para suporte para formatos FAT</p></li>
+            <li><p><mark>fusefs-ntfs</mark> Para suporte para NTFS</p></li>
+            <li><p><mark>fusefs-ext2</mark> Para suporte para EXT</p></li>
+            <li><p><mark>fusefs-hfsfuse</mark> Para suporte para HFS</p></li>
+            <li><p><mark>fusefs-jmtpfs</mark> Para suporte para MTP</p></li>
+        </ul>
+        <p>Nesse caso vamos supor que quero utilizar um pendrive em NTFS, o comando para instalação seria:</p>
+        <code>pkg install automount fusefs-ntfs</code>
+        <p>Agora temos que setar a configuração do automount que está em <mark>/usr/local/etc/automount.conf</mark>:</p>
+        <code>USERUMOUNT=YES<br>ATIME=NO<br>FM="<em>comando para chamar o seu file manager</em>"<br>USER=<em>seu username</em><br>ENCODING=pt_BR.UTF-8<br>CODEPAGE=850</code>
+        <p>* Este <em>CODEPAGE=850</em> está baseado no valor padrão do <em>mkfs.fat</em></p>
+        <p>Agora vamos editar o <mark>/etc/sysctl.conf</mark> para possibilitar que os usuários do grupo operator possam montar sistemas de arquivo, para isso inclua a linha abaixo:</p>
+        <code>vfs.usermount=1</code>
+        <p>Agora vamos carregar o módulo <em>FUSE</em> durante o boot, para isso acesse o arquivo <mark>/boot/loader.conf</mark> e adicione a linha:</p>
+        <code>fusefs_load="YES"</code>
+        <p>Para carregar o serviço edite o arquivo <mark>/etc/rc.conf</mark> e adicione a linha:</p>
+        <code>fuse_enable="YES"</code>
+
         <h3>Corrigindo Som</h3>
         <p>Ao utilizar ambientes gráficos completos no FreeBSD é bem provavel que ocasionalmente você enfrente alguma espécide de problema com relação a desligamento de dispositivos, perda de sincronia e por aí vai. Para resolver esses problemas o interessante é que você entenda um pouco das alternativas "por baixo do capô" para resolver o seu problema de uma vez por todas.</p>
         <h4>Problema número 1: Erro na escolha de dispositivo padrão</h4>
